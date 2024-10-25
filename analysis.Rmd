@@ -34,12 +34,12 @@ male_allNat_Ethnic_PD %>%
   ggplot(
     aes(
       x = Year,
-      y = count
+      y = as.numeric(count)
     )
   ) + geom_bar(
     aes(
       color = Ethnicity,
-      fill = Ethnicity
+      group = Ethnicity
     ),
     position = "stack",
     stat = "identity"
