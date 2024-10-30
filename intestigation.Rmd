@@ -1,7 +1,7 @@
 ---
-title: "IDS investigation worksheet"
-author: "by Team-Name: User1, User2, User3, User4 & User5"
-date: "`r Sys.Date()`"
+title: 'IDS investigation worksheet'
+author: 'by GOMAKASHI: Sky, Hanna, Maggie, Marcel, Siddhi, Vivi'
+date: '`r Sys.Date()`'
 output: html_document
 ---
 
@@ -22,18 +22,17 @@ library(ggplot2)
 library(readODS)
 library(janitor) #for changing row names
 library(RColorBrewer)
-library(ggforce)
 
 ```
 
 
 ```{r load-data-and-func}
-Ethnic_PD <- read_ods("data/Population_30June2023_Annual.ods", sheet = 14)
+Ethnic_PD <- read_ods('data/Population_30June2023_Annual.ods', sheet = 14)
 
 #wrapper function for generating title of plots
 wrapper <- function(x, ...) 
 {
-  paste(strwrap(x, ...), collapse = "\n")
+  paste(strwrap(x, ...), collapse = '\n')
 }
 
 #normalises data to range from 0 to 1
@@ -48,21 +47,21 @@ normalise_01 <- function(x)
 ```{r ethnicity-plot1}
 
 male_allNat_Ethnic_PD <- Ethnic_PD %>%
-  slice(.,34:40) %>% #ignores "all nationalities" since it is redundant
+  slice(.,34:40) %>% #ignores 'all nationalities' since it is redundant
   select(!2:9)
 
 male_allNat_Ethnic_PD <- as.data.frame(t(male_allNat_Ethnic_PD)) %>%
   select(1,2,5,3,4,6,7) %>%
-  #Using select() to reorder columns such that "Other", "not stated" and "not recorded" are last.
+  #Using select() to reorder columns such that 'Other', 'not stated' and 'not recorded' are last.
   #This is because they do not classify as an ethnicity (i.e. a mix of all possible ethnicity), hence they don't follow the same trend as defined ethnicity
   row_to_names(row_number = 1) %>%
   rename(
-    `Asian people` = "Asian/ Asian British(2)",
-    Other = "Other ethnic group(2)",
-    `Not recorded` = "Ethnic group not recorded",
-    `Black people` = "Black/ African/ Caribbean/ Black British",
-    `Mixed or Multiple` = "Mixed/ Multiple ethnic groups",
-    `White people` = "White"
+    `Asian people` = 'Asian/ Asian British(2)',
+    Other = 'Other ethnic group(2)',
+    `Not recorded` = 'Ethnic group not recorded',
+    `Black people` = 'Black/ African/ Caribbean/ Black British',
+    `Mixed or Multiple` = 'Mixed/ Multiple ethnic groups',
+    `White people` = 'White'
   ) %>%
   #converts all columns to numeric
   mutate_all(~ as.numeric(.))
@@ -76,7 +75,7 @@ male_allNat_Ethnic_PD$Year <- c(2009:2023)
 
 male_allNat_Ethnic_PD %>%
   #setting up data for the plot
-  pivot_longer(!Year, names_to = "Ethnicity", values_to = "count") %>%
+  pivot_longer(!Year, names_to = 'Ethnicity', values_to = 'count') %>%
   group_by(Ethnicity) %>%
   
   #adds percentage
@@ -94,10 +93,10 @@ male_allNat_Ethnic_PD %>%
     aes(
       group = Ethnicity
     ),
-    stat = "identity",
+    stat = 'identity',
   ) +
   facet_wrap(~Ethnicity,
-             scales = "free",
+             scales = 'free',
              shrink = FALSE,
              nrow = 3,
              ncol = 3) +
@@ -105,20 +104,20 @@ male_allNat_Ethnic_PD %>%
   #styling
   theme_light() +
   theme(
-    legend.position = "bottom",
+    legend.position = 'bottom',
     plot.title = element_text(hjust = 0.5)
   ) +
   labs(
-    x = "Year",
-    y = "Number of people",
-    title = wrapper("Prison population in England and Wales, grouped by ethnicity, from year 2009 to 2023", 60),
-    fill = wrapper("normalised indicator of max and min within Ethnicity group",40)
+    x = 'Year',
+    y = 'Number of people',
+    title = wrapper('Prison population in England and Wales, grouped by ethnicity, from year 2009 to 2023', 60),
+    fill = wrapper('normalised indicator of max and min within Ethnicity group',40)
   ) +
   # scale_fill_gradient(low='red', high='forestgreen', breaks = c(0,1))
   scale_fill_gradient2(low='violetred3', mid='grey', high='chartreuse3',
                        midpoint = 0.5,
                          breaks = c(0,0.5,1),
-                       labels = c("min","","max")
+                       labels = c('min','','max')
                       )
 ```
 
@@ -126,7 +125,7 @@ male_allNat_Ethnic_PD %>%
   #plotting with different viz, namely difference between years
   
   male_allNat_Ethnic_PD %>%
-  pivot_longer(!Year, names_to = "Ethnicity", values_to = "count") %>%
+  pivot_longer(!Year, names_to = 'Ethnicity', values_to = 'count') %>%
   group_by(Ethnicity) %>%
   
   mutate(group_p = normalise_01(c( 0, diff(count,lag = 1)) ) ) %>%
@@ -142,10 +141,10 @@ male_allNat_Ethnic_PD %>%
     aes(
       group = Ethnicity
     ),
-    stat = "identity",
+    stat = 'identity',
   ) +
   facet_wrap(~Ethnicity,
-             scales = "free",
+             scales = 'free',
              shrink = FALSE,
              nrow = 3,
              ncol = 3) +
@@ -153,19 +152,19 @@ male_allNat_Ethnic_PD %>%
   #styling
   theme_light() +
   theme(
-    legend.position = "bottom",
+    legend.position = 'bottom',
     plot.title = element_text(hjust = 0.5)
   ) +
   labs(
-    x = "Year",
-    y = "Number of people",
-    title = wrapper("Prison population in England and Wales, grouped by ethnicity, from year 2009 to 2023", 60),
-    fill = wrapper("normalised indicator of difference from previous year within Ethnicity group",40)
+    x = 'Year',
+    y = 'Number of people',
+    title = wrapper('Prison population in England and Wales, grouped by ethnicity, from year 2009 to 2023', 60),
+    fill = wrapper('normalised indicator of difference from previous year within Ethnicity group',40)
   ) +
   scale_fill_gradient2(low='violetred3', mid='grey', high='chartreuse3',
                        midpoint = 0.5,
                          breaks = c(0,0.5,1),
-                       labels = c("decrease","","increase")
+                       labels = c('decrease','','increase')
                       )
 ```
 
