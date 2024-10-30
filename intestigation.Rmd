@@ -16,19 +16,71 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r load-lib, message = FALSE}
 library(tidyverse)
-# Add any other libraries here
+library(readODS)
+library(janitor) #for changing row names
 
-
+library(ggplot2)
+library(RColorBrewer)
 
 ```
 
 
 ```{r load-data}
-# load your data 
-
-
+Ethnic_PD <- read_ods("data/Population_30June2023_Annual.ods", sheet = 14)
 
 
 ```
 
 
+```{r ethnicity-analysis}
+
+male_allNat_Ethnic_PD <- Ethnic_PD %>%
+  slice(.,34:40) %>% #ignores all nationalities since it is redundant
+  select(!2:9)
+
+male_allNat_Ethnic_PD <- as.data.frame(t(male_allNat_Ethnic_PD)) %>%
+  row_to_names(row_number = 1) %>%
+  rename(
+    
+    `Asian people` = "Asian/ Asian British(2)",
+    Other = "Other ethnic group(2)",
+    `Not recorded` = "Ethnic group not recorded",
+    `Black people` = "Black/ African/ Caribbean/ Black British",
+    `Mixed or Multiple` = "Mixed/ Multiple ethnic groups",
+    `White people` = "White"
+  )
+
+rownames(male_allNat_Ethnic_PD) <- NULL
+male_allNat_Ethnic_PD$Year <- c(2009:2023)
+
+
+male_allNat_Ethnic_PD %>%
+  pivot_longer(!Year, names_to = "Ethnicity", values_to = "count") %>%
+  group_by(Year) %>%
+  ggplot(
+    aes(
+      x = Year,
+      y = as.numeric(count)
+    )
+  ) + geom_bar(
+    aes(
+      fill = Ethnicity,
+      group = Ethnicity
+    ),
+    stat = "identity",
+  ) +
+  facet_wrap(~Ethnicity,
+             scales = "free",
+             nrow = 2,
+             ncol = 4) +
+  
+  #styling
+  theme_light() +
+  theme(
+    legend.position = "bottom"
+  )
+```
+
+```{r ethnicity-ratio}
+
+```
