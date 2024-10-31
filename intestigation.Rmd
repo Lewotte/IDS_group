@@ -38,7 +38,12 @@ wrapper <- function(x, ...)
 #normalises data to range from 0 to 1
 normalise_01 <- function(x)
 {
-  (x-min(x))/(max(x)-min(x))
+  if (min(x) < 0 )
+  {
+    x/max(abs(x))
+  } else {
+    (x-min(x))/(max(x)-min(x))
+  }
 }
 
 ```
@@ -51,17 +56,14 @@ male_allNat_Ethnic_PD <- Ethnic_PD %>%
   select(!2:9)
 
 male_allNat_Ethnic_PD <- as.data.frame(t(male_allNat_Ethnic_PD)) %>%
-  select(1,2,5,3,4,6,7) %>%
-  #Using select() to reorder columns such that 'Other', 'not stated' and 'not recorded' are last.
-  #This is because they do not classify as an ethnicity (i.e. a mix of all possible ethnicity), hence they don't follow the same trend as defined ethnicity
   row_to_names(row_number = 1) %>%
   rename(
-    `Asian people` = 'Asian/ Asian British(2)',
+    `Asian_people` = 'Asian/ Asian British(2)',
     Other = 'Other ethnic group(2)',
-    `Not recorded` = 'Ethnic group not recorded',
-    `Black people` = 'Black/ African/ Caribbean/ Black British',
-    `Mixed or Multiple` = 'Mixed/ Multiple ethnic groups',
-    `White people` = 'White'
+    `Not_recorded` = 'Ethnic group not recorded',
+    `Black_people` = 'Black/ African/ Caribbean/ Black British',
+    `Mixed_or_Multiple` = 'Mixed/ Multiple ethnic groups',
+    `White_people` = 'White'
   ) %>%
   #converts all columns to numeric
   mutate_all(~ as.numeric(.))
@@ -74,6 +76,8 @@ male_allNat_Ethnic_PD$Year <- c(2009:2023)
 ### STARTS PLOTTING PRECEDURES
 
 male_allNat_Ethnic_PD %>%
+  #adds total
+  mutate(All = rowSums(., !Year)) %>%
   #setting up data for the plot
   pivot_longer(!Year, names_to = 'Ethnicity', values_to = 'count') %>%
   group_by(Ethnicity) %>%
@@ -96,10 +100,10 @@ male_allNat_Ethnic_PD %>%
     stat = 'identity',
   ) +
   facet_wrap(~Ethnicity,
-             scales = 'free',
+             scales = 'free_y',
              shrink = FALSE,
-             nrow = 3,
-             ncol = 3) +
+             nrow = 2,
+             ncol = 4) +
   
   #styling
   theme_light() +
@@ -114,8 +118,7 @@ male_allNat_Ethnic_PD %>%
     fill = wrapper('normalised indicator of max and min within Ethnicity group',40)
   ) +
   # scale_fill_gradient(low='red', high='forestgreen', breaks = c(0,1))
-  scale_fill_gradient2(low='violetred3', mid='grey', high='chartreuse3',
-                       midpoint = 0.5,
+  scale_fill_gradient(low='violetred3', high='chartreuse3',
                          breaks = c(0,0.5,1),
                        labels = c('min','','max')
                       )
@@ -125,10 +128,11 @@ male_allNat_Ethnic_PD %>%
   #plotting with different viz, namely difference between years
   
   male_allNat_Ethnic_PD %>%
+  mutate(All = rowSums(., !Year)) %>%
   pivot_longer(!Year, names_to = 'Ethnicity', values_to = 'count') %>%
   group_by(Ethnicity) %>%
   
-  mutate(group_p = normalise_01(c( 0, diff(count,lag = 1)) ) ) %>%
+  mutate(group_p = c(0,normalise_01(diff(count,lag = 1)) ) ) %>%
   
   ggplot(
     aes(
@@ -144,10 +148,10 @@ male_allNat_Ethnic_PD %>%
     stat = 'identity',
   ) +
   facet_wrap(~Ethnicity,
-             scales = 'free',
+             scales = 'free_y',
              shrink = FALSE,
-             nrow = 3,
-             ncol = 3) +
+             nrow = 2,
+             ncol = 4) +
   
   #styling
   theme_light() +
