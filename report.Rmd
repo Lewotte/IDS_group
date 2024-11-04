@@ -12,30 +12,43 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r load-lib, include = FALSE}
 library(tidyverse)
-# Add any other libraries here
+library(ggplot2)
 
-
+#PACKAGES YOU MIGHT NEED TO INSTALL
+library(readODS)
+library(janitor) #for changing row names
+library(RColorBrewer)
 
 ```
 
 
 ```{r load-data, include=FALSE}
-# load your data here and any pre-processing/cleaning 
-#  that you need for your report.
+Ethnic_PD <- read_ods('data/Population_30June2023_Annual.ods', sheet = 14)
 
+#wrapper function for generating title of plots
+wrapper <- function(x, ...) 
+{
+  paste(strwrap(x, ...), collapse = '\n')
+}
 
+#normalises data to range from 0 to 1
+normalise_01 <- function(x)
+{
+  if (min(x) < 0 )
+  {
+    x/max(abs(x))
+  } else {
+    (x-min(x))/(max(x)-min(x))
+  }
+}
 
 
 ```
 
 
-## Research Question
+## Research Question: Correlation between significant political events and prison population
 
-Describe your research question here. Include why this question might be of interest. 
-
-
-
-
+We have picked some major worldwide political events to test whether there is a noticeable correlation between them and changes in parts of the prison population in England and Wales.
 
 ## Data
 

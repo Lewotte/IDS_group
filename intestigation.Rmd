@@ -45,7 +45,12 @@ normalise_01 <- function(x)
 
 ```
 
-
+# Ethnicity prison data
+In this section, prison population is plotted as bar plots with 2 distinct visualisation formats.
+<ol>
+<li> In the 1st visualisation, colour corresponds to the value of the bars;</li>
+<li> In the 2nd visualisation, colour corresponds to the change in population compared to the previous year.</li>
+</ol>
 ```{r ethnicity-plot1}
 
 male_allNat_Ethnic_PD <- Ethnic_PD %>%
