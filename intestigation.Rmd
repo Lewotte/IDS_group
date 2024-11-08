@@ -26,6 +26,7 @@ library(RColorBrewer)
 ```{r load-data-and-func}
 Ethnic_PD <- read_ods('data/Population_30June2023_Annual.ods', sheet = 14)
 A1_7 <- read_ods('data/Population_30June2023_Annual.ods', sheet = 12)
+TypeOfCrime <- read_ods('data/Population_30June2023_Annual.ods', sheet = 10)
 
 #wrapper function for generating title of plots
 wrapper <- function(x, ...) 
@@ -268,3 +269,26 @@ ggplot(data = na.omit(grad_Annual_Data_A1_7),
   facet_wrap(~Group, scales = "free") 
 ```
 
+```{r Type of Crime}
+Type_of_Crime_Graph <- as.data.frame(TypeOfCrime)
+
+#selects wanted data and the dates
+Type_of_Crime_Graph <- Type_of_Crime_Graph %>%
+  slice(4,12,17,18,19,23,26,32,35,47)
+
+#makes the column names the Date
+colnames(Type_of_Crime_Graph)[-1] <- Type_of_Crime_Graph[1,-1]
+
+colnames(Type_of_Crime_Graph)[1] <- "Date"
+
+
+#basic data plot by Group
+ggplot(data = (TypeOfCrime),
+       mapping = aes( 
+         x = Date,
+         y = Type of Crime,
+         group = Group,
+         colour = Group)) + 
+  geom_line(size = 1) + 
+  facet_wrap(~Group, scales = "free") 
+```
