@@ -53,13 +53,13 @@ style_xaringan(
 
 class: center, middle
 
-Correlation Between Significant Events and Prison Population
+#Correlation Between Significant Events and Prison Population
 
 ---
 
 class: inverse, center, middle
 
-# Section title
+#Penal Reforms
 
 ---
 
