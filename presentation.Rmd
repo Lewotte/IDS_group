@@ -31,6 +31,8 @@ library(tidymodels)
 library(palmerpenguins)
 library(knitr)
 library(xaringanthemer)
+library(ggplot2)
+
 ```
 
 ```{r setup, include=FALSE}
@@ -38,8 +40,8 @@ library(xaringanthemer)
 knitr::opts_chunk$set(fig.retina = 3, dpi = 300, fig.width = 6, fig.asp = 0.618, out.width = "80%")
 ```
 
-```{r load-data, include=FALSE}
-# Load your data here
+```{r load-data-and-func, echo = FALSE, warning = FALSE, message = FALSE}
+
 
 ```
 
@@ -49,6 +51,7 @@ knitr::opts_chunk$set(fig.retina = 3, dpi = 300, fig.width = 6, fig.asp = 0.618,
 style_xaringan(
   title_slide_background_image = "img/confetti.jpg"
 )
+
 ```
 
 class: center, middle
@@ -59,7 +62,22 @@ class: center, middle
 
 class: inverse, center, middle
 
-#Penal Reforms
+#COVID 19
+
+
+```{r - COVID, echo = FALSE}
+
+
+```
+
+```{R SKY_PLOT,echo = FALSE}
+
+knitr::include_graphics("img/sky_graph.jpg")
+
+
+```
+```
+
 
 ---
 
