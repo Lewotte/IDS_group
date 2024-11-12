@@ -1,7 +1,7 @@
 ---
 title: "Correlation Between Significant Events and Prison Population"
-subtitle: "Final IDS Project"
-author: "Gomakashi <br> Sky, Marcel, Siddhi, Maggie, Vivi, Hanna"
+subtitle: "Group<br> _GOMAKASHI_"
+author: "Members<br> _Sky, Marcel, Siddhi, Maggie, Vivi, Hanna_"
 institute: "University of Edinburgh"
 date: "`r Sys.Date()`"
 output:
@@ -24,7 +24,7 @@ install.packages('xaringan')
 ```
 
 
-```{r load-packages, echo = FALSE, include = FALSE}
+```{r load-packages, echo = FALSE, include = FALSE, out.width="80%"}
 # Add any additional packages you need to this chunk
 library(tidyverse)
 library(tidymodels)
@@ -33,26 +33,40 @@ library(knitr)
 library(xaringanthemer)
 library(ggplot2)
 
+library(readODS)
+library(janitor) #for changing row names
+library(RColorBrewer)
+
 ```
 
 ```{r setup, include=FALSE}
 # For better figure resolution
-knitr::opts_chunk$set(fig.retina = 3, dpi = 300, fig.width = 6, fig.asp = 0.618, out.width = "80%")
+knitr::opts_chunk$set(fig.retina = 3, dpi = 300, fig.width = 6, fig.asp = 0.4, out.width = "80%")
 ```
 
 ```{r load-data-and-func, echo = FALSE, warning = FALSE, message = FALSE}
+Custody_PD <- read_ods('data/Population_30June2023_Annual.ods', sheet = 2)
+
+#wrapper function for generating title of plots
+wrapper <- function(x, ...) 
+{
+  paste(strwrap(x, ...), collapse = '\n')
+}
+
+#normalises data to range from 0 to 1
+normalise_01 <- function(x)
+{
+  if (min(x) < 0 )
+  {
+    x/max(abs(x))
+  } else {
+    (x-min(x))/(max(x)-min(x))
+  }
+}
 
 
 ```
 
-```{r include=FALSE}
-
-#Background image
-style_xaringan(
-  title_slide_background_image = "img/intro_bg.png"
-)
-
-```
 
 class: center, middle
 
@@ -62,20 +76,60 @@ class: center, middle
 
 class: inverse, center, middle
 
-#COVID 19
+#A look at population by Custody
+- Here I choose a selection of 2 custody categories, "10 years to less than 14 years " and "12 months to less than 4 years".
+- Y-axis is a percentage of total within subgroup of categories custody, gender, and age group. (i.e. all values within one grid element adds up to 1)
 
 
-```{r - COVID, echo = FALSE}
+```{r Sky_plot1, echo = FALSE, warning = FALSE}
+#use facet grid: (<Male/Female>,<Age group>, <custody type>)
+offset <- 2
 
 
-```
+Custody_PD_sliced <- Custody_PD %>%
+  row_to_names(row_number = 1) %>%
+    rename("Custody" = 1) %>%
+  rename("30-6-09" = 10) %>%
+  select(!9) %>%
+  #removing rows we don't want
+  slice(-c(1:(118-offset),(185-offset):(212-offset),(279-offset):nrow(.))) %>% #looks at male and female separately, gets 6 blocks (3 age groups for 2 genders, ignores blocks for total)
+  slice(-seq.int(1,5*22+1,by=22)) %>% #removes columns containing totals per category
+  cbind(
+    #Manually renames age and gender category
+    Gender = rep(c("Male","Female"), rep(63,2)),
+    Age = rep(c("Adult","18-20", "15-17"), rep(21,3))
+  ) %>%
+  replace(., . == "-", NA) %>%
+  
+  pivot_longer(!c("Custody", "Gender", "Age"), names_to = "Date", values_to = "Count") %>%
+  mutate(Count = as.numeric(Count),
+         Date = dmy(Date),
+         year = year(Date), month = month(Date), day = day(Date)) %>%
+  #filter
+  filter(year >= 2015,
+         Custody == c("10 years to less than 14 years",
+                      "12 months to less than 4 years"
+                      )
+         ) %>%
+  
+  #grouping for plot visuals
+  group_by(Custody, Gender) %>%
+  mutate(perc_count_gender = Count/sum(Count, na.rm = TRUE)) 
 
-```{R SKY_PLOT,echo = FALSE}
+  
+  ###plotting
+  custody_plot <- ggplot(data = Custody_PD_sliced,
+    aes(x = Date, y = perc_count_gender, group = Gender)) +
+    geom_line(aes(group = Gender, colour = Gender),
+           ) +
+    facet_grid(vars(Age), vars(Custody), scales = "free_y") +
+    scale_color_manual(values = c(Male = "chocolate2",Female = "royalblue")) +
+    labs(x = "Time", y = "Population percentage") +
+    theme(text = element_text(size = 10))
+  
+print(custody_plot)
+  
 
-knitr::include_graphics("img/sky_graph.jpg")
-
-
-```
 ```
 
 
