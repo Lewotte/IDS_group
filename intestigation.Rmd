@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-```{r load-lib, message = FALSE}
+```{r load-lib, message = FALSE, echo = FALSE}
 library(tidyverse)
 library(ggplot2)
 
@@ -27,6 +27,7 @@ library(RColorBrewer)
 Ethnic_PD <- read_ods('data/Population_30June2023_Annual.ods', sheet = 14)
 A1_7 <- read_ods('data/Population_30June2023_Annual.ods', sheet = 12)
 TypeOfCrime <- read_ods('data/Population_30June2023_Annual.ods', sheet = 10)
+Custody_PD <- read_ods('data/Population_30June2023_Annual.ods', sheet = 2)
 
 #wrapper function for generating title of plots
 wrapper <- function(x, ...) 
@@ -45,6 +46,54 @@ normalise_01 <- function(x)
   }
 }
 
+```
+
+```{r custody-type}
+#use facet grid: (<Male/Female>,<Age group>, <custody type>)
+# Custody_PD_dates <- Custody_PD %>% slice(1) %>% dmy()
+offset <- 2
+
+Custody_PD_sliced <- Custody_PD %>%
+  row_to_names(row_number = 1) %>%
+    rename("Custody" = 1) %>%
+  rename("30-6-09" = 10) %>%
+  select(!9) %>%
+  #removing rows we don't want
+  slice(-c(1:(118-offset),(185-offset):(212-offset),(279-offset):nrow(.))) %>% #looks at male and female separately, gets 6 blocks (3 age groups for 2 genders, ignores blocks for total)
+  slice(-seq.int(1,5*22+1,by=22)) %>% #removes columns containing totals per category
+  cbind(
+    #Manually renames age and gender category
+    Gender = rep(c("Male","Female"), rep(63,2)),
+    Age = rep(c("Adult","18-20", "15-17"), rep(21,3))
+  ) %>%
+  replace(., . == "-", NA) %>%
+  
+  pivot_longer(!c("Custody", "Gender", "Age"), names_to = "Date", values_to = "Count") %>%
+  mutate(Count = as.numeric(Count),
+         Date = dmy(Date),
+         year = year(Date), month = month(Date), day = day(Date)) %>%
+  #filter
+  filter(year >= 2015) %>%
+  
+  #grouping for plot visuals
+  group_by(Gender, Custody, Age) %>%
+  mutate(perc_count_gender = Count/sum(Count, na.rm = TRUE)) 
+
+  
+  ###plotting
+  custody_plot <- ggplot(data = Custody_PD_sliced,
+    aes(x = Date, y = perc_count_gender, group = Gender)) +
+  # geom_bar(aes(group = Gender, colour = Gender),
+  #          stat = "identity", position = position_dodge()) +
+  geom_line(aes(group = Gender, colour = Gender),
+           ) +
+  facet_grid(vars(Age), vars(Custody), scales = "free_y")
+  
+  # print(custody_plot)
+  
+  #in = 100 pixels
+  ggsave("img/custody_plot_gender2.jpg", plot = custody_plot, width = 46, height = 7, units = "in")
+  
 ```
 
 # Ethnicity prison data

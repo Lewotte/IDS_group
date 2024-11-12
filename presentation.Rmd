@@ -24,7 +24,7 @@ install.packages('xaringan')
 ```
 
 
-```{r load-packages, include = FALSE}
+```{r load-packages, echo = FALSE, include = FALSE}
 # Add any additional packages you need to this chunk
 library(tidyverse)
 library(tidymodels)
@@ -49,14 +49,14 @@ knitr::opts_chunk$set(fig.retina = 3, dpi = 300, fig.width = 6, fig.asp = 0.618,
 
 #Background image
 style_xaringan(
-  title_slide_background_image = "img/confetti.jpg"
+  title_slide_background_image = "img/intro_bg.png"
 )
 
 ```
 
 class: center, middle
 
-#Correlation Between Significant Events and Prison Population
+#Correlation Between Significant Events and Prison Population of England and Wales
 
 ---
 
