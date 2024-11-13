@@ -66,17 +66,18 @@ class: inverse, center, middle
 
 
 ```{r - COVID, echo = FALSE}
-
-
-```
-
-```{R SKY_PLOT,echo = FALSE}
-
 knitr::include_graphics("img/sky_graph.jpg")
 
+```
+---
+#REFORMS
+
+```{R Marcel_Siddhi_graph,echo = FALSE}
+knitr::include_graphics("img/Marcel_Siddhi_graph.jpg")
 
 ```
 ```
+
 
 
 ---
