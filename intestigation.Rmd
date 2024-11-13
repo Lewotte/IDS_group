@@ -279,30 +279,49 @@ ggplot(data = (Annual_Data_A1_7),
 ```
 
 ```{r A1_7 change plotting,fig.width=10, fig.height=5}
-#Calculates the difference of previous value (note first value is set to NA)
+#Calculates the % change from previous value (note first value is set to NA)
 diff_Annual_Data_A1_7 <- Annual_Data_A1_7 %>%
+  filter(year(Date) > 2009) %>%
+  arrange(Group, Date) %>%
   group_by(Group) %>%
-  mutate(Arrests_diff = c(NA, diff(Arrests))) %>%
+  mutate(
+    Arrests_diff = c(NA, diff(Arrests)),
+    Arrests_pct_change = (Arrests_diff / lag(Arrests)) * 100
+    ) %>%
   ungroup()
 #plots difference between each data point by group
 ggplot(data = na.omit(diff_Annual_Data_A1_7),
        mapping = aes( 
          x = Date,
-         y = Arrests_diff,
+         y = Arrests_pct_change,
          group = Group,
          colour = Group)) + 
   geom_line(size = 1) + 
-  facet_wrap(~Group, scales = "free") 
+  annotate(
+    "rect",
+    xmin= as.Date("2012-01-01"), xmax=as.Date("2014-06-01"),
+    ymin=-Inf, ymax=Inf,
+    alpha = 0.2, fill = "black", color = "black"
+  ) +
+  annotate(
+    "rect",
+    xmin= as.Date("2017-03-01"), xmax=as.Date("2020-01-01"),
+    ymin=-Inf, ymax=Inf,
+    alpha = 0.2, fill = "black", color = "black"
+  ) +
+  facet_wrap(~Group, scales = "free")
+
  
 ```
 
 ```{r Gradient of A1_7,fig.width=10, fig.height=5}
-#calculates the gradient (rate of change) per week and is similar to previous
-#per month might be better but to add in you must do ... units = "days")) /30.437) (30.437 is average days in a month)
+#quarter is measured in days / 91.3125 (Ave days in a quarter)
 grad_Annual_Data_A1_7 <- diff_Annual_Data_A1_7 %>%
+  filter(year(Date) > 2009) %>%
+  arrange(Group, Date) %>%
   group_by(Group) %>%
   mutate(
-    Date_diff = c(NA, as.numeric(difftime(Date[-1], Date[-length(Date)], units = "weeks"))),
+    Date_diff = c(NA, as.numeric(difftime(Date[-1], Date[-length(Date)], units = "days")/ 91.3125)),
     Gradient = Arrests_diff / Date_diff
     ) %>%
   ungroup()
@@ -315,6 +334,18 @@ ggplot(data = na.omit(grad_Annual_Data_A1_7),
          group = Group,
          colour = Group)) + 
   geom_line(size = 1) + 
+  annotate(
+    "rect",
+    xmin= as.Date("2012-01-01"), xmax=as.Date("2014-06-01"),
+    ymin=-Inf, ymax=Inf,
+    alpha = 0.2, fill = "black", color = "black"
+  ) +
+  annotate(
+    "rect",
+    xmin= as.Date("2017-03-01"), xmax=as.Date("2020-01-01"),
+    ymin=-Inf, ymax=Inf,
+    alpha = 0.2, fill = "black", color = "black"
+  ) +
   facet_wrap(~Group, scales = "free") 
 ```
 
