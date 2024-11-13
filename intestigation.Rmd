@@ -288,9 +288,11 @@ diff_Annual_Data_A1_7 <- Annual_Data_A1_7 %>%
     Arrests_diff = c(NA, diff(Arrests)),
     Arrests_pct_change = (Arrests_diff / lag(Arrests)) * 100
     ) %>%
-  ungroup()
+  ungroup
+Total_group_data <- diff_Annual_Data_A1_7 %>%
+  filter(Group == "Total")
 #plots difference between each data point by group
-ggplot(data = na.omit(diff_Annual_Data_A1_7),
+ggplot(data = na.omit(Total_group_data),
        mapping = aes( 
          x = Date,
          y = Arrests_pct_change,
@@ -325,9 +327,11 @@ grad_Annual_Data_A1_7 <- diff_Annual_Data_A1_7 %>%
     Gradient = Arrests_diff / Date_diff
     ) %>%
   ungroup()
+Total_group_data <- grad_Annual_Data_A1_7 %>%
+  filter(Group == "Total")
 
 #plots gradient by group
-ggplot(data = na.omit(grad_Annual_Data_A1_7),
+ggplot(data = na.omit(Total_group_data),
        mapping = aes( 
          x = Date,
          y = Gradient,
