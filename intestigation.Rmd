@@ -50,7 +50,6 @@ normalise_01 <- function(x)
 
 ```{r custody-type}
 #use facet grid: (<Male/Female>,<Age group>, <custody type>)
-# Custody_PD_dates <- Custody_PD %>% slice(1) %>% dmy()
 offset <- 2
 
 Custody_PD_sliced <- Custody_PD %>%
@@ -73,26 +72,31 @@ Custody_PD_sliced <- Custody_PD %>%
          Date = dmy(Date),
          year = year(Date), month = month(Date), day = day(Date)) %>%
   #filter
-  filter(year >= 2015) %>%
+  filter(year >= 2015,
+         Custody == c("10 years to less than 14 years",
+                      "12 months to less than 4 years"
+                      )
+         ) %>%
   
   #grouping for plot visuals
-  group_by(Gender, Custody, Age) %>%
+  group_by(Custody, Gender) %>%
   mutate(perc_count_gender = Count/sum(Count, na.rm = TRUE)) 
 
   
   ###plotting
   custody_plot <- ggplot(data = Custody_PD_sliced,
     aes(x = Date, y = perc_count_gender, group = Gender)) +
-  # geom_bar(aes(group = Gender, colour = Gender),
-  #          stat = "identity", position = position_dodge()) +
-  geom_line(aes(group = Gender, colour = Gender),
+    geom_line(aes(group = Gender, colour = Gender),
            ) +
-  facet_grid(vars(Age), vars(Custody), scales = "free_y")
+    facet_grid(vars(Age), vars(Custody), scales = "free_y") +
+    scale_color_manual(values = c(Male = "chocolate2",Female = "royalblue")) +
+    labs(x = "Time", y = "Population percentage") +
+    theme(text = element_text(size = 10))
   
-  # print(custody_plot)
+print(custody_plot)
   
-  #in = 100 pixels
-  ggsave("img/custody_plot_gender2.jpg", plot = custody_plot, width = 46, height = 7, units = "in")
+  #in = 100 pixels. Keep commented unless need to export plot
+  # ggsave("img/custody_plot_gender2.jpg", plot = custody_plot, width = 46, height = 7, units = "in")
   
 ```
 
@@ -389,7 +393,7 @@ ggplot(data = (Type_of_Crime_Graph),
   facet_wrap(~Group, scales = "free")  
 ```
 
-```{r Type of Crime,fig.width=10, fig.height=5}
+```{r Type of Crime 2,fig.width=10, fig.height=5}
 #Analyzing about Brexit
 Brexit_PD <- Annual_Data_A1_7 %>%
   filter(Date >= as.Date("2016-01-01") & Date <= as.Date("2021-12-31"))
