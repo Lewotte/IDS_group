@@ -388,3 +388,33 @@ ggplot(data = (Type_of_Crime_Graph),
   geom_line(size = 1) + 
   facet_wrap(~Group, scales = "free")  
 ```
+
+```{r Type of Crime,fig.width=10, fig.height=5}
+#Analyzing about Brexit
+Brexit_PD <- Annual_Data_A1_7 %>%
+  filter(Date >= as.Date("2016-01-01") & Date <= as.Date("2021-12-31"))
+
+# Plot the trend of arrests over time by group with enhanced styling
+ggplot(Brexit_PD, aes(x = Date, y = Arrests, color = Group)) +
+  geom_line(size = 1) +
+  labs(
+    title = "Trend of Prisoner Population during Brexit (2016-2021)",
+    subtitle = "Showing Total, Remand, Sentenced, and Non-criminal Population",
+    x = "Date",
+    y = "Arrests"
+  ) +
+  scale_y_continuous(labels = scales::comma) +  # Use comma formatting for y-axis
+  scale_color_manual(values = c("Total" = "blue", "Remand" = "red", 
+                                "Sentenced" = "green", "Non-criminal prisoners" = "purple")) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, size = 12),
+    legend.title = element_text(size = 10),
+    legend.position = "top",
+    panel.grid.minor = element_blank(),
+    strip.text = element_text(size = 12, face = "bold")
+  ) +
+  facet_wrap(~ Group, scales = "free_y")  # Allows each facet to have a different y-axis range if needed
+
+```
