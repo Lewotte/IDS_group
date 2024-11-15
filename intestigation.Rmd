@@ -283,42 +283,77 @@ ggplot(data = (Annual_Data_A1_7),
 ```
 
 ```{r A1_7 change plotting,fig.width=10, fig.height=5}
-#Calculates the difference of previous value (note first value is set to NA)
+#Calculates the % change from previous value (note first value is set to NA)
 diff_Annual_Data_A1_7 <- Annual_Data_A1_7 %>%
+  filter(year(Date) > 2009) %>%
+  arrange(Group, Date) %>%
   group_by(Group) %>%
-  mutate(Arrests_diff = c(NA, diff(Arrests))) %>%
-  ungroup()
+  mutate(
+    Arrests_diff = c(NA, diff(Arrests)),
+    Arrests_pct_change = (Arrests_diff / lag(Arrests)) * 100
+    ) %>%
+  ungroup
+Total_group_data <- diff_Annual_Data_A1_7 %>%
+  filter(Group == "Total")
 #plots difference between each data point by group
-ggplot(data = na.omit(diff_Annual_Data_A1_7),
+ggplot(data = na.omit(Total_group_data),
        mapping = aes( 
          x = Date,
-         y = Arrests_diff,
+         y = Arrests_pct_change,
          group = Group,
          colour = Group)) + 
   geom_line(size = 1) + 
-  facet_wrap(~Group, scales = "free") 
+  annotate(
+    "rect",
+    xmin= as.Date("2012-01-01"), xmax=as.Date("2014-06-01"),
+    ymin=-Inf, ymax=Inf,
+    alpha = 0.2, fill = "black", color = "black"
+  ) +
+  annotate(
+    "rect",
+    xmin= as.Date("2017-03-01"), xmax=as.Date("2020-01-01"),
+    ymin=-Inf, ymax=Inf,
+    alpha = 0.2, fill = "black", color = "black"
+  ) +
+  facet_wrap(~Group, scales = "free")
+
  
 ```
 
 ```{r Gradient of A1_7,fig.width=10, fig.height=5}
-#calculates the gradient (rate of change) per week and is similar to previous
-#per month might be better but to add in you must do ... units = "days")) /30.437) (30.437 is average days in a month)
+#quarter is measured in days / 91.3125 (Ave days in a quarter)
 grad_Annual_Data_A1_7 <- diff_Annual_Data_A1_7 %>%
+  filter(year(Date) > 2009) %>%
+  arrange(Group, Date) %>%
   group_by(Group) %>%
   mutate(
-    Date_diff = c(NA, as.numeric(difftime(Date[-1], Date[-length(Date)], units = "weeks"))),
+    Date_diff = c(NA, as.numeric(difftime(Date[-1], Date[-length(Date)], units = "days")/ 91.3125)),
     Gradient = Arrests_diff / Date_diff
     ) %>%
   ungroup()
+Total_group_data <- grad_Annual_Data_A1_7 %>%
+  filter(Group == "Total")
 
 #plots gradient by group
-ggplot(data = na.omit(grad_Annual_Data_A1_7),
+ggplot(data = na.omit(Total_group_data),
        mapping = aes( 
          x = Date,
          y = Gradient,
          group = Group,
          colour = Group)) + 
   geom_line(size = 1) + 
+  annotate(
+    "rect",
+    xmin= as.Date("2012-01-01"), xmax=as.Date("2014-06-01"),
+    ymin=-Inf, ymax=Inf,
+    alpha = 0.2, fill = "black", color = "black"
+  ) +
+  annotate(
+    "rect",
+    xmin= as.Date("2017-03-01"), xmax=as.Date("2020-01-01"),
+    ymin=-Inf, ymax=Inf,
+    alpha = 0.2, fill = "black", color = "black"
+  ) +
   facet_wrap(~Group, scales = "free") 
 ```
 
@@ -356,4 +391,34 @@ ggplot(data = (Type_of_Crime_Graph),
          colour = Group)) + 
   geom_line(size = 1) + 
   facet_wrap(~Group, scales = "free")  
+```
+
+```{r Type of Crime 2,fig.width=10, fig.height=5}
+#Analyzing about Brexit
+Brexit_PD <- Annual_Data_A1_7 %>%
+  filter(Date >= as.Date("2016-01-01") & Date <= as.Date("2021-12-31"))
+
+# Plot the trend of arrests over time by group with enhanced styling
+ggplot(Brexit_PD, aes(x = Date, y = Arrests, color = Group)) +
+  geom_line(size = 1) +
+  labs(
+    title = "Trend of Prisoner Population during Brexit (2016-2021)",
+    subtitle = "Showing Total, Remand, Sentenced, and Non-criminal Population",
+    x = "Date",
+    y = "Arrests"
+  ) +
+  scale_y_continuous(labels = scales::comma) +  # Use comma formatting for y-axis
+  scale_color_manual(values = c("Total" = "blue", "Remand" = "red", 
+                                "Sentenced" = "green", "Non-criminal prisoners" = "purple")) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, size = 12),
+    legend.title = element_text(size = 10),
+    legend.position = "top",
+    panel.grid.minor = element_blank(),
+    strip.text = element_text(size = 12, face = "bold")
+  ) +
+  facet_wrap(~ Group, scales = "free_y")  # Allows each facet to have a different y-axis range if needed
+
 ```

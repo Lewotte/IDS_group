@@ -43,7 +43,7 @@
   --header-h3-font-size: 1.75rem;
 
   /* Colors */
-  --text-color: gray;
+  --text-color: #000;
   --header-color: #000;
   --background-color: #FFF;
   --link-color: rgb(249, 38, 114);
@@ -122,7 +122,7 @@ a, a > code {
 .inverse {
   background-color: var(--inverse-background-color);
   color: var(--inverse-text-color);
-  text-shadow: 0 0 20px #333;
+  
 }
 .inverse h1, .inverse h2, .inverse h3 {
   color: var(--inverse-header-color);
