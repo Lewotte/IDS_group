@@ -358,67 +358,30 @@ ggplot(data = na.omit(Total_group_data),
 ```
 
 ```{r Type of Crime,fig.width=10, fig.height=5}
-Type_of_Crime_Graph <- as.data.frame(TypeOfCrime)
+Lockdown_data <- Annual_Data_A1_7
+Lockdown_data$prison_population <- Lockdown_data$Arrests
 
-#selects wanted data and the dates
-Type_of_Crime_Graph <- Type_of_Crime_Graph %>%
-  slice(1,2,3,13,16,17,22,25,31,34)
+# Ensure the Date column is in Date format
+Lockdown_data$Date <- as.Date(Lockdown_data$Date)
 
-#cleans names
-#Annual_Data_A1_7[5,1] <- "Non-criminal prisoners"
-#Annual_Data_A1_7[2,1] <- "Total"
+# Define lockdown periods 
+Lockdown_data$lockdown <- ifelse(
+  (Lockdown_data$Date >= "2020-03-23" & Lockdown_data$Date <= "2020-07-04") |  # First lockdown
+  (Lockdown_data$Date >= "2020-11-05" & Lockdown_data$Date <= "2020-12-02") |  # Second lockdown
+  (Lockdown_data$Date >= "2021-01-06" & Lockdown_data$Date <= "2021-03-29"),   # Third lockdown
+  1,  # Assign 1 during lockdown
+  0   # Assign 0 otherwise
+)
 
-#makes the column names the Date
-colnames(Type_of_Crime_Graph)[-1] <- Type_of_Crime_Graph[1,-1]
+library(tidymodels)            
 
-colnames(Type_of_Crime_Graph)[1] <- "Group"
+# Fit the linear model using tidymodels syntax
+model <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(prison_population ~ lockdown, 
+      data = Lockdown_data)
 
-#pivots the data frame creating 3 columns being "Group","Date","Arrests"
-Type_of_Crime_Graph <- Type_of_Crime_Graph %>%
-  slice(-1) %>%
-  pivot_longer(!Group, names_to = "Date", values_to = "Arrests") %>%
-  mutate(Date = as.Date(Date, format = "%d-%m月-%y"),
-         Arrests = as.numeric(Arrests)) 
-
-Type_of_Crime_Graph <- na.omit(Type_of_Crime_Graph)
-
-#basic data plot by Group
-ggplot(data = (Type_of_Crime_Graph),
-       mapping = aes( 
-         x = Date,
-         y = Arrests,
-         group = Group,
-         colour = Group)) + 
-  geom_line(size = 1) + 
-  facet_wrap(~Group, scales = "free")  
-```
-
-```{r Type of Crime 2,fig.width=10, fig.height=5}
-#Analyzing about Brexit
-Brexit_PD <- Annual_Data_A1_7 %>%
-  filter(Date >= as.Date("2016-01-01") & Date <= as.Date("2021-12-31"))
-
-# Plot the trend of arrests over time by group with enhanced styling
-ggplot(Brexit_PD, aes(x = Date, y = Arrests, color = Group)) +
-  geom_line(size = 1) +
-  labs(
-    title = "Trend of Prisoner Population during Brexit (2016-2021)",
-    subtitle = "Showing Total, Remand, Sentenced, and Non-criminal Population",
-    x = "Date",
-    y = "Arrests"
-  ) +
-  scale_y_continuous(labels = scales::comma) +  # Use comma formatting for y-axis
-  scale_color_manual(values = c("Total" = "blue", "Remand" = "red", 
-                                "Sentenced" = "green", "Non-criminal prisoners" = "purple")) +
-  theme_minimal(base_size = 12) +
-  theme(
-    plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
-    plot.subtitle = element_text(hjust = 0.5, size = 12),
-    legend.title = element_text(size = 10),
-    legend.position = "top",
-    panel.grid.minor = element_blank(),
-    strip.text = element_text(size = 12, face = "bold")
-  ) +
-  facet_wrap(~ Group, scales = "free_y")  # Allows each facet to have a different y-axis range if needed
+# View the model coefficients
+tidy(model)
 
 ```
