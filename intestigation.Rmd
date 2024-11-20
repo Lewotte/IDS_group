@@ -24,9 +24,9 @@ library(RColorBrewer)
 
 
 ```{r load-data-and-func}
-Ethnic_PD <- read_ods('data/Population_30June2023_Annual.ods', sheet = 14)
-A1_7 <- read_ods('data/Population_30June2023_Annual.ods', sheet = 12)
-TypeOfCrime <- read_ods('data/Population_30June2023_Annual.ods', sheet = 10)
+# Ethnic_PD <- read_ods('data/Population_30June2023_Annual.ods', sheet = 14)
+# A1_7 <- read_ods('data/Population_30June2023_Annual.ods', sheet = 12)
+# TypeOfCrime <- read_ods('data/Population_30June2023_Annual.ods', sheet = 10)
 Custody_PD <- read_ods('data/Population_30June2023_Annual.ods', sheet = 2)
 
 #wrapper function for generating title of plots
@@ -70,33 +70,55 @@ Custody_PD_sliced <- Custody_PD %>%
   pivot_longer(!c("Custody", "Gender", "Age"), names_to = "Date", values_to = "Count") %>%
   mutate(Count = as.numeric(Count),
          Date = dmy(Date),
-         year = year(Date), month = month(Date), day = day(Date)) %>%
+         year = year(Date), month = month(Date), day = day(Date),
+         d1_Count = diff(c(0,Count)),
+         d2_Count = diff(c(0,d1_Count)),
+         
+         
+         d1_Count = diff(c(0,Count))
+         ) %>%
   #filter
-  filter(year >= 2015,
-         Custody == c("10 years to less than 14 years",
-                      "12 months to less than 4 years"
-                      )
+  filter(
+    year >= 2015,
+    # Custody == c("10 years to less than 14 years",
+    #              "12 months to less than 4 years"
+    #              )
          ) %>%
   
   #grouping for plot visuals
   group_by(Custody, Gender) %>%
-  mutate(perc_count_gender = Count/sum(Count, na.rm = TRUE)) 
+  mutate(perc_count_gender = Count/sum(Count, na.rm = TRUE),
+         d1_Count_min = mean(d1_Count, na.rm = TRUE) - 2*sd(d1_Count, na.rm = TRUE),
+         d1_Count_max = mean(d1_Count, na.rm = TRUE) + 2*sd(d1_Count, na.rm = TRUE))
 
   
   ###plotting
-  custody_plot <- ggplot(data = Custody_PD_sliced,
-    aes(x = Date, y = perc_count_gender, group = Gender)) +
-    geom_line(aes(group = Gender, colour = Gender),
-           ) +
-    facet_grid(vars(Age), vars(Custody), scales = "free_y") +
-    scale_color_manual(values = c(Male = "chocolate2",Female = "royalblue")) +
-    labs(x = "Time", y = "Population percentage") +
-    theme(text = element_text(size = 10))
+custody_plot <- ggplot(data = Custody_PD_sliced,
+  aes(x = Date, y = perc_count_gender, group = Gender)) +
+  geom_line(aes(group = Gender, colour = Gender),
+         ) +
+  facet_grid(vars(Age), vars(Custody), scales = "free_y") +
+  scale_color_manual(values = c(Male = "chocolate2",Female = "royalblue")) +
+  labs(x = "Time", y = "Population percentage") +
+  theme(text = element_text(size = 10))
   
-print(custody_plot)
+# print(custody_plot)
+
+custody_plot_d1 <- ggplot(data = Custody_PD_sliced,
+  aes(x = Date, y = d1_Count, group = Gender)) +
+  geom_line(aes(group = Gender, colour = Gender),
+         ) +
+  facet_grid(vars(Age), vars(Custody), scales = "free_y") +
+  scale_color_manual(values = c(Male = "gold",Female = "mediumorchid")) +
+  labs(x = "Time", y = "Population percentage") +
+  geom_blank(aes(y = d1_Count_min)) +
+  geom_blank(aes(y = d1_Count_max)) +
+  theme(text = element_text(size = 10))
   
+# print(custody_plot_d1)
+
   #in = 100 pixels. Keep commented unless need to export plot
-  # ggsave("img/custody_plot_gender2.jpg", plot = custody_plot, width = 46, height = 7, units = "in")
+  ggsave("img/custody_plot_gender_d2.jpg", plot = custody_plot_d1, width = 46, height = 7, units = "in")
   
 ```
 
