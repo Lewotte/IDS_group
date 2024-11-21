@@ -71,10 +71,6 @@ Custody_PD_sliced <- Custody_PD %>%
   mutate(Count = as.numeric(Count),
          Date = dmy(Date),
          year = year(Date), month = month(Date), day = day(Date),
-         d1_Count = diff(c(0,Count)),
-         d2_Count = diff(c(0,d1_Count)),
-         
-         
          d1_Count = diff(c(0,Count))
          ) %>%
   #filter
@@ -88,11 +84,15 @@ Custody_PD_sliced <- Custody_PD %>%
   #grouping for plot visuals
   group_by(Custody, Gender) %>%
   mutate(perc_count_gender = Count/sum(Count, na.rm = TRUE),
+         d1_perc_Count = diff(c(NA,perc_count_gender)),
+         
+         d1_perc_Count_min = mean(d1_perc_Count, na.rm = TRUE) - 1*sd(d1_perc_Count, na.rm = TRUE),
+         d1_perc_Count_max = mean(d1_perc_Count, na.rm = TRUE) + 1*sd(d1_perc_Count, na.rm = TRUE),
+         
          d1_Count_min = mean(d1_Count, na.rm = TRUE) - 2*sd(d1_Count, na.rm = TRUE),
          d1_Count_max = mean(d1_Count, na.rm = TRUE) + 2*sd(d1_Count, na.rm = TRUE))
 
-  
-  ###plotting
+###plotting
 custody_plot <- ggplot(data = Custody_PD_sliced,
   aes(x = Date, y = perc_count_gender, group = Gender)) +
   geom_line(aes(group = Gender, colour = Gender),
@@ -108,17 +108,22 @@ custody_plot_d1 <- ggplot(data = Custody_PD_sliced,
   aes(x = Date, y = d1_Count, group = Gender)) +
   geom_line(aes(group = Gender, colour = Gender),
          ) +
-  facet_grid(vars(Age), vars(Custody), scales = "free_y") +
+  facet_wrap(
+    Age ~ Custody,
+    nrow = 3,
+    # vars(Age), vars(Custody),
+    scales = "free_y"
+             ) +
   scale_color_manual(values = c(Male = "gold",Female = "mediumorchid")) +
   labs(x = "Time", y = "Population percentage") +
   geom_blank(aes(y = d1_Count_min)) +
   geom_blank(aes(y = d1_Count_max)) +
   theme(text = element_text(size = 10))
   
-# print(custody_plot_d1)
+print(custody_plot_d1)
 
   #in = 100 pixels. Keep commented unless need to export plot
-  ggsave("img/custody_plot_gender_d2.jpg", plot = custody_plot_d1, width = 46, height = 7, units = "in")
+  ggsave("img/custody_plot_gender_d1.jpg", plot = custody_plot_d1, width = 46, height = 7, units = "in")
   
 ```
 
