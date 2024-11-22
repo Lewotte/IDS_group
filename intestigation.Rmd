@@ -14,6 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r load-lib, message = FALSE, echo = FALSE}
 library(tidyverse)
 library(ggplot2)
+library(ggh4x)
 
 #PACKAGES YOU MIGHT NEED TO INSTALL
 library(readODS)
@@ -24,9 +25,9 @@ library(RColorBrewer)
 
 
 ```{r load-data-and-func}
-Ethnic_PD <- read_ods('data/Population_30June2023_Annual.ods', sheet = 14)
-A1_7 <- read_ods('data/Population_30June2023_Annual.ods', sheet = 12)
-TypeOfCrime <- read_ods('data/Population_30June2023_Annual.ods', sheet = 10)
+# Ethnic_PD <- read_ods('data/Population_30June2023_Annual.ods', sheet = 14)
+# A1_7 <- read_ods('data/Population_30June2023_Annual.ods', sheet = 12)
+# TypeOfCrime <- read_ods('data/Population_30June2023_Annual.ods', sheet = 10)
 Custody_PD <- read_ods('data/Population_30June2023_Annual.ods', sheet = 2)
 A1_5i <- read_ods('data/Population_30June2023_Annual.ods', sheet = 9)
 
@@ -67,37 +68,84 @@ Custody_PD_sliced <- Custody_PD %>%
     Age = rep(c("Adult","18-20", "15-17"), rep(21,3))
   ) %>%
   replace(., . == "-", NA) %>%
-  
   pivot_longer(!c("Custody", "Gender", "Age"), names_to = "Date", values_to = "Count") %>%
-  mutate(Count = as.numeric(Count),
-         Date = dmy(Date),
-         year = year(Date), month = month(Date), day = day(Date)) %>%
-  #filter
-  filter(year >= 2015,
-         Custody == c("10 years to less than 14 years",
-                      "12 months to less than 4 years"
-                      )
+  mutate(
+    Custody = case_when(
+      .default = as.character(Custody),
+      # Custody == "Remand" ~ "",
+      # Custody == "Untried" ~ "",
+      # Custody == "Convicted unsentenced" ~ "",
+      # Custody == "Sentenced" ~ "",
+      # Custody == "Fine defaulter" ~ "",
+      Custody == "Less than or equal to 6 months" ~ "0.5 yrs",
+      Custody == "Greater than 6 months to less than 12 months" ~ "0.5-1 yrs",
+      Custody == "12 months to less than 4 years" ~ "1-4 yrs",
+      Custody == "12 months to less than 2 years" ~ "1-2 yrs",
+      Custody == "2 years to less than 4 years" ~ "2-4 yrs",
+      Custody == "4 years or more (excluding indeterminate sentences)" ~ ">4.0 yrs",
+      Custody == "4 years to less than 5 years" ~ "4-5 yrs",
+      Custody == "5 years to less than 7 years" ~ "5-7 yrs",
+      Custody == "7 years to less than 10 years" ~ "7-10 yrs",
+      Custody == "10 years to less than 14 years" ~ "10-14 yrs",
+      Custody == "14 years or more (excluding indeterminate sentences)" ~ ">14 yrs",
+      # Custody == "Extended determinate sentence" ~ "",
+      # Custody == "Indeterminate sentences" ~ "",
+      # Custody == "Recalls" ~ "",
+      Custody == "Sentence length not recorded" ~ "Length not recorded",
+      Custody == "Non-criminal prisoners(2)" ~ "Non-criminal prisoners"
+    ),
+    
+    Count = as.numeric(Count),
+    Date = dmy(Date),
+    year = year(Date), month = month(Date),
+    d1_Count = diff(c(0,Count))
          ) %>%
+  #filter
+  filter(
+    year >= 2015,
+    Custody == "Non-criminal prisoners" |
+    Custody == "Length not recorded"
+    ) %>%
   
   #grouping for plot visuals
   group_by(Custody, Gender) %>%
-  mutate(perc_count_gender = Count/sum(Count, na.rm = TRUE)) 
+  mutate(perc_count_gender = Count/sum(Count, na.rm = TRUE),
+         d1_perc_Count = diff(c(NA,perc_count_gender))
+         # d1_Count_min = mean(d1_Count, na.rm = TRUE) - 2*sd(d1_Count, na.rm = TRUE),
+         # d1_Count_max = mean(d1_Count, na.rm = TRUE) + 2*sd(d1_Count, na.rm = TRUE)
+         )
 
+###plotting
+custody_plot <- ggplot(data = Custody_PD_sliced,
+  aes(x = Date, y = perc_count_gender, group = Gender)) +
+  geom_line(aes(group = Gender, colour = Gender),
+         ) +
+  facet_grid(vars(Age), vars(Custody), scales = "free_y") +
+  scale_color_manual(values = c(Male = "#05c5fa",Female = "#de4570")) +
+  labs(x = "Time", y = "Population percentage") +
+  theme(text = element_text(size = 10))
   
-  ###plotting
-  custody_plot <- ggplot(data = Custody_PD_sliced,
-    aes(x = Date, y = perc_count_gender, group = Gender)) +
-    geom_line(aes(group = Gender, colour = Gender),
-           ) +
-    facet_grid(vars(Age), vars(Custody), scales = "free_y") +
-    scale_color_manual(values = c(Male = "chocolate2",Female = "royalblue")) +
-    labs(x = "Time", y = "Population percentage") +
-    theme(text = element_text(size = 10))
+# print(custody_plot)
+
+custody_plot_d1 <- ggplot(data = Custody_PD_sliced,
+  aes(x = Date, y = d1_Count, group = Gender)) +
+  geom_line(aes(group = Gender, colour = Gender),
+         ) +
+  facet_wrap(
+    nrow=6,
+    Age+Gender ~ Custody,
+    scales = "free_y"
+             ) +
+  scale_color_manual(values = c(Male = "#19babf",Female = "#ff0048")) +
+  labs(x = "Time", y = "Population percentage") +
+  geom_vline(xintercept = ymd("2020-03-26"), linetype = "dotted", size = 0.5) +
+  theme(text = element_text(size = 10))
   
-print(custody_plot)
-  
+# print(custody_plot_d1)
+
   #in = 100 pixels. Keep commented unless need to export plot
-  # ggsave("img/custody_plot_gender2.jpg", plot = custody_plot, width = 46, height = 7, units = "in")
+export.width <- 12 
+ggsave("img/custody_plot_noReaction.jpg", plot = custody_plot_d1, width = export.width, height = export.width, units = "in")
   
 ```
 

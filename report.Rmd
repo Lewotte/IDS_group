@@ -46,21 +46,19 @@ normalise_01 <- function(x)
 ```
 
 
-## Research Question: Correlation between significant political events and prison population
+## Research Question: Correlation between significant events and prison population of England and Wales
 
-We have picked some major worldwide political events to test whether there is a noticeable correlation between them and changes in parts of the prison population in England and Wales.
+We have picked some major worldwide events to see whether if there is a noticeable correlation between them and changes in prison population.
 
 ## Data
 
-Briefly describe your dataset here - include a description of the key variables you will be investigating. 
-Include a citation for your data. 
-See http://libraryguides.vu.edu.au/c.php?g=386501&p=4347840 for guidance on proper citation for datasets. 
-If you got your data off the web, make sure to state the retrieval date.
+We explored the 'Prison population by type of custody, age group and sex' section of the data.
 
-
-
-
-
+Note to future editor:
+Elaborate in this section on:
+- what does each custody group mean (remand, intermediate sentence, etc.)
+- the time resolution (how much time is spaced between consecutive data), how it went from once a year to once a month in 2011, etc.)
+- explaination of other data set used
 
 ## Findings
 
@@ -86,6 +84,5 @@ Make sure to hide your code with  `echo = FALSE` unless the point you are trying
 
 ## References
 
-List any references here. You should, at a minimum, list your data source.
-
+Ministry of Justice, Offender Management Statistics Quarterly publications, "Prison population: 30 June 2023", Retrieved November 8, 2024, Available at: https://www.gov.uk/government/collections/offender-management-statistics-quarterly
 
