@@ -25,9 +25,9 @@ library(RColorBrewer)
 
 
 ```{r load-data-and-func}
-# Ethnic_PD <- read_ods('data/Population_30June2023_Annual.ods', sheet = 14)
-# A1_7 <- read_ods('data/Population_30June2023_Annual.ods', sheet = 12)
-# TypeOfCrime <- read_ods('data/Population_30June2023_Annual.ods', sheet = 10)
+Ethnic_PD <- read_ods('data/Population_30June2023_Annual.ods', sheet = 14)
+A1_7 <- read_ods('data/Population_30June2023_Annual.ods', sheet = 12)
+TypeOfCrime <- read_ods('data/Population_30June2023_Annual.ods', sheet = 10)
 Custody_PD <- read_ods('data/Population_30June2023_Annual.ods', sheet = 2)
 A1_5i <- read_ods('data/Population_30June2023_Annual.ods', sheet = 9)
 
