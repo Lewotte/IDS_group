@@ -218,7 +218,7 @@ knitr::include_graphics("img/Gordon Brown.jpg")
 - Urban Hotspots: Dense city areas like London and Manchester saw higher robbery rates, especially in public spaces.
 - Crime Displacement: Focused policing on knife crime may have inadvertently shifted criminal activity toward robbery in some areas.
 
-
+---
 
 
 ---
