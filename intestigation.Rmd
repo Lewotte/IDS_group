@@ -28,6 +28,7 @@ Ethnic_PD <- read_ods('data/Population_30June2023_Annual.ods', sheet = 14)
 A1_7 <- read_ods('data/Population_30June2023_Annual.ods', sheet = 12)
 TypeOfCrime <- read_ods('data/Population_30June2023_Annual.ods', sheet = 10)
 Custody_PD <- read_ods('data/Population_30June2023_Annual.ods', sheet = 2)
+A1_5i <- read_ods('data/Population_30June2023_Annual.ods', sheet = 9)
 
 #wrapper function for generating title of plots
 wrapper <- function(x, ...) 
@@ -356,6 +357,88 @@ ggplot(data = na.omit(Total_group_data),
   ) +
   facet_wrap(~Group, scales = "free") 
 ```
+
+```{r 2012-17 type of crime and sentence type,fig.width=10, fig.height=5}
+Annual_Data_A1_5ii <- as.data.frame(TypeOfCrime)
+Annual_Data_A1_5i <- as.data.frame(A1_5i)
+Annual_Data_A1_1 <- as.data.frame(Custody_PD)
+
+#selects wanted data and the dates
+Annual_Data_A1_5ii <- Annual_Data_A1_5ii %>%
+  slice(1,16,17,18,22,25)
+Annual_Data_A1_5i <- Annual_Data_A1_5i %>%
+  slice(1,61,62,89,128)
+Annual_Data_A1_1 <- Annual_Data_A1_1 %>%
+  slice(1,3,4,5,7,21)
+
+#makes the column names the Date
+colnames(Annual_Data_A1_5ii)[-1] <- Annual_Data_A1_5ii[1,-1]
+colnames(Annual_Data_A1_5ii)[1] <- "Group"
+colnames(Annual_Data_A1_5i)[-1] <- Annual_Data_A1_5i[1,-1]
+colnames(Annual_Data_A1_5i)[1] <- "Group"
+colnames(Annual_Data_A1_1)[-1] <- Annual_Data_A1_1[1,-1]
+colnames(Annual_Data_A1_1)[1] <- "Group"
+
+#pivots the data frame creating 3 columns being "Group","Date","Arrests"
+Annual_Data_A1_5ii <- Annual_Data_A1_5ii %>%
+  slice(-1) %>%
+  pivot_longer(!Group, names_to = "Date", values_to = "Arrests") %>%
+  mutate(Date = as.Date(Date, format = "%d-%m月-%y"),
+         Arrests = as.numeric(Arrests))
+Annual_Data_A1_5i <- Annual_Data_A1_5i %>%
+  slice(-1) %>%
+  pivot_longer(!Group, names_to = "Date", values_to = "Arrests") %>%
+  mutate(Date = as.Date(Date, format = "%d-%m月-%y"),
+         Arrests = as.numeric(Arrests)) 
+Annual_Data_A1_1 <- Annual_Data_A1_1 %>%
+  slice(-1) %>%
+  pivot_longer(!Group, names_to = "Date", values_to = "Arrests") %>%
+  mutate(Date = as.Date(Date, format = "%d-%m月-%y"),
+         Arrests = as.numeric(Arrests)) 
+
+Annual_Data_A1_5ii <- na.omit(Annual_Data_A1_5ii)
+Annual_Data_A1_5i <- na.omit(Annual_Data_A1_5i)
+Annual_Data_A1_1 <- na.omit(Annual_Data_A1_1)
+
+#merge datas
+Annual_Data_A1_5ii <- Annual_Data_A1_5ii %>%
+  mutate(Group = if_else(
+    Group %in% c("Theft and handling","Burglary"),"Theft Offences", Group)) %>%
+  group_by(Group, Date) %>%
+  summarise(Arrests = sum(Arrests, na.rm = TRUE), .groups = "drop") %>%
+  mutate(Group = if_else(Group == "Fraud and forgery","Fraud Offences", Group))
+
+Annual_Date_A1_5 <- Annual_Data_A1_5ii %>%
+  full_join(Annual_Data_A1_5i)
+
+#filter years
+Annual_Date_A1_5 <- Annual_Date_A1_5 %>%
+  filter(Date > as.Date("2011-01-01"),
+         Date < as.Date("2018-01-01"))
+Annual_Date_A1_1 <- Annual_Data_A1_1 %>%
+  filter(Date > as.Date("2011-01-01"),
+         Date < as.Date("2018-01-01"))
+
+#basic data plot by Group
+ggplot(data = (Annual_Date_A1_5),
+       mapping = aes( 
+         x = Date,
+         y = Arrests,
+         group = Group,
+         colour = Group)) + 
+  geom_line(size = 1) + 
+  facet_wrap(~Group, scales = "free") 
+
+ggplot(data = (Annual_Date_A1_1),
+       mapping = aes( 
+         x = Date,
+         y = Arrests,
+         group = Group,
+         colour = Group)) + 
+  geom_line(size = 1) + 
+  facet_wrap(~Group, scales = "free") 
+```
+
 
 ```{r Type of Crime,fig.width=10, fig.height=5}
 Lockdown_data <- Annual_Data_A1_7
