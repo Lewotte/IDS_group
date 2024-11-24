@@ -15,12 +15,14 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(ggplot2)
 library(ggh4x)
+library(tidymodels)
 
 #PACKAGES YOU MIGHT NEED TO INSTALL
 library(readODS)
 library(janitor) #for changing row names
 library(RColorBrewer)
-
+library(forecast)
+library(zoo)
 ```
 
 
@@ -491,6 +493,185 @@ labs(title = "Remand",
        x = "Date",
        y = "Population") +
   facet_wrap(~Group, scales = "free") 
+```
+
+```{r analysis of penal reforms}
+#this has repeat code but this can therefore be used as a template
+
+#load data
+PR_A1_1 <- as.data.frame(Custody_PD)
+PR_A1_7 <- as.data.frame(A1_7)
+
+#selects wanted data and the dates
+PR_A1_1 <- PR_A1_1 %>%
+  slice(1,2,3,6,25,28,96,190)
+PR_A1_7 <- PR_A1_7 %>%
+  slice(1,3,4,5,6,7,8,9,10)
+
+#makes the column names the Date and changes col name (col 1 changes based on data)
+colnames(PR_A1_1)[-1] <- PR_A1_1[1,-1]
+colnames(PR_A1_1)[1] <- "Custody_type"
+colnames(PR_A1_7)[-1] <- PR_A1_7[1,-1]
+colnames(PR_A1_7)[1] <- "Age"
+
+#pivots the data frame creating 3 columns
+PR_A1_1 <- PR_A1_1 %>%
+  slice(-1) %>%
+  pivot_longer(!Custody_type, names_to = "Date", values_to = "Prison_pop") %>%
+  mutate(Date = as.Date(Date, format = "%d-%m月-%y"),
+         Prison_pop = as.numeric(Prison_pop)) %>%
+  distinct(Date, Custody_type, .keep_all = TRUE)
+PR_A1_7 <- PR_A1_7 %>%
+  slice(-1) %>%
+  pivot_longer(!Age, names_to = "Date", values_to = "Prison_pop") %>%
+  mutate(Date = as.Date(Date, format = "%d-%m月-%y"),
+         Prison_pop = as.numeric(Prison_pop)) %>%
+   distinct(Date, Age, .keep_all = TRUE)
+
+PR_A1_1 <- na.omit(PR_A1_1)
+PR_A1_7 <- na.omit(PR_A1_7)
+
+#to make code neater i added gender and total into PR_A1_1 and filtered time here
+#filter to selected time indicator (this case is monthly)
+PR_A1_7 <- PR_A1_7 %>%
+  filter(Date >= as.Date("2010-06-01"),
+         Date <= as.Date("2020-06-01"))
+PR_A1_1 <- PR_A1_1 %>%
+  filter(Date >= as.Date("2010-06-01"),
+         Date <= as.Date("2020-06-01"))
+
+
+
+#add a new data frame for total
+PR_total <- PR_A1_1 %>%
+  filter(Custody_type == "Males and Females")
+colnames(PR_total)[3] <- "Total_pop"
+PR_total <- PR_total %>%
+  select(!1)
+
+#new data frame for males then females
+PR_male <- PR_A1_1 %>%
+    filter(Custody_type == "Males")
+colnames(PR_male)[3] <- "Male_pop"
+PR_male <- PR_male %>%
+  select(!1)
+
+PR_female <- PR_A1_1 %>%
+    filter(Custody_type == "Females")
+colnames(PR_female)[3] <- "Female_pop"
+PR_female <- PR_female %>%
+  select(!1)
+
+#custody type data frames
+PR_Remand <- PR_A1_1 %>%
+  filter(Custody_type == "Remand")
+colnames(PR_Remand)[3] <- "Remand_pop"
+PR_Remand <- PR_Remand %>%
+  select(!1)
+
+PR_Sentenced <- PR_A1_1 %>%
+  filter(Custody_type == "Sentenced")
+colnames(PR_Sentenced)[3] <- "Sentenced_pop"
+PR_Sentenced <- PR_Sentenced %>%
+  select(!1)
+
+#age data frames
+PR_age <- PR_A1_7 %>%
+  mutate(Age = case_when(
+      Age %in% c("15-17","18-20", "21-24") ~ "Under 25",
+      Age %in% c("25-29", "30-39") ~ "25-40",
+      Age %in% c("40-49","50-59") ~ "40-60",
+      Age %in% c("60 and over") ~ "60+",
+      TRUE ~ "Unknown")) %>%
+  group_by(Age,Date) %>%
+  summarise(Prison_pop = sum(Prison_pop), .groups = "drop")
+
+PR_u25 <- PR_age %>%
+  filter(Age == "Under 25")
+colnames(PR_u25)[3] <- "Under_25_pop"
+PR_u25 <- PR_u25 %>%
+  select(!1)
+
+PR_25_40 <- PR_age %>%
+  filter(Age == "25-40")
+colnames(PR_25_40)[3] <- "at_25_40_pop"
+PR_25_40 <- PR_25_40 %>%
+  select(!1)
+
+PR_40_60 <- PR_age %>%
+  filter(Age == "40-60")
+colnames(PR_40_60)[3] <- "at_40_60_pop"
+PR_40_60 <- PR_40_60 %>%
+  select(!1)
+
+PR_a60 <- PR_age %>%
+  filter(Age == "60+")
+colnames(PR_a60)[3] <- "Above_60_pop"
+PR_a60 <- PR_a60 %>%
+  select(!1)
+
+#list of data frames
+dfs <- list(PR_female, PR_male, PR_Remand, PR_Sentenced, PR_u25, PR_25_40, PR_40_60, PR_a60, PR_total)
+
+#use reduce to join all data frames in the list by "Date"
+PR_quarterly <- reduce(dfs, left_join, by = "Date")
+
+PR_quarterly <- na.omit(PR_quarterly)
+
+#event dates
+event_dates <- as.Date(c("2012-05-01", "2013-04-25", "2014-03-13", "2015-02-12"))
+event_quarters <- quarter(event_dates, with_year = TRUE)
+
+#checking if in same quarter
+PR_quarterly <- PR_quarterly %>%
+  mutate(event_occurred = if_else(quarter(Date, with_year = TRUE) %in% event_quarters, 1, 0))
+
+#t test (messures mean before and after events)
+PR_t_test <- t.test(Total_pop ~ event_occurred, data = PR_quarterly) %>%
+  tidy()
+print(PR_t_test)
+
+#t test is mostly not visualisable so this can kinda be used as a visual representation
+ggplot(PR_quarterly, aes(x = as.factor(event_occurred), y = Total_pop, fill = as.factor(event_occurred))) +
+  geom_boxplot() +
+  labs(title = "Boxplot of Total Population by Event Occurrence",
+       x = "Event Occurred",
+       y = "Total Population") +
+  theme_minimal()
+
+#convert Date to numeric for regression modelling
+PR_quarterly$Date_num <- as.numeric(as.Date(PR_quarterly$Date))
+
+#linear regression model with Date and Event indicator for quarters
+PR_model <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(Total_pop ~ Date_num + event_occurred, data = PR_quarterly) %>%
+  tidy()
+print(PR_model)
+
+#time series analysis (can be used to see the difference in predicted vs actual)
+ts_data <- ts(PR_quarterly$Total_pop, frequency = 4)  #number of quarters in a year
+fit_arima <- auto.arima(ts_data)
+forecast_result <- forecast(fit_arima, h = 22)  #forecasting the next 22 periods
+print(forecast_result)
+
+#clean ts data
+forecast_df <- rownames_to_column(as.data.frame(forecast_result), var = "Date") %>%
+  mutate(Date = as.Date(as.yearqtr(Date, format = "%y Q%q"), frac = 1)) #end of quarter
+
+ts_vs_real <- inner_join(forecast_df, PR_quarterly , by = "Date")
+
+ts_vs_real %>%
+  filter(Date <= as.Date("2016-09-01")) %>%
+  ggplot(aes(x = Date)) +
+  geom_line(aes(y = `Point Forecast`, color = "Point Forecast")) +
+  geom_line(aes(y = `Lo 95`, color = "Lo 95")) +
+  geom_line(aes(y = `Hi 95`, color = "Hi 95")) +
+  geom_line(aes(y = Total_pop, color = "Total_pop")) +
+  scale_color_manual(values = c("Point Forecast" = "blue", "Lo 95" = "green", "Hi 95" = "orange", "Total_pop" = "red")) +
+  labs(title = "Forecast vs Real",
+       x = "Date", 
+       y = "Population")
 ```
 
 
