@@ -642,12 +642,13 @@ ggplot(PR_quarterly, aes(x = as.factor(event_occurred), y = Total_pop, fill = as
 #convert Date to numeric for regression modelling
 PR_quarterly$Date_num <- as.numeric(as.Date(PR_quarterly$Date))
 
-#linear regression model with Date and Event indicator for quarters
+#logistic regression model with Date and Event indicator for quarters
 PR_model <- linear_reg() %>%
-  set_engine("lm") %>%
+  set_engine("glm") %>%
   fit(Total_pop ~ Date_num + event_occurred, data = PR_quarterly) %>%
   tidy()
 print(PR_model)
+
 
 #time series analysis (can be used to see the difference in predicted vs actual)
 ts_data <- ts(PR_quarterly$Total_pop, frequency = 4)  #number of quarters in a year
@@ -701,6 +702,8 @@ model <- linear_reg() %>%
 
 # View the model coefficients
 tidy(model)
+
+
 
 ```
 
