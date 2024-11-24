@@ -475,6 +475,9 @@ ggplot(data = (Annual_Date_A1_5),
          group = Group,
          colour = Group)) + 
   geom_line(size = 1) + 
+  labs(title = "Offence Type",
+       x = "Date",
+       y = "Population") +
   facet_wrap(~Group, scales = "free") 
 
 ggplot(data = (Annual_Date_A1_1),
@@ -484,6 +487,9 @@ ggplot(data = (Annual_Date_A1_1),
          group = Group,
          colour = Group)) + 
   geom_line(size = 1) + 
+labs(title = "Remand",
+       x = "Date",
+       y = "Population") +
   facet_wrap(~Group, scales = "free") 
 ```
 
