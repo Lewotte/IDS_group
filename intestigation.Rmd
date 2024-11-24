@@ -22,6 +22,7 @@ library(readODS)
 library(janitor) #for changing row names
 library(RColorBrewer)
 library(forecast)
+library(zoo)
 ```
 
 
@@ -609,6 +610,8 @@ dfs <- list(PR_female, PR_male, PR_Remand, PR_Sentenced, PR_u25, PR_25_40, PR_40
 #use reduce to join all data frames in the list by "Date"
 PR_quarterly <- reduce(dfs, left_join, by = "Date")
 
+PR_quarterly <- na.omit(PR_quarterly)
+
 #event dates
 event_dates <- as.Date(c("2012-05-01", "2013-04-25", "2014-03-13", "2015-02-12"))
 event_quarters <- quarter(event_dates, with_year = TRUE)
@@ -622,7 +625,15 @@ PR_t_test <- t.test(Total_pop ~ event_occurred, data = PR_quarterly) %>%
   tidy()
 print(PR_t_test)
 
-#convert Date to numeric for regression modeling
+#t test is mostly not visualisable so this can kinda be used as a visual representation
+ggplot(PR_quarterly, aes(x = as.factor(event_occurred), y = Total_pop, fill = as.factor(event_occurred))) +
+  geom_boxplot() +
+  labs(title = "Boxplot of Total Population by Event Occurrence",
+       x = "Event Occurred",
+       y = "Total Population") +
+  theme_minimal()
+
+#convert Date to numeric for regression modelling
 PR_quarterly$Date_num <- as.numeric(as.Date(PR_quarterly$Date))
 
 #linear regression model with Date and Event indicator for quarters
@@ -633,12 +644,28 @@ PR_model <- linear_reg() %>%
 print(PR_model)
 
 #time series analysis (can be used to see the difference in predicted vs actual)
-PR_quarterly <- na.omit(PR_quarterly) #make quarterly
-
 ts_data <- ts(PR_quarterly$Total_pop, frequency = 4)  #number of quarters in a year
 fit_arima <- auto.arima(ts_data)
-forecast_result <- forecast(fit_arima, h = 12)  #forecasting the next 12 periods
+forecast_result <- forecast(fit_arima, h = 22)  #forecasting the next 22 periods
 print(forecast_result)
+
+#clean ts data
+forecast_df <- rownames_to_column(as.data.frame(forecast_result), var = "Date") %>%
+  mutate(Date = as.Date(as.yearqtr(Date, format = "%y Q%q"), frac = 1)) #end of quarter
+
+ts_vs_real <- inner_join(forecast_df, PR_quarterly , by = "Date")
+
+ts_vs_real %>%
+  filter(Date <= as.Date("2016-09-01")) %>%
+  ggplot(aes(x = Date)) +
+  geom_line(aes(y = `Point Forecast`, color = "Point Forecast")) +
+  geom_line(aes(y = `Lo 95`, color = "Lo 95")) +
+  geom_line(aes(y = `Hi 95`, color = "Hi 95")) +
+  geom_line(aes(y = Total_pop, color = "Total_pop")) +
+  scale_color_manual(values = c("Point Forecast" = "blue", "Lo 95" = "green", "Hi 95" = "orange", "Total_pop" = "red")) +
+  labs(title = "Forecast vs Real",
+       x = "Date", 
+       y = "Population")
 ```
 
 
