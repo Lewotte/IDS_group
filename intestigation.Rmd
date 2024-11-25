@@ -756,4 +756,83 @@ ggplot(data = (Type_of_Crime_Graph),
          colour = Group)) + 
   geom_line(size = 1) + 
   facet_wrap(~Group, scales = "free")  
+
+#Same as Marcel's with new dates
+# Adjust event dates to represent Cameron and May's time in office
+event_dates <- as.Date(c("2010-05-11", "2016-07-13", "2016-07-13", "2019-07-24"))
+event_quarters <- quarter(event_dates, with_year = TRUE)
+
+# Filter data based on the relevant timeframe for Cameron and May's tenures
+PR_quarterly <- PR_quarterly %>%
+  filter(Date >= as.Date("2010-05-11") & Date <= as.Date("2019-07-24"))
+
+# Checking if events occurred during the specified periods (David Cameron and Theresa May's tenure)
+PR_quarterly <- PR_quarterly %>%
+  mutate(event_occurred = if_else(quarter(Date, with_year = TRUE) %in% event_quarters, 1, 0))
+
+# t-test to measure the mean before and after the events (Cameron and May's tenure)
+PR_t_test <- t.test(Total_pop ~ event_occurred, data = PR_quarterly) %>%
+  tidy()
+print(PR_t_test)
+
+# Visual representation with a boxplot
+ggplot(PR_quarterly, aes(x = as.factor(event_occurred), y = Total_pop, fill = as.factor(event_occurred))) +
+  geom_boxplot() +
+  labs(title = "Boxplot of Total Population by Event Occurrence (Cameron & May)",
+       x = "Event Occurred",
+       y = "Total Population") +
+  theme_minimal()
+
+# Convert Date to numeric for regression modelling
+PR_quarterly$Date_num <- as.numeric(as.Date(PR_quarterly$Date))
+
+# Linear regression model with Date and Event indicator for quarters
+PR_model <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(Total_pop ~ Date_num + event_occurred, data = PR_quarterly) 
+model_summary <- summary(PR_model$fit)
+model_summary
+
+# Print R-squared and Adjusted R-squared
+r_squared <- model_summary$r.squared
+adj_r_squared <- model_summary$adj.r.squared
+r_squared
+adj_r_squared 
+
+# Time series analysis (forecasting the next 22 periods)
+ts_data <- ts(PR_quarterly$Total_pop, frequency = 4)
+
+# Filtering for relevant time periods (2010-2012)
+PR_quarterly_to_tenures <- PR_quarterly %>%
+  filter(Date >= as.Date("2010-05-11") & Date <= as.Date("2019-07-24"))
+ts_data <- ts(PR_quarterly_to_2012$Total_pop, start = c(2010, 2), frequency = 4) 
+
+# Fit the ARIMA model and forecast
+fit_arima <- auto.arima(ts_data)
+forecast_result <- forecast(fit_arima, h = 22)
+
+# Print the forecast result
+print(forecast_result)
+
+# Clean forecast data for plotting
+forecast_df <- rownames_to_column(as.data.frame(forecast_result), var = "Date") %>%
+  mutate(Date = as.Date(as.yearqtr(Date, format = "%Y Q%q"), frac = 1))  # End of quarter
+
+# Merge forecast data with actual data for comparison
+ts_vs_real <- inner_join(forecast_df, PR_quarterly, by = "Date")
+
+# Plotting forecast vs actual data
+ts_vs_real %>%
+  filter(Date <= as.Date("2016-09-01")) %>%
+  ggplot(aes(x = Date)) +
+  geom_line(aes(y = `Point Forecast`, color = "Point Forecast")) +
+  geom_line(aes(y = `Hi 95`, color = "Hi 95")) +
+  geom_line(aes(y = `Lo 95`, color = "Lo 95")) +
+  geom_line(aes(y = Total_pop, color = "Total_pop")) +
+  scale_color_manual(values = c("Point Forecast" = "blue", "Lo 95" = "orange", "Hi 95" = "orange", "Total_pop" = "red")) +
+  labs(title = "Forecast vs Real for Cameron & May's Tenure",
+       x = "Date", 
+       y = "Population")
+
+
 ```
