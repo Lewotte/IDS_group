@@ -138,15 +138,21 @@ knitr::include_graphics("img/Marcel_Sid.png")
 
 ```
 ---
-```{R Marcel_Siddhi_graph2,echo = FALSE}
+```{R Marcel_Siddhi_graph2,echo = FALSE, fig.width=4, fig.height=4,}
 knitr::include_graphics("img/Marcel_sid_graph2.png")
 ```
 ---
-```{R Marcel_Siddhi_graph3,echo = FALSE}
+.pull-left[
+- Siddhi
+- Marcel
+]
+.pull-right[
+```{R Marcel_Siddhi_graph3, out.width="500%", fig.width=4,echo = FALSE}
+
 knitr::include_graphics("img/Marcel_Sid_3.png")
 
 ```
-
+]
 ---
 #PRIME MINISTERS
 
