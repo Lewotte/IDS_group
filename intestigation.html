@@ -700,60 +700,66 @@ Custody_PD_sliced &lt;- Custody_PD %&gt;%
     Count = as.numeric(Count),
     Date = dmy(Date),
     year = year(Date), month = month(Date),
+    #FOR MODELING
+    lockdown_happens = ifelse(Date &lt; ymd(&quot;2020-03-26&quot;) | Date &gt; ymd(&quot;2021-06-19&quot;), 0, 1),
+    
+    #rate of change
     d1_Count = diff(c(0,Count))
-         ) %&gt;%
-  #filter
+         )</code></pre>
+<pre class="r"><code>###plotting
+custody_plot &lt;- Custody_PD_sliced %&gt;%
+  group_by(Custody, Gender) %&gt;%
   filter(
     year &gt;= 2015,
-    Custody == &quot;Non-criminal prisoners&quot; |
-    Custody == &quot;Length not recorded&quot;
-    ) %&gt;%
-  
-  #grouping for plot visuals
-  group_by(Custody, Gender) %&gt;%
-  mutate(perc_count_gender = Count/sum(Count, na.rm = TRUE),
-         d1_perc_Count = diff(c(NA,perc_count_gender))
-         # d1_Count_min = mean(d1_Count, na.rm = TRUE) - 2*sd(d1_Count, na.rm = TRUE),
-         # d1_Count_max = mean(d1_Count, na.rm = TRUE) + 2*sd(d1_Count, na.rm = TRUE)
-         )
-
-###plotting
-custody_plot &lt;- ggplot(data = Custody_PD_sliced,
-  aes(x = Date, y = perc_count_gender, group = Gender)) +
-  geom_line(aes(group = Gender, colour = Gender),
-         ) +
-  facet_grid(vars(Age), vars(Custody), scales = &quot;free_y&quot;) +
-  scale_color_manual(values = c(Male = &quot;#05c5fa&quot;,Female = &quot;#de4570&quot;)) +
-  labs(x = &quot;Time&quot;, y = &quot;Population percentage&quot;) +
-  theme(text = element_text(size = 10))
-  
-# print(custody_plot)
-
-custody_plot_d1 &lt;- ggplot(data = Custody_PD_sliced,
+    # Age == &quot;Adult&quot;,
+    Custody == c(
+      &quot;Sentenced&quot;,
+      &quot;Untried&quot;
+    ),
+  ) %&gt;% 
+  ggplot(
   aes(x = Date, y = d1_Count, group = Gender)) +
   geom_line(aes(group = Gender, colour = Gender),
          ) +
   facet_wrap(
     nrow=6,
-    Age+Gender ~ Custody,
+    Age + Gender ~ Custody,
     scales = &quot;free_y&quot;
              ) +
   scale_color_manual(values = c(Male = &quot;#19babf&quot;,Female = &quot;#ff0048&quot;)) +
-  labs(x = &quot;Time&quot;, y = &quot;Population percentage&quot;) +
+  labs(x = &quot;Time&quot;, y = &quot;Population change&quot;) +
   geom_vline(xintercept = ymd(&quot;2020-03-26&quot;), linetype = &quot;dotted&quot;, size = 0.5) +
   theme(text = element_text(size = 10))</code></pre>
+<pre><code>## Warning: There were 42 warnings in `filter()`.
+## The first warning was:
+## ℹ In argument: `Custody == c(&quot;Sentenced&quot;, &quot;Untried&quot;)`.
+## ℹ In group 1: `Custody = &quot;0.5 yrs&quot;` and `Gender = &quot;Female&quot;`.
+## Caused by warning in `Custody == c(&quot;Sentenced&quot;, &quot;Untried&quot;)`:
+## ! longer object length is not a multiple of shorter object length
+## ℹ Run `dplyr::last_dplyr_warnings()` to see the 41 remaining warnings.</code></pre>
 <pre><code>## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
 ## ℹ Please use `linewidth` instead.
 ## This warning is displayed once every 8 hours.
 ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
 ## generated.</code></pre>
-<pre class="r"><code># print(custody_plot_d1)
+<pre class="r"><code># print(custody_plot)
 
   #in = 100 pixels. Keep commented unless need to export plot
 export.width &lt;- 12 
-ggsave(&quot;img/custody_plot_noReaction.jpg&quot;, plot = custody_plot_d1, width = export.width, height = export.width, units = &quot;in&quot;)</code></pre>
-<pre><code>## Warning: Removed 12 rows containing missing values or values outside the scale range
-## (`geom_line()`).</code></pre>
+ggsave(&quot;img/custody_plot_testing.jpg&quot;, plot = custody_plot, width = export.width, height = export.width, units = &quot;in&quot;)</code></pre>
+<pre class="r"><code>Custody_modeling &lt;- Custody_PD_sliced %&gt;%
+  filter(Custody == &quot;Sentenced&quot;)
+
+custody_COVID_fit &lt;- linear_reg() %&gt;%
+  set_engine(&quot;lm&quot;) %&gt;%
+  fit(d1_Count ~ Date, data = Custody_modeling)
+
+tidy(custody_COVID_fit)</code></pre>
+<pre><code>## # A tibble: 2 × 5
+##   term        estimate std.error statistic    p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;
+## 1 (Intercept) 2159.     452.          4.78 0.00000202
+## 2 Date          -0.123    0.0265     -4.66 0.00000365</code></pre>
 <div id="ethnicity-prison-data" class="section level1">
 <h1>Ethnicity prison data</h1>
 In this section, prison population is plotted as bar plots with 2
