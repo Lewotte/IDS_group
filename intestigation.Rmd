@@ -21,6 +21,7 @@ library(readODS)
 library(janitor) #for changing row names
 library(RColorBrewer)
 library(forecast)
+library("zoo")
 #removed zoo because it is under forecast
 ```
 
@@ -686,11 +687,6 @@ ts_vs_real %>%
 
 ```
 
-```{r}
-
-
-```
-
 
 ```{r,fig.width=10, fig.height=5}
 Lockdown_data <- Annual_Data_A1_7
@@ -787,6 +783,7 @@ PM_A1_7 <- PM_A1_7 %>%
   mutate(Date = as.Date(Date, format = "%d-%m月-%y"),
          Prison_pop = as.numeric(Prison_pop)) %>%
    distinct(Date, Age, .keep_all = TRUE)
+
 PM_A1_1 <- na.omit(PM_A1_1)
 PM_A1_7 <- na.omit(PM_A1_7)
 
@@ -930,17 +927,21 @@ forecast_df <- rownames_to_column(as.data.frame(forecast_result), var = "Date") 
   mutate(Date = as.Date(as.yearqtr(Date, format = "%Y Q%q"), frac = 1)) #end of quarter
 ts_vs_real <- inner_join(forecast_df, PM_quarterly , by = "Date")
 
+# Ensure the ts_vs_real data frame has the correct structure
 ts_vs_real %>%
-  filter(Date <= as.Date("2016-09-01")) %>%
+  filter(Date <= as.Date("2019-07-24")) %>%
   ggplot(aes(x = Date)) +
-  geom_line(aes(y = `Point Forecast`, color = "Point Forecast")) +
+  geom_line(aes(
+    y = `Point Forecast`, color = "Point Forecast")) +
   geom_line(aes(y = `Hi 95`, color = "Hi 95")) +
   geom_line(aes(y = `Lo 95`, color = "Lo 95")) +
   geom_line(aes(y = Total_pop, color = "Total_pop")) +
-  scale_color_manual(values = c("Point Forecast" = "blue", "Lo 95" = "orange", "Hi 95" = "orange", "Total_pop" = "red")) +
+  scale_color_manual(values = c("Point Forecast" = "blue", 
+                                "Lo 95" = "orange", 
+                                "Hi 95" = "orange", 
+                                "Total_pop" = "red")) +
   labs(title = "Forecast vs Real",
        x = "Date", 
        y = "Population") 
-
 
 ```
