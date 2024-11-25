@@ -14,7 +14,6 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r load-lib, message = FALSE, echo = FALSE}
 library(tidyverse)
 library(ggplot2)
-library(ggh4x)
 library(tidymodels)
 
 #PACKAGES YOU MIGHT NEED TO INSTALL
@@ -22,7 +21,7 @@ library(readODS)
 library(janitor) #for changing row names
 library(RColorBrewer)
 library(forecast)
-library(zoo)
+#removed zoo because it is under forecast
 ```
 
 
@@ -52,7 +51,7 @@ normalise_01 <- function(x)
 
 ```
 
-```{r custody-type}
+```{r custody-data_wrang}
 #use facet grid: (<Male/Female>,<Age group>, <custody type>)
 offset <- 2
 
@@ -100,56 +99,59 @@ Custody_PD_sliced <- Custody_PD %>%
     Count = as.numeric(Count),
     Date = dmy(Date),
     year = year(Date), month = month(Date),
+    #FOR MODELING
+    lockdown_happens = ifelse(Date < ymd("2020-03-26") | Date > ymd("2021-06-19"), 0, 1),
+    
+    #rate of change
     d1_Count = diff(c(0,Count))
-         ) %>%
-  #filter
+         )
+```
+
+```{r custody-plot}
+###plotting
+custody_plot <- Custody_PD_sliced %>%
+  group_by(Custody, Gender) %>%
   filter(
     year >= 2015,
-    Custody == "Non-criminal prisoners" |
-    Custody == "Length not recorded"
-    ) %>%
-  
-  #grouping for plot visuals
-  group_by(Custody, Gender) %>%
-  mutate(perc_count_gender = Count/sum(Count, na.rm = TRUE),
-         d1_perc_Count = diff(c(NA,perc_count_gender))
-         # d1_Count_min = mean(d1_Count, na.rm = TRUE) - 2*sd(d1_Count, na.rm = TRUE),
-         # d1_Count_max = mean(d1_Count, na.rm = TRUE) + 2*sd(d1_Count, na.rm = TRUE)
-         )
-
-###plotting
-custody_plot <- ggplot(data = Custody_PD_sliced,
-  aes(x = Date, y = perc_count_gender, group = Gender)) +
-  geom_line(aes(group = Gender, colour = Gender),
-         ) +
-  facet_grid(vars(Age), vars(Custody), scales = "free_y") +
-  scale_color_manual(values = c(Male = "#05c5fa",Female = "#de4570")) +
-  labs(x = "Time", y = "Population percentage") +
-  theme(text = element_text(size = 10))
-  
-# print(custody_plot)
-
-custody_plot_d1 <- ggplot(data = Custody_PD_sliced,
+    # Age == "Adult",
+    Custody == c(
+      "Sentenced",
+      "Untried"
+    ),
+  ) %>% 
+  ggplot(
   aes(x = Date, y = d1_Count, group = Gender)) +
   geom_line(aes(group = Gender, colour = Gender),
          ) +
   facet_wrap(
     nrow=6,
-    Age+Gender ~ Custody,
+    Age + Gender ~ Custody,
     scales = "free_y"
              ) +
   scale_color_manual(values = c(Male = "#19babf",Female = "#ff0048")) +
-  labs(x = "Time", y = "Population percentage") +
+  labs(x = "Time", y = "Population change") +
   geom_vline(xintercept = ymd("2020-03-26"), linetype = "dotted", size = 0.5) +
   theme(text = element_text(size = 10))
   
-# print(custody_plot_d1)
+# print(custody_plot)
 
   #in = 100 pixels. Keep commented unless need to export plot
 export.width <- 12 
-ggsave("img/custody_plot_noReaction.jpg", plot = custody_plot_d1, width = export.width, height = export.width, units = "in")
+ggsave("img/custody_plot_testing.jpg", plot = custody_plot, width = export.width, height = export.width, units = "in")
   
 ```
+
+```{r Sky-modeling}
+Custody_modeling <- Custody_PD_sliced %>%
+  filter(Custody == "Sentenced")
+
+custody_COVID_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(d1_Count ~ Date, data = Custody_modeling)
+
+tidy(custody_COVID_fit)
+```
+
 
 # Ethnicity prison data
 In this section, prison population is plotted as bar plots with 2 distinct visualisation formats.
