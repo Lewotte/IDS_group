@@ -520,19 +520,18 @@ PR_A1_1 <- PR_A1_1 %>%
   mutate(Date = as.Date(Date, format = "%d-%m月-%y"),
          Prison_pop = as.numeric(Prison_pop)) %>%
   distinct(Date, Custody_type, .keep_all = TRUE)
-
 PR_A1_7 <- PR_A1_7 %>%
   slice(-1) %>%
   pivot_longer(!Age, names_to = "Date", values_to = "Prison_pop") %>%
   mutate(Date = as.Date(Date, format = "%d-%m月-%y"),
          Prison_pop = as.numeric(Prison_pop)) %>%
    distinct(Date, Age, .keep_all = TRUE)
-
 PR_A1_1 <- na.omit(PR_A1_1)
 PR_A1_7 <- na.omit(PR_A1_7)
 
 #to make code neater i added gender and total into PR_A1_1 and filtered time here
 #filter to selected time indicator (this case is monthly)
+
 PR_A1_7 <- PR_A1_7 %>%
   filter(Date >= as.Date("2010-06-01"),
          Date <= as.Date("2020-06-01"))
@@ -553,7 +552,6 @@ PR_male <- PR_A1_1 %>%
 colnames(PR_male)[3] <- "Male_pop"
 PR_male <- PR_male %>%
   select(!1)
-
 PR_female <- PR_A1_1 %>%
     filter(Custody_type == "Females")
 colnames(PR_female)[3] <- "Female_pop"
@@ -566,7 +564,6 @@ PR_Remand <- PR_A1_1 %>%
 colnames(PR_Remand)[3] <- "Remand_pop"
 PR_Remand <- PR_Remand %>%
   select(!1)
-
 PR_Sentenced <- PR_A1_1 %>%
   filter(Custody_type == "Sentenced")
 colnames(PR_Sentenced)[3] <- "Sentenced_pop"
@@ -576,7 +573,7 @@ PR_Sentenced <- PR_Sentenced %>%
 #age data frames
 PR_age <- PR_A1_7 %>%
   mutate(Age = case_when(
-      Age %in% c("15-17","18-20", "21-24") ~ "Under 25",
+     Age %in% c("15-17","18-20", "21-24") ~ "Under 25",
       Age %in% c("25-29", "30-39") ~ "25-40",
       Age %in% c("40-49","50-59") ~ "40-60",
       Age %in% c("60 and over") ~ "60+",
@@ -586,6 +583,7 @@ PR_age <- PR_A1_7 %>%
 
 PR_u25 <- PR_age %>%
   filter(Age == "Under 25")
+
 colnames(PR_u25)[3] <- "Under_25_pop"
 PR_u25 <- PR_u25 %>%
   select(!1)
@@ -593,17 +591,20 @@ PR_u25 <- PR_u25 %>%
 PR_25_40 <- PR_age %>%
   filter(Age == "25-40")
 colnames(PR_25_40)[3] <- "at_25_40_pop"
+
 PR_25_40 <- PR_25_40 %>%
   select(!1)
 
 PR_40_60 <- PR_age %>%
   filter(Age == "40-60")
 colnames(PR_40_60)[3] <- "at_40_60_pop"
+
 PR_40_60 <- PR_40_60 %>%
   select(!1)
 
 PR_a60 <- PR_age %>%
   filter(Age == "60+")
+
 colnames(PR_a60)[3] <- "Above_60_pop"
 PR_a60 <- PR_a60 %>%
   select(!1)
@@ -613,7 +614,6 @@ dfs <- list(PR_female, PR_male, PR_Remand, PR_Sentenced, PR_u25, PR_25_40, PR_40
 
 #use reduce to join all data frames in the list by "Date"
 PR_quarterly <- reduce(dfs, left_join, by = "Date")
-
 PR_quarterly <- na.omit(PR_quarterly)
 
 #event dates
@@ -643,23 +643,31 @@ PR_quarterly$Date_num <- as.numeric(as.Date(PR_quarterly$Date))
 #linear regression model with Date and Event indicator for quarters
 PR_model <- linear_reg() %>%
   set_engine("lm") %>%
-  fit(Total_pop ~ Date_num + event_occurred, data = PR_quarterly) %>%
-  tidy()
-print(PR_model)
+  fit(Total_pop ~ Date_num + event_occurred, data = PR_quarterly) 
+model_summary <- summary(PR_model$fit)
+model_summary
+# Print R-squared and Adjusted R-squared
+r_squared <- model_summary$r.squared
+adj_r_squared <- model_summary$adj.r.squared
+r_squared
+adj_r_squared 
 
 #time series analysis (can be used to see the difference in predicted vs actual)
+ts_data <- ts(PR_quarterly$Total_pop, frequency = 4) 
+
+#number of quarters in a year
 PR_quarterly_to_2012 <- PR_quarterly %>%
   filter(Date >= as.Date("2010-04-01") & Date <= as.Date("2012-06-30"))
-
 ts_data <- ts(PR_quarterly_to_2012$Total_pop,  start = c(2010, 2), frequency = 4)  #number of quarters in a year
 fit_arima <- auto.arima(ts_data)
-forecast_result <- forecast(fit_arima, h = 22)  #forecasting the next 22 periods
+forecast_result <- forecast(fit_arima, h = 22) 
+
+#forecasting the next 22 periods
 print(forecast_result)
 
 #clean ts data
 forecast_df <- rownames_to_column(as.data.frame(forecast_result), var = "Date") %>%
   mutate(Date = as.Date(as.yearqtr(Date, format = "%Y Q%q"), frac = 1)) #end of quarter
-
 ts_vs_real <- inner_join(forecast_df, PR_quarterly , by = "Date")
 
 ts_vs_real %>%
@@ -673,6 +681,12 @@ ts_vs_real %>%
   labs(title = "Forecast vs Real",
        x = "Date", 
        y = "Population")
+
+```
+
+```{r}
+
+
 ```
 
 
