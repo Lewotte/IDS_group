@@ -519,14 +519,12 @@ PR_A1_1 <- PR_A1_1 %>%
   slice(-1) %>%
   pivot_longer(!Custody_type, names_to = "Date", values_to = "Prison_pop") %>%
   mutate(Date = as.Date(Date, format = "%d-%m月-%y"),
-         Prison_pop = as.numeric(Prison_pop)) %>%
-  distinct(Date, Custody_type, .keep_all = TRUE)
+         Prison_pop = as.numeric(Prison_pop))
 PR_A1_7 <- PR_A1_7 %>%
   slice(-1) %>%
   pivot_longer(!Age, names_to = "Date", values_to = "Prison_pop") %>%
   mutate(Date = as.Date(Date, format = "%d-%m月-%y"),
-         Prison_pop = as.numeric(Prison_pop)) %>%
-   distinct(Date, Age, .keep_all = TRUE)
+         Prison_pop = as.numeric(Prison_pop))
 
 PR_A1_1 <- na.omit(PR_A1_1)
 PR_A1_7 <- na.omit(PR_A1_7)
@@ -624,12 +622,17 @@ event_quarters <- quarter(event_dates, with_year = TRUE)
 
 #checking if in same quarter
 PR_quarterly <- PR_quarterly %>%
-  mutate(event_occurred = if_else(quarter(Date, with_year = TRUE) %in% event_quarters, 1, 0))
+  mutate(event_occurred = if_else(quarter(Date, with_year = TRUE) %in% event_quarters, 1, 0),
+         event_occurred_year = if_else(year(Date) %in% floor(event_quarters), 1, 0))
 
 #t test (messures mean before and after events)
-PR_t_test <- t.test(Total_pop ~ event_occurred, data = PR_quarterly) %>%
+PR_t_test_1 <- t.test(Total_pop ~ event_occurred, data = PR_quarterly) %>%
   tidy()
-print(PR_t_test)
+print(PR_t_test_1)
+
+PR_t_test_2 <- t.test(Total_pop ~ event_occurred_year, data = PR_quarterly) %>%
+  tidy()
+print(PR_t_test_2)
 
 #t test is mostly not visualisable so this can kinda be used as a visual representation
 ggplot(PR_quarterly, aes(x = as.factor(event_occurred), y = Total_pop, fill = as.factor(event_occurred))) +
@@ -643,33 +646,44 @@ ggplot(PR_quarterly, aes(x = as.factor(event_occurred), y = Total_pop, fill = as
 PR_quarterly$Date_num <- as.numeric(as.Date(PR_quarterly$Date))
 
 #logistic regression model with Date and Event indicator for quarters
-PR_model <- linear_reg() %>%
+PR_model_1 <- linear_reg() %>%
   set_engine("glm") %>%
   fit(Total_pop ~ Date_num + event_occurred, data = PR_quarterly) %>%
   tidy()
-print(PR_model)
+print(PR_model_1)
 
+PR_model_2 <- linear_reg() %>%
+  set_engine("glm") %>%
+  fit(Total_pop ~ Date_num + event_occurred_year, data = PR_quarterly) %>%
+  tidy()
+print(PR_model_2)
+
+PR_model_3 <- linear_reg() %>%
+  set_engine("glm") %>%
+  fit(Total_pop ~ Date_num + event_occurred + event_occurred_year, data = PR_quarterly) %>%
+  tidy()
+print(PR_model_3)
 
 #time series analysis (can be used to see the difference in predicted vs actual)
-ts_data <- ts(PR_quarterly$Total_pop, frequency = 4)  #number of quarters in a year
-fit_arima <- auto.arima(ts_data)
-forecast_result <- forecast(fit_arima, h = 22)  #forecasting the next 22 periods
-print(forecast_result)
+PR_ts_data <- ts(PR_quarterly$Total_pop, frequency = 4)  #number of quarters in a year
+PR_fit_arima <- auto.arima(PR_ts_data)
+PR_forecast_result <- forecast(PR_fit_arima, h = 22)  #forecasting the next 22 periods
+print(PR_forecast_result)
 
 #clean ts data
-forecast_df <- rownames_to_column(as.data.frame(forecast_result), var = "Date") %>%
+PR_forecast_df <- rownames_to_column(as.data.frame(PR_forecast_result), var = "Date") %>%
   mutate(Date = as.Date(as.yearqtr(Date, format = "%y Q%q"), frac = 1)) #end of quarter
 
-ts_vs_real <- inner_join(forecast_df, PR_quarterly , by = "Date")
+PR_ts_vs_real <- inner_join(PR_forecast_df, PR_quarterly , by = "Date")
 
-ts_vs_real %>%
-  filter(Date <= as.Date("2016-09-01")) %>%
+PR_ts_vs_real %>%
+  filter(Date <= as.Date("2016-06-01")) %>%
   ggplot(aes(x = Date)) +
   geom_line(aes(y = `Point Forecast`, color = "Point Forecast")) +
-  geom_line(aes(y = `Lo 95`, color = "Lo 95")) +
+  geom_line(aes(y = `Hi 80`, color = "Hi 80")) +
   geom_line(aes(y = `Hi 95`, color = "Hi 95")) +
   geom_line(aes(y = Total_pop, color = "Total_pop")) +
-  scale_color_manual(values = c("Point Forecast" = "blue", "Lo 95" = "green", "Hi 95" = "orange", "Total_pop" = "red")) +
+  scale_color_manual(values = c("Point Forecast" = "blue", "Hi 80" = "green", "Hi 95" = "orange", "Total_pop" = "red")) +
   labs(title = "Forecast vs Real",
        x = "Date", 
        y = "Population")
