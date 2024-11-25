@@ -683,7 +683,7 @@ PR_ts_vs_real %>%
   geom_line(aes(y = `Hi 80`, color = "Hi 80")) +
   geom_line(aes(y = `Hi 95`, color = "Hi 95")) +
   geom_line(aes(y = Total_pop, color = "Total_pop")) +
-  scale_color_manual(values = c("Point Forecast" = "blue", "Hi 80" = "green", "Hi 95" = "orange", "Total_pop" = "red")) +
+  scale_color_manual(values = c("Point Forecast" = "blue", "Hi 95" = "green", "Hi 80" = "orange", "Total_pop" = "red")) +
   labs(title = "Forecast vs Real",
        x = "Date", 
        y = "Population")
