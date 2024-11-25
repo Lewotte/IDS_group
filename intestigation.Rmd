@@ -878,11 +878,11 @@ PM_quarterly <- reduce(dfs, left_join, by = "Date")
 PM_quarterly <- na.omit(PM_quarterly)
 
 #event date
-event_date <- as.Date("2019-07-24")
+event_date <- as.Date("2016-07-13")
 
 #checking if its after event_date
 PM_quarterly <- PM_quarterly %>%
-  mutate(event_occurred = if_else(Date < event_date, 0, 1))
+  mutate(event_occurred = ifelse(Date < event_date, 0, 1))
 
 #t test (measures mean before and after events)
 PM_t_test <- t.test(Total_pop ~ event_occurred, data = PM_quarterly) %>%
