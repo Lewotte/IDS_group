@@ -1,6 +1,6 @@
 ---
 title: "Correlation Between Significant Events and Prison Population"
-subtitle: "Group<br> _GOMAKASHI_"
+subtitle: "Group 13<br> _GOMAKASHI_"
 author: "Members<br> _Sky, Marcel, Siddhi, Maggie, Vivi, Hanna_"
 institute: "University of Edinburgh"
 date: "`r Sys.Date()`"
