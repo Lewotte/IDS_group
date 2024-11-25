@@ -655,7 +655,7 @@ adj_r_squared
 #time series analysis (can be used to see the difference in predicted vs actual)
 ts_data <- ts(PR_quarterly$Total_pop, frequency = 4) 
 
-#number of quarters in a year
+#number of quarters in a yearl
 PR_quarterly_to_2012 <- PR_quarterly %>%
   filter(Date >= as.Date("2010-04-01") & Date <= as.Date("2012-06-30"))
 ts_data <- ts(PR_quarterly_to_2012$Total_pop,  start = c(2010, 2), frequency = 4)  #number of quarters in a year
@@ -794,7 +794,7 @@ PM_A1_7 <- na.omit(PM_A1_7)
 PM_A1_7 <- PM_A1_7 %>%
   filter(Date >= as.Date("2010-05-11"),
          Date <= as.Date("2019-07-24"))
-PR_A1_1 <- PR_A1_1 %>%
+PM_A1_1 <- PM_A1_1 %>%
   filter(Date >= as.Date("2010-05-11"),
          Date <= as.Date("2019-07-24"))
 
@@ -875,13 +875,12 @@ dfs <- list(PM_female, PM_male, PM_Remand, PM_Sentenced, PM_u25, PM_25_40, PM_40
 PM_quarterly <- reduce(dfs, left_join, by = "Date")
 PM_quarterly <- na.omit(PM_quarterly)
 
-#event dates
-event_dates <- as.Date(c("2019-07-24"))
-event_quarters <- quarter(event_dates, with_year = TRUE)
+#event date
+event_date <- as.Date("2019-07-24")
 
-#checking if in same quarter
+#checking if its after event_date
 PM_quarterly <- PM_quarterly %>%
-  mutate(event_occurred = if_else(quarter(Date, with_year = TRUE) %in% event_quarters, "Theresa", "Cameron"))
+  mutate(event_occurred = if_else(Date < event_date, 0, 1))
 
 #t test (measures mean before and after events)
 PM_t_test <- t.test(Total_pop ~ event_occurred, data = PM_quarterly) %>%
