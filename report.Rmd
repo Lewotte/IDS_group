@@ -63,139 +63,78 @@ Elaborate in this section on:
 
 ## Findings
 ### Prime Minister
-For the prime minister section, we included the whole data set and all the years to provide a comparison for before and during each Prime Ministers' time in office. There were a few limitations such as being unable to directly correlate causes of changes to specific polices that the government made at that time which resulted in assumptions being made. To help with this, we used different types of crime and looked into individual polices regarding those.
+For the Prime Minister section, we analyzed the full data set across all years to compare crime trends before and during each Prime Minister's term. However, limitations included difficulty in directly linking changes to specific policies, leading to some assumptions. To address this, we examined different crime types and related policies.
 
-We then looked into specific factors and possible related government responses for both Lord Cameron and Theresa May.
+We then looked into key issues and possible related government responses for both Lord Cameron and Theresa May.
 
 #### Lord Cameron(2010-2016):
 
 ##### 1.Drug Offences
 
 Trend: 
-After peaking around 2010, the prison population for drug offences declined significantly during the Cameron years.
+Significant decline after 2010
 
 Key Issues:
 
-- Reflects a shift in policing priorities and sentencing for drug-related crimes.
-
-- Debate over the effectiveness of punitive measures versus rehabilitation programs.
-
-Factors:
-
-- Policing Strategy: Focus shifted to tackling high-level drug trafficking rather than low-level offenses.
-
-- Rehabilitation: Increased emphasis on drug treatment programs as alternatives to imprisonment.
-
-- Cultural Changes: Reduced stigma around certain drugs, particularly cannabis, influenced public and legal
-attitudes.
+- Shift from punitive measures to rehabilitation and tackling high-level trafficking.
 
 Government Response:
 
 - Expanded funding for drug treatment and harm reduction initiatives.
 
-- Focused on dismantling organized drug networks, deprioritizing minor possession cases.
-
-
 ##### 2.Fraud Offences
 
 Trend: 
-Fraud offenses steadily declined during Cameron’s tenure, reflecting reduced resources for white-collar crime investigations and a shift toward online fraud.
+Declined, reflecting a transition to cyber fraud.
 
 Key Issues:
 
-- Fewer resources allocated to investigating white-collar crime.
-
-- Fraud increasingly perpetrated through cyber channels, making traditional arrests less feasible.
-
-Factors:
-
-- Technological Advances: Transition to online fraud reduced physical evidence, complicating arrests and convictions.
-
-- Austerity: Police funding cuts impacted the capacity to investigate complex financial crimes.
-
-- Focus Shift: Law enforcement prioritized violent and drug-related crimes over fraud.
+- Limited resources allocated for investigating complex fraud and increasing online scams
 
 Government Response:
 
-- Encouraged the private sector to take more responsibility for preventing financial fraud.
-
-- Supported the development of specialized units for cybercrime investigation.
-
+- Strengthened cybercrime units and encouraged private sector involvement in fraud prevention. 
 
 ##### 3.Rape
 
 Trend: 
-The prison population for rape offenses steadily increased throughout the period.
+Reports and imprisonments steadily increased.
 
 Key Issues:
 
-- Increased reporting due to awareness campaigns and social movements.
-
-- Lengthier sentences for sexual offenses reflected public demand for justice.
-
-Factors:
-
-- Cultural Shift: Greater willingness of survivors to report sexual offenses.
-
-- Judicial Changes: Harsher sentencing policies for rape and sexual violence.
-
-- Awareness Campaigns: Initiatives like #MeToo raised awareness and led to action on sexual crimes.
+- Greater awareness and public demand for action
 
 Government Response:
 
-- Expanded funding for sexual violence support services.
-
-- Introduced training for police and prosecutors to handle rape cases sensitively.
+- Funded support services and introduced training for handling rape cases.
 
 
 ##### 4.Robbery
 
 Trend: 
-Robbery offenses peaked early in Cameron’s tenure and then declined significantly, reflecting improvements in urban security and targeted policing.
+Peaked early, then declined significantly
 
 Key Issues:
 
-- Variability linked to changes in socioeconomic conditions and crime opportunities.
-
-- Shift to non-violent theft methods like cybercrime reduced traditional robbery.
-
-Factors:
-
-- Economic Climate: Recession-related unemployment initially drove robbery rates up.
-
-- Security Measures: Increased CCTV coverage deterred street-level robbery.
-
-- Policing Priorities: Focus shifted to violent and high-profile crimes.
+- Economic recession initially drove rates up, while urban safety measures later reduced offenses.
 
 Government Response:
 
-- Promoted urban safety initiatives, such as better street lighting.
-
-- Strengthened penalties for armed robbery to deter violent crimes.
+- Promoted urban safety initiatives like CCTV and improved penalties for violent robbery.
 
 
 ##### 5.Theft Offences 
 
 Trend: 
-Theft offenses saw an initial rise and then consistently declined, reflecting improved security and changing criminal behaviors.
+Declined after an intial rise.
 
 Key Issues:
 
-- Improved home and business security measures reduced opportunities.
-
-- A shift from physical theft to cybercrime influenced trends.
-
-Factors:
-
-- Technological Advances: Alarms and surveillance reduced physical theft.
-
-- Policing Priorities: Focused resources on higher-profile crimes.
+- Technological advancements in security deterred theft.
 
 Government Response:
 
-- Encouraged neighborhood watch programs and public safety campaigns.
-
-- Supported private-public collaborations to prevent theft.
+- Supported public safety campaigns and neighbourhood watch programs.
 
 
 #### Theresa May(2016-2019):
@@ -203,121 +142,70 @@ Government Response:
 ##### 1.Drug Offences
 
 Trend:
-Drug offences saw fluctuations, with an initial decline followed by a rise during May's leadership, reflecting shifts in enforcement strategies.
+Fluctuated, with a rise linked to county lines operations.
 
 Key Issues:
 
-- Increase in county lines drug operations exploiting vulnerable individuals.
-
-- Resource constraints limited comprehensive enforcement.
-
-Factors:
-
-- Organized Crime: Rise in county lines operations.
-
-- Austerity: Reduced police budgets hindered proactive measures.
+- Vulnerable individuals exploited by organized crime.
 
 Government Response:
 
-- Strengthened the National Crime Agency (NCA) to tackle drug trafficking.
-
-- Introduced targeted initiatives to safeguard vulnerable individuals.
+- Strengthened the National Crime Agency (NCA) and introduced targeted interventions.
 
 
 ##### 2.Fraud Offenses
 
 Trend: 
-Fraud offenses steadily declined, partly due to a shift toward cyber fraud, which is harder to detect and prosecute.
+Continue declined due to a shift towards cyber fraud. 
 
 Key Issues:
 
-- Limited resources for investigating complex financial crimes.
-
-- Increasing prevalence of online scams.
-
-Factors:
-
-- Technology: Shift to online fraud reduced physical evidence.
-
-- Austerity: Cutbacks impacted investigative capacity.
+- Limited resources for complex fraud investigations.
 
 Government Response:
 
-- Promoted private sector collaboration in fraud prevention.
-
-- Strengthened cybercrime units within the NCA.
+- Promoted private sector collaboration and expanded cybercrime units.
 
 
 ##### 3.Rape
 
 Trend: 
-Rape offences rose sharply, reflecting increased awareness and improved reporting mechanisms during May’s tenure.
+Reports rose sharply, reflecting increased awareness
 
 Key Issues:
 
-- Growing public awareness of sexual violence.
-
-- Low conviction rates despite rising reports.
-
-Factors:
-
-- Cultural Shift: Movements like #MeToo encouraged reporting.
-
-- Judicial Reforms: Harsher sentencing for sexual crimes.
+- Persistent gaps in convictions despite higher reporting.
 
 Government Response:
 
-- Expanded victim support services.
-
-- Improved police training for handling sensitive cases.
-
+- Improved victim support and police training for sensitive cases.
 
 ##### 4.Robbery
 
 Trend: 
-Robbery offenses saw a steep decline, likely due to increased use of surveillance and targeted interventions in urban areas.
+Steep decline due to improved surveillance and urban safety measures.
 
 Key Issues:
 
-- Economic challenges initially drove up robbery rates.
-
-- Policing focus shifted to violent and organized crime.
-
-Factors:
-
-- Security Measures: Increased CCTV and street lighting.
-
-- Economic Conditions: Recession impacts reduced over time.
+- Economic challenges and reduced police presence.
 
 Government Response:
 
-- Promoted urban safety initiatives.
-
-- Strengthened penalties for violent robberies.
+- Strengthened penalties and promoted urbvan safety programs.
 
 
 ##### 5.Theft Offences
 
 Trend: 
-Theft offences consistently declined, driven by improved security measures and technological advancements.
+Consistently declined due to imporved security measures.
 
 Key Issues:
 
-- Shift from physical theft to online fraud and scams.
-
-- Declining police presence in rural areas.
-
-Factors:
-
-- Technology: Use of alarms and surveillance deterred theft.
-
-- Policing Priorities: Resources focused on violent crimes.
+- Shift from physical theft to online fraud
 
 Government Response:
 
-- Encouraged public safety campaigns.
-
-- Supported neighborhood watch programs to reduce theft.
+- Supported neighborhood watch programs and public awareness campaigns. 
 
 
 
