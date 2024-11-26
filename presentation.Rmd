@@ -6,6 +6,7 @@ institute: "University of Edinburgh"
 date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
+    yolo: true
     css: xaringan-themer.css
     lib_dir: libs
     nature:
@@ -14,6 +15,9 @@ output:
       highlightLines: true
       countIncrementalSlides: false
       
+---
+layout: true
+class: inverse
 ---
 
 ```{r load-packages, echo = FALSE, include = FALSE, out.width="80%"}
