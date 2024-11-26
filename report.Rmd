@@ -215,7 +215,7 @@ Government Response:
 
 To prove our findings further. We start an analysis aimed to model the rate of change in the prisoner population (d1_Count) over time, considering the impact of the COVID-19 lockdown period. 
 
-#### Methods
+##### Methods
 
 Three linear regression models were fitted to the data:
 
@@ -225,7 +225,7 @@ Three linear regression models were fitted to the data:
 
 3. **Model 3 (custody_fit_Simple)**: The simplest model included only `lockdown_happens` as a predictor.
 
-#### Results
+##### Results
 
 **Model 1 (custody_fit_yesInt) Results:**
 
@@ -236,6 +236,9 @@ The R-squared values indicate the proportion of variance explained by each model
 **Model 2 (custody_fit_noInt)** R-squared: 0.134
 
 **Model 3 (custody_fit_Simple)** R-squared: 0.127
+
+
+
 
 
 

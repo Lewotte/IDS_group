@@ -140,7 +140,7 @@ custody_plot <- Custody_PD_sliced %>%
 export.width <- 12 
 ggsave("img/custody_plot_testing.jpg", plot = custody_plot, width = export.width, height = export.width, units = "in")
 
-print(custody_plot)
+
   
 ```
 
@@ -154,23 +154,32 @@ Custody_modeling <- Custody_PD_sliced %>%
     )
   )
 
+#Model 1
 custody_fit_yesInt <- linear_reg() %>%
   set_engine("lm") %>%
   fit(d1_Count ~ Date + lockdown_happens + Date * lockdown_happens, data = Custody_modeling)
 
+#Model 2
 custody_fit_noInt <- linear_reg() %>%
   set_engine("lm") %>%
   fit(d1_Count ~ Date + lockdown_happens, data = Custody_modeling)
 
+#Model 3
 custody_fit_Simple <- linear_reg() %>%
   set_engine("lm") %>%
   fit(d1_Count ~ lockdown_happens, data = Custody_modeling)
 
 tidy(custody_fit_yesInt)
 
-glance(custody_fit_noInt)$r.squared
+#R-squared for each model
 glance(custody_fit_yesInt)$r.squared
+glance(custody_fit_noInt)$r.squared
 glance(custody_fit_Simple)$r.squared
+
+#Adjusted R-squared for each model
+glance(custody_fit_yesInt)$adj.r.squared
+glance(custody_fit_noInt)$adj.r.squared
+glance(custody_fit_Simple)$adj.r.squared
 ```
 
 
