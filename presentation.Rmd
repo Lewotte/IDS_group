@@ -150,6 +150,24 @@ knitr::include_graphics("img/Primeminister.png")
 
 ```
 ---
+###Key Insights from Results:
+
+####Drug Offenses:
+- Prison populations for drug offenses significantly declined as Cameron's government prioritized dismantling organized drug networks and de-emphasized minor drug possession. Expanded funding for drug rehabilitation programs and harm reduction reflected this shift.
+####Fraud and Forgery:
+- Fraud-related imprisonment decreased, driven by a shift toward online financial crimes, which were harder to prosecute under reduced police resources. Cameron's government encouraged private sector involvement in financial crime prevention.
+####Motoring Offenses:
+- A consistent decline in motoring offense imprisonment occurred due to increased use of automated systems (e.g., speed cameras) and alternative penalties like fines. Resource cuts impacted manual enforcement further.
+---
+
+####Rape and Sexual Offenses:
+- Increased awareness campaigns and judicial reforms led to rising imprisonment for rape offenses. Initiatives like #MeToo and longer sentencing reflected societal shifts.
+####Robbery:
+- Prison populations for robbery offenses fluctuated, peaking around 2013 due to economic challenges and declining thereafter. Urban safety initiatives and improved surveillance reduced robbery rates.
+####Violence Against the Person:
+- Prison populations grew until 2013, influenced by tougher sentencing policies. Cameron introduced domestic violence legislation and community-based violence prevention programs.
+####Burglary: 
+- Declining arrests reflect improved security technologies and reduced police presence under austerity. Emphasis on community policing and public safety campaigns shaped outcomes.
 
 ---
 #PRIME MINISTERS - Theresa May
@@ -161,7 +179,24 @@ knitr::include_graphics("img/Primeminister.png")
 
 ```
 ---
+###Key Insights from Results:
 
+####Drug Offenses:
+- Drug-related imprisonments fluctuated as May emphasized tackling organized drug operations and county lines. Budget constraints limited police capacity, but efforts were made to safeguard vulnerable individuals exploited in drug trafficking.
+####Fraud and Forgery:
+- Fraud arrests declined as traditional financial crimes shifted to cyber fraud. May prioritized cybercrime prevention by strengthening the National Crime Agency (NCA) and encouraging businesses to adopt stronger fraud detection measures.
+####Motoring Offenses:
+- Motoring offense imprisonments consistently declined due to technological advancements (e.g., speed cameras) and reduced police traffic enforcement capacity under austerity. May promoted automated systems and public awareness campaigns for road safety.
+---
+
+####Rape and Sexual Offenses:
+- Increased awareness campaigns, like #MeToo, and harsher sentencing policies resulted in a rise in imprisonments for sexual offenses. May expanded victim support services and improved police training for handling sensitive cases.
+####Robbery:
+- Robbery imprisonment trends fluctuated, reflecting targeted interventions in high-crime areas and economic challenges. May emphasized urban safety through community policing and data-driven resource allocation.
+####Violence Against the Person:
+- Prison populations for violent crimes grew during May's tenure, reflecting increased reporting and tougher sentencing. She introduced legislation to combat domestic violence and funded community-based initiatives to address knife crime and hate crimes.
+####Burglary:
+- Declining arrests reflected improved home security technologies but highlighted gaps in enforcement due to reduced police presence under austerity. Community policing and public safety awareness were prioritized.
 
 ---
 #####The graph below shows how different leadership styles, policy priorities, or external events under Cameron and May could have influenced prison population trends. The Point forecast (blue) represents a steady, expected trajectory, derived from the prison population data from Cameron's period, while the Total_pop (red) highlights the variability and challenges that arose during May's period. 
