@@ -772,20 +772,29 @@ tidy(custody_fit_yesInt)</code></pre>
 ## 2 Date                       0.0229    0.0213     1.07  0.284   
 ## 3 lockdown_happens      -26742.     6778.        -3.95  0.000110
 ## 4 Date:lockdown_happens      1.42      0.365      3.90  0.000131</code></pre>
-<pre class="r"><code>#R-squared for each model
-glance(custody_fit_yesInt)$r.squared</code></pre>
-<pre><code>## [1] 0.1950568</code></pre>
-<pre class="r"><code>glance(custody_fit_noInt)$r.squared</code></pre>
-<pre><code>## [1] 0.13385</code></pre>
-<pre class="r"><code>glance(custody_fit_Simple)$r.squared</code></pre>
-<pre><code>## [1] 0.1270062</code></pre>
-<pre class="r"><code>#Adjusted R-squared for each model
-glance(custody_fit_yesInt)$adj.r.squared</code></pre>
-<pre><code>## [1] 0.1829826</code></pre>
-<pre class="r"><code>glance(custody_fit_noInt)$adj.r.squared</code></pre>
-<pre><code>## [1] 0.1252316</code></pre>
-<pre class="r"><code>glance(custody_fit_Simple)$adj.r.squared</code></pre>
-<pre><code>## [1] 0.1226845</code></pre>
+<pre class="r"><code># Get R-squared and Adjusted R-squared for each model
+r_squared_yesInt &lt;- glance(custody_fit_yesInt)$r.squared
+r_squared_noInt  &lt;- glance(custody_fit_noInt)$r.squared
+r_squared_Simple &lt;- glance(custody_fit_Simple)$r.squared
+
+adj_r_squared_yesInt &lt;- glance(custody_fit_yesInt)$adj.r.squared
+adj_r_squared_noInt  &lt;- glance(custody_fit_noInt)$adj.r.squared
+adj_r_squared_Simple &lt;- glance(custody_fit_Simple)$adj.r.squared
+
+# Print the results
+cat(&quot;R-squared for custody_fit_yesInt:&quot;, r_squared_yesInt, &quot;\n&quot;)</code></pre>
+<pre><code>## R-squared for custody_fit_yesInt: 0.1950568</code></pre>
+<pre class="r"><code>cat(&quot;R-squared for custody_fit_noInt:&quot;, r_squared_noInt, &quot;\n&quot;)</code></pre>
+<pre><code>## R-squared for custody_fit_noInt: 0.13385</code></pre>
+<pre class="r"><code>cat(&quot;R-squared for custody_fit_Simple:&quot;, r_squared_Simple, &quot;\n&quot;)</code></pre>
+<pre><code>## R-squared for custody_fit_Simple: 0.1270062</code></pre>
+<pre class="r"><code>cat(&quot;\n&quot;)</code></pre>
+<pre class="r"><code>cat(&quot;Adjusted R-squared for custody_fit_yesInt:&quot;, adj_r_squared_yesInt, &quot;\n&quot;)</code></pre>
+<pre><code>## Adjusted R-squared for custody_fit_yesInt: 0.1829826</code></pre>
+<pre class="r"><code>cat(&quot;Adjusted R-squared for custody_fit_noInt:&quot;, adj_r_squared_noInt, &quot;\n&quot;)</code></pre>
+<pre><code>## Adjusted R-squared for custody_fit_noInt: 0.1252316</code></pre>
+<pre class="r"><code>cat(&quot;Adjusted R-squared for custody_fit_Simple:&quot;, adj_r_squared_Simple, &quot;\n&quot;)</code></pre>
+<pre><code>## Adjusted R-squared for custody_fit_Simple: 0.1226845</code></pre>
 <div id="ethnicity-prison-data" class="section level1">
 <h1>Ethnicity prison data</h1>
 In this section, prison population is plotted as bar plots with 2

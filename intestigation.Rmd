@@ -145,6 +145,7 @@ ggsave("img/custody_plot_testing.jpg", plot = custody_plot, width = export.width
 ```
 
 ```{r Sky-modeling}
+
 Custody_modeling <- Custody_PD_sliced %>%
   filter(
     year >= 2015,
@@ -171,15 +172,24 @@ custody_fit_Simple <- linear_reg() %>%
 
 tidy(custody_fit_yesInt)
 
-#R-squared for each model
-glance(custody_fit_yesInt)$r.squared
-glance(custody_fit_noInt)$r.squared
-glance(custody_fit_Simple)$r.squared
+# Get R-squared and Adjusted R-squared for each model
+r_squared_yesInt <- glance(custody_fit_yesInt)$r.squared
+r_squared_noInt  <- glance(custody_fit_noInt)$r.squared
+r_squared_Simple <- glance(custody_fit_Simple)$r.squared
 
-#Adjusted R-squared for each model
-glance(custody_fit_yesInt)$adj.r.squared
-glance(custody_fit_noInt)$adj.r.squared
-glance(custody_fit_Simple)$adj.r.squared
+adj_r_squared_yesInt <- glance(custody_fit_yesInt)$adj.r.squared
+adj_r_squared_noInt  <- glance(custody_fit_noInt)$adj.r.squared
+adj_r_squared_Simple <- glance(custody_fit_Simple)$adj.r.squared
+
+# Print the results
+cat("R-squared for custody_fit_yesInt:", r_squared_yesInt, "\n")
+cat("R-squared for custody_fit_noInt:", r_squared_noInt, "\n")
+cat("R-squared for custody_fit_Simple:", r_squared_Simple, "\n")
+cat("\n")
+cat("Adjusted R-squared for custody_fit_yesInt:", adj_r_squared_yesInt, "\n")
+cat("Adjusted R-squared for custody_fit_noInt:", adj_r_squared_noInt, "\n")
+cat("Adjusted R-squared for custody_fit_Simple:", adj_r_squared_Simple, "\n")
+
 ```
 
 
