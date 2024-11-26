@@ -159,7 +159,7 @@ knitr::include_graphics("img/Marcel_Sid_3.png")
 #####Theresa May is a British politician who served as the Prime Minister of the United Kingdom from July 2016 to July 2019. A member of the Conservative Party, she was the second woman to hold the office of Prime Minister, after Margaret Thatcher.
 
 ```{R Hanna_Vivi graph,echo = FALSE}
-knitr::include_graphics("img/Gordon Brown.jpg")
+knitr::include_graphics("img/Primeminister.png")
 
 ```
 ---
