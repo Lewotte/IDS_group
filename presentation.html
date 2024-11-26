@@ -46,15 +46,50 @@ class: center, middle
 #Correlation Between Significant Events and Prison Population of England and Wales
 
 ---
+class: inverse, left, middle
 
-class: inverse, center, middle
+## A look at the effect of COVID-19 on prison population
 
-#A look at population by Custody
-- Here I choose a selection of 2 custody categories, "10 years to less than 14 years " and "12 months to less than 4 years".
-- Y-axis is a percentage of total within subgroup of categories custody, gender, and age group. (i.e. all values within one grid element adds up to 1)
+We explored the effect of lockdown measures in UK on the prison population.
 
+Data we looked at is grouped by Custody type:
+1. Sentenced (supergroup of all length-determined sentences, e.g. 7-10 yrs)
+  - This group contains miscellaneous subgroups such as "Sentence length not recorded".
+2. Remand (i.e. pre-trial detention)
+3. Non-criminal prisoners (civil offenders)
 
-&lt;img src="presentation_files/figure-html/Sky_plot1-1.png" width="80%" /&gt;
+And is sorted by gender (Male &amp; Female). Most prisoners are male.
+
+---
+## Important dates used for modeling
+
+- First lockdown enforced: `\(^1\)`
+  - March 26, 2020
+- Most lockdown restrictions lifted (until start of 2nd lockdown): `\(^2\)`
+  - July 4, 2020
+- All lockdown restrictions lifted for the last time: `\(^3\)`
+  - June 19, 2021
+
+.footnote[
+[1] Institute for Government analysis, https://www.instituteforgovernment.org.uk/sites/default/files/timeline-lockdown-web.pdf , retrieved November 26, 2024
+
+[2] UK Parliment, Coronavirus: A history of English lockdown laws, https://commonslibrary.parliament.uk/research-briefings/cbp-9068/ , retrieved November 26, 2024
+
+[3] BBC, Covid: England lockdown rules to end on 19 July, PM confirms, https://www.bbc.co.uk/news/uk-57809691
+]
+
+---
+(Explain custody types with pos and neg reaction to covid.)
+
+---
+
+.pull-left[
+
+![test](img/custody_plot_posReaction.jpg)
+]
+.pull-right[
+
+]
 
 ---
 #REFORMS
@@ -71,7 +106,92 @@ class: inverse, center, middle
 &lt;img src="img/Marcel_Sid_3.png" width="500%" /&gt;
 ]
 ---
-#PRIME MINISTERS
+#PRIME MINISTERS - David Cameron
+#####David Cameron, a Conservative, was UK Prime Minister from 2010 to 2016. He implemented austerity measures and held the 2016 EU referendum, leading to Brexit and his resignation.
+
+&lt;img src="img/Primeminister.png" width="80%" /&gt;
+---
+###1. Drug Offenses
+####Trend: After peaking around 2010, the prison population for drug offenses declined significantly during the Cameron years.
+####Key Issues:
+- Reflects a shift in policing priorities and sentencing for drug-related crimes.
+- Debate over the effectiveness of punitive measures versus rehabilitation programs.
+####Factors:
+- Policing Strategy: Focus shifted to tackling high-level drug trafficking rather than low-level offenses.
+- Rehabilitation: Increased emphasis on drug treatment programs as alternatives to imprisonment.
+- Cultural Changes: Reduced stigma around certain drugs, particularly cannabis, influenced public and legal attitudes.
+####Government Response:
+- Expanded funding for drug treatment and harm reduction initiatives.
+- Focused on dismantling organized drug networks, deprioritizing minor possession cases.
+
+---
+
+###2. Fraud and Forgery
+####Trend: The prison population for fraud and forgery offenses declined steadily during this period.
+####Key Issues:
+- Fewer resources allocated to investigating white-collar crime.
+- Fraud increasingly perpetrated through cyber channels, making traditional arrests less feasible.
+####Factors:
+- Technological Advances: Transition to online fraud reduced physical evidence, complicating arrests and convictions.
+- Austerity: Police funding cuts impacted the capacity to investigate complex financial crimes.
+- Focus Shift: Law enforcement prioritized violent and drug-related crimes over fraud.
+####Government Response:
+- Encouraged the private sector to take more responsibility for preventing financial fraud.
+- Supported the development of specialized units for cybercrime investigation.
+---
+###3. Motoring Offenses
+####Trend: The prison population for motoring offenses consistently declined throughout this period.
+####Key Issues:
+- Declining imprisonment for motoring-related crimes could reflect a focus on alternative penalties.
+- Technological enforcement (e.g., speed cameras) played a larger role than human intervention.
+####Factors:
+- Automation: Greater use of automated systems reduced reliance on arrests for minor offenses.
+- Legislation: Introduction of more on-the-spot fines and penalty point systems decreased incarceration rates.
+- Austerity: Police budget cuts impacted road traffic enforcement.
+####Government Response:
+- Focused resources on education campaigns (e.g., drink-driving awareness).
+Promoted use of technology for road safety enforcement.
+---
+###4. Rape
+####Trend: The prison population for rape offenses steadily increased throughout the period.
+####Key Issues:
+- Increased reporting due to awareness campaigns and social movements.
+- Lengthier sentences for sexual offenses reflected public demand for justice.
+####Factors:
+- Cultural Shift: Greater willingness of survivors to report sexual offenses.
+- Judicial Changes: Harsher sentencing policies for rape and sexual violence.
+- Awareness Campaigns: Initiatives like #MeToo raised awareness and led to action on sexual crimes.
+####Government Response:
+- Expanded funding for sexual violence support services.
+- Introduced training for police and prosecutors to handle rape cases sensitively.
+---
+###5. Robbery
+####Trend: The prison population for robbery offenses fluctuated, peaking around 2011 and declining thereafter.
+####Key Issues:
+- Variability linked to changes in socioeconomic conditions and crime opportunities.
+- Shift to non-violent theft methods like cybercrime reduced traditional robbery.
+####Factors:
+- Economic Climate: Recession-related unemployment initially drove robbery rates up.
+- Security Measures: Increased CCTV coverage deterred street-level robbery.
+- Policing Priorities: Focus shifted to violent and high-profile crimes.
+####Government Response:
+- Promoted urban safety initiatives, such as better street lighting.
+- Strengthened penalties for armed robbery to deter violent crimes.
+---
+###6. Violence Against the Person
+####Trend: The prison population for violence against the person rose sharply until 2013, then plateaued.
+####Key Issues:
+- Reflects stricter sentencing and prioritization of violent crime.
+- Public concern about knife crime and domestic violence influenced policy focus.
+####Factors:
+- Legislative Changes: Tougher sentences for assault and domestic violence.
+- Social Awareness: Greater focus on addressing domestic violence and hate crimes.
+- Policing Strategies: Proactive measures like stop-and-search increased violent crime detections.
+####Government Response:
+- Introduced domestic violence legislation and support programs.
+- Increased funding for community-based violence prevention initiatives.
+---
+#PRIME MINISTERS - Theresa May
 
 #####Theresa May is a British politician who served as the Prime Minister of the United Kingdom from July 2016 to July 2019. A member of the Conservative Party, she was the second woman to hold the office of Prime Minister, after Margaret Thatcher.
 
