@@ -139,6 +139,8 @@ custody_plot <- Custody_PD_sliced %>%
   #in = 100 pixels. Keep commented unless need to export plot
 export.width <- 12 
 ggsave("img/custody_plot_testing.jpg", plot = custody_plot, width = export.width, height = export.width, units = "in")
+
+print(custody_plot)
   
 ```
 
