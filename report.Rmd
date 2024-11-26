@@ -63,6 +63,8 @@ Elaborate in this section on:
 
 ## Findings
 
+For the prime minister section, we included the whole data set and all the years to provide a comparison for before and during each Prime Ministers' time in office. There were a few limitations such as being unable to directly correlate causes of changes to specific polices that the government made at that time which resulted in assumptions being made. To help with this, we used different types of crime and looked into individual polices regarding those.
+
 The write-up of your project and findings go here. 
 
 Think of this as the text of your presentation with some extra detail to cover what there was not time to discuss in the presentation. This might include any assumptions you made when doing your analysis, any limitations of the work you have done or any ideas you have for future work. Feel free to split this section into subsections to make it easier to read. 
