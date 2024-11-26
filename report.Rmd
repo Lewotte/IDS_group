@@ -54,9 +54,10 @@ We have picked some major worldwide events to see whether if there is a noticeab
 
 We explored the 'Prison population by type of custody, age group and sex' section of the data.
 
+The data set we looked at contained many custody groups like remand(individuals that are held in prison until their trial/hearing), intermediate sentence(individuals that have to stay in custody until they have been approved to be safe for the public), fine defaulter(individuals that are in prison due to refusing to pay a fine) and recalls(individuals that were released on parole/license but broke the rules of their probation and are back in prison). 
+
 Note to future editor:
 Elaborate in this section on:
-- what does each custody group mean (remand, intermediate sentence, etc.)
 - the time resolution (how much time is spaced between consecutive data), how it went from once a year to once a month in 2011, etc.)
 - explaination of other data set used
 
