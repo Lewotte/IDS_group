@@ -1,6 +1,6 @@
 ---
 title: "Correlation Between Significant Events and Prison Population"
-subtitle: "Group<br> _GOMAKASHI_"
+subtitle: "Group 13<br> _GOMAKASHI_"
 author: "Members<br> _Sky, Marcel, Siddhi, Maggie, Vivi, Hanna_"
 institute: "University of Edinburgh"
 date: "`r Sys.Date()`"
@@ -156,7 +156,7 @@ knitr::include_graphics("img/Marcel_Sid_3.png")
 ---
 #PRIME MINISTERS
 
-#####Gordon Brown served as the Prime Minister of the UK from June 2007 to May 2010. During his tenure, crime rates in the UK were shaped by several factors including government policies, socio-economic conditions and broader trends in crime.
+#####Theresa May is a British politician who served as the Prime Minister of the United Kingdom from July 2016 to July 2019. A member of the Conservative Party, she was the second woman to hold the office of Prime Minister, after Margaret Thatcher.
 
 ```{R Hanna_Vivi graph,echo = FALSE}
 knitr::include_graphics("img/Gordon Brown.jpg")
@@ -164,77 +164,114 @@ knitr::include_graphics("img/Gordon Brown.jpg")
 ```
 ---
 ###1. Violence Against The Person
-####Trend: Knife crime emerged as a major concern during Brown’s premiership, with recorded incidents rising, particularly in urban areas.
+####Trend: Violent crime, including domestic violence, increased during Theresa May's time as Prime Minister. Austerity measures reduced police resources, but awareness campaigns led to more reporting of such crimes.
 ####Key Issues:
-- High-profile stabbings and youth violence gained significant media attention.
-- Gang-related knife crime became a growing problem in cities like London, Manchester, and Birmingham.
+- Rising arrests for violent crimes raised concerns about public safety.
+- Domestic violence and knife crime were particularly alarming during her leadership.
 
 ####Factors:
-- Increased youth involvement in gangs.
-- Economic deprivation exacerbated tensions in certain communities.
+Increased Reporting: Campaigns encouraged victims to come forward.
+Austerity: Budget cuts reduced the number of police officers.
+Social Media: Highlighted incidents and raised public awareness.
 
 ####Government Response:
-- Operation Blunt 2 was launched in 2008 to curb knife possession, but public perception remained critical of the problem's persistence.
+- Introduced the Serious Violence Strategy to tackle knife crime and gang violence.
+- Focused on addressing domestic violence with funding for shelters and new laws.
 
 ---
-###2. Burglary Trends Post-2010
-####After 2010, burglary rates continued to decline across the UK. This drop can be attributed to several factors, some of which were influenced by the groundwork laid by initiatives like Operation Blunt 2:
+###2. Burglary 
+####Trend: Burglary rates declined during Theresa May’s tenure, partly due to improved home security systems. However, police budget cuts under austerity raised concerns about reduced capacity to address these crimes.
+####Key Issues :
+- Decline in arrests may reflect reduced police resources rather than fewer burglaries.
+- Continued reliance on homeowners to secure their properties.
 
-- Improved Home Security: Advancements in home security systems, such as alarms, CCTV, and stronger locks, reduced burglary opportunities.
+####Factors :
+- Better Security: Increased use of CCTV, alarms, and smart locks deterred burglars.
+- Austerity: Police funding cuts led to fewer officers investigating burglaries.
+- Criminal Shift: Some offenders moved toward cybercrime instead of traditional burglary.
 
-- Continued Focus on Hotspot Policing: The policing strategies developed under Brown's era, including intelligence-led policing and hotspot targeting, persisted and evolved.
+####Government Response :
+- Promoted neighborhood watch programs and public campaigns on home security.
+- Focused police efforts on higher-priority crimes, leaving burglary less emphasized.
 
-- Economic Recovery: Gradual recovery from the 2008 financial crisis may have reduced the economic desperation that drives some property crimes.
 ---
 ###3. Fraud and Forgery
-####Trend: Fraud, particularly financial and benefit fraud, saw increases during Brown’s tenure.
+####Trend: Fraud increasingly shifted online during May’s tenure, with cybercrime emerging as a dominant concern. Traditional forgery and fraud arrests declined as enforcement adapted to these changes.
 ####Key Issues:
-- The 2008 financial crisis created opportunities for fraudulent activity.
-- Mortgage fraud and Ponzi schemes grew during this period.
-- Benefit fraud became a political issue, with accusations of widespread abuse of welfare systems.
+- Cybercrime posed new challenges for law enforcement, requiring specialized skills and resources.
 
 ####Factors:
-- Economic hardship drove some individuals toward opportunistic crimes.
-- Systemic vulnerabilities in financial institutions and benefit systems were exploited.
+- Technological Shift: Rapid digitization created opportunities for online fraud.
+- Public Awareness: Many individuals and businesses lacked awareness of cybersecurity risks.
+- Resource Limitations: Austerity limited the expansion of specialized cybercrime units.
 
 ####Government Response:
-- Efforts to detect and prevent benefit fraud were intensified, including data matching and stricter audits.
+- Expanded the National Crime Agency’s cybercrime capabilities.
+- Promoted public education campaigns to raise awareness of online fraud risks.
 
 ---
 ###4. Drug Offences
-####Trend: While drug possession and distribution offenses did not see a nationwide surge, certain areas experienced spikes in drug-related violence.
+####Trend: Drug-related crime remained a persistent issue during May’s tenure, with a focus on tackling organized crime networks and trafficking rather than low-level offenses.
 ####Key Issues:
-- Turf wars among gangs in hotspot areas.
-- An uptick in the availability of "legal highs" (psychoactive substances not yet banned).
+- A fluctuating trend in drug-related arrests reflected changing enforcement strategies.
+- Rising concern over county lines drug operations involving vulnerable individuals.
+
 
 ####Factors:
-- Economic inequality and lack of opportunities in affected communities.
+- Organized Crime: Increased trafficking and exploitation of minors in drug distribution.
+- Reduced Policing Capacity: Austerity limited proactive drug enforcement efforts.
+- Changing Social Attitudes: Shifts in societal views on recreational drug use affected enforcement priorities.
 
 ####Government Response:
-- Continued focus on disrupting drug supply chains and targeting organized crime groups.
+- Strengthened the role of the National Crime Agency (NCA) in combating drug trafficking.
+- Launched initiatives to address county lines drug operations, including safeguarding vulnerable individuals.
 
 ---
 ###5. Rape
+####Trend:Sexual violence reporting increased during May’s tenure due to heightened awareness and improved survivor support systems. However, there was criticism about the low prosecution rates for these crimes.
 ####Key Issues:
-####Improved Reporting and Awareness:
-- Public Campaigns: Greater awareness about sexual violence and campaigns to encourage victims to come forward (e.g., initiatives led by charities and government bodies) led to more reported cases.
-- Police Focus: Law enforcement agencies improved their handling of sexual violence cases, making it easier for victims to report incidents.
-- Changing Social Attitudes: Stigma surrounding reporting rape began to decline, prompting more survivors to seek justice.
+- Rising arrests reflected improved reporting but also revealed gaps in handling sexual violence cases.
 
-####Better Recording Practices:
-- During this period, the UK introduced reforms to ensure that sexual offenses were accurately recorded by police forces, leading to a rise in reported cases.
-- Historical cases and delayed reporting also contributed to the increase in recorded numbers.
+####Factors:
+- Social Movements: Global campaigns like #MeToo increased awareness and reporting of sexual violence.
+- Police Training: Law enforcement became better equipped to handle sensitive cases.
+- Judicial Backlogs: Delays in prosecution and low conviction rates caused frustration among victims
+
+####Government Reponse:
+- Promoted better police training on handling sexual offenses.
+- Advocated for increased funding for victim support programs and rape crisis centers.
+- Supported the creation of specialist units to handle sexual violence cases.
 
 ---
 ###6. Robbery
+####Trend:Fluctuations in robbery arrests reflected targeted interventions in high-crime areas, though austerity measures hindered broader prevention efforts.
 ####Key Issues:
-- Economic Strain: The 2008 financial crisis led to rising unemployment and financial hardship, driving some individuals toward opportunistic crimes like robbery.
-- Youth and Gang Involvement: Youths, often linked to gangs, played a significant role in street robberies, using weapons to intimidate victims and steal valuable items like phones or jewelry.
-- Urban Hotspots: Dense city areas like London and Manchester saw higher robbery rates, especially in public spaces.
-- Crime Displacement: Focused policing on knife crime may have inadvertently shifted criminal activity toward robbery in some areas.
+- Robbery remained a concern, especially in urban areas with higher youth crime rates.
+
+####Factors:
+- Youth Involvement: Economic challenges during austerity may have driven some young people toward robbery.
+- Targeted Policing: Police focused resources on areas with high robbery rates.
+- Technological Advances: Improved surveillance helped deter robberies.
+
+####Government Response:
+- Promoted community engagement programs to prevent youth involvement in robbery.
+- Supported the use of data-driven policing to identify and target robbery hotspots.
+
 
 ---
+###7. Other Offenses
+####Trend:An increase in arrests for miscellaneous crimes, such as public order offenses and emerging cyber-related crimes, highlighted changing priorities in law enforcement under May’s leadership.
 
+####Key Issues:
+- Law enforcement struggled to address modern challenges with reduced resources.
+
+####Factors:
+- Emerging Crimes: Growth in cyber-related offenses and technology-driven crimes.
+- Shifting Social Norms: Changes in public behavior led to new categories of offenses.
+
+####Government Response:
+- Modernized police training to address evolving threats, such as cybercrime and organized crime.
+- Introduced the Modern Slavery Act 2015, targeting exploitation and human trafficking.
 
 ---
 # Hello World
