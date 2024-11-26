@@ -146,7 +146,7 @@ knitr::include_graphics("img/Marcel_Sid_3.png")
 #####David Cameron, a Conservative, was the UK Prime Minister from 2010 to 2016. He implemented austerity measures and held the 2016 EU referendum, leading to Brexit and his resignation.
 
 ```{R Hanna_Vivi graph,echo = FALSE}
-knitr::include_graphics("img/Primeminister.png")
+knitr::include_graphics("img/New_vivi_hanna_graph.png")
 
 ```
 ---
@@ -175,7 +175,7 @@ knitr::include_graphics("img/Primeminister.png")
 #####Theresa May is a British politician who served as the Prime Minister of the United Kingdom from July 2016 to July 2019. A member of the Conservative Party, she was the second woman to hold the office of Prime Minister, after Margaret Thatcher.
 
 ```{R Hanna_Vivi_2 graph,echo = FALSE}
-knitr::include_graphics("img/Primeminister.png")
+knitr::include_graphics("img/New_vivi_hanna_graph.png")
 
 ```
 ---
