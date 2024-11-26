@@ -619,6 +619,9 @@ dfs <- list(PR_female, PR_male, PR_Remand, PR_Sentenced, PR_u25, PR_25_40, PR_40
 PR_quarterly <- reduce(dfs, left_join, by = "Date")
 PR_quarterly <- na.omit(PR_quarterly)
 
+dfs_2 <- list(PR_female, PR_male, PR_Remand, PR_Sentenced, PR_total)
+PR_monthly <- reduce(dfs_2, left_join, by = "Date")
+
 #event dates
 event_dates <- as.Date(c("2012-05-01", "2013-04-25", "2014-03-13", "2015-02-12"))
 event_quarters <- quarter(event_dates, with_year = TRUE)
@@ -627,13 +630,18 @@ event_quarters <- quarter(event_dates, with_year = TRUE)
 PR_quarterly <- PR_quarterly %>%
   mutate(event_occurred = if_else(quarter(Date, with_year = TRUE) %in% event_quarters, 1, 0))
 
+PR_monthly <- PR_monthly %>%
+  rowwise() %>%
+  mutate(event_occurred = any(Date > event_dates & Date <= event_dates + months(8))) %>%
+  ungroup()
+
 #t test (messures mean before and after events)
-PR_t_test <- t.test(Total_pop ~ event_occurred, data = PR_quarterly) %>%
+PR_t_test <- t.test(Total_pop ~ event_occurred, data = PR_monthly) %>%
   tidy()
 print(PR_t_test)
 
 #t test is mostly not visualisable so this can kinda be used as a visual representation
-ggplot(PR_quarterly, aes(x = as.factor(event_occurred), y = Total_pop, fill = as.factor(event_occurred))) +
+ggplot(PR_monthly, aes(x = as.factor(event_occurred), y = Total_pop, fill = as.factor(event_occurred))) +
   geom_boxplot() +
   labs(title = "Boxplot of Total Population by Event Occurrence",
        x = "Event Occurred",
@@ -656,35 +664,28 @@ r_squared
 adj_r_squared 
 
 #time series analysis (can be used to see the difference in predicted vs actual)
-ts_data <- ts(PR_quarterly$Total_pop, frequency = 4) 
+PR_monthly_to_2012 <- PR_monthly %>%
+  filter(Date < as.Date("2012-05-01"))
 
-#number of quarters in a yearl
-PR_quarterly_to_2012 <- PR_quarterly %>%
-  filter(Date >= as.Date("2010-04-01") & Date <= as.Date("2012-06-30"))
-ts_data <- ts(PR_quarterly_to_2012$Total_pop,  start = c(2010, 2), frequency = 4)  #number of quarters in a year
+ts_data <- ts(PR_monthly_to_2012$Total_pop, start = c(2010, 7), frequency = 12) #number of months in a year
 fit_arima <- auto.arima(ts_data)
-forecast_result <- forecast(fit_arima, h = 22) 
-
-#forecasting the next 22 periods
-print(forecast_result)
+forecast_result <- forecast(fit_arima, h = 48) 
 
 #clean ts data
 forecast_df <- rownames_to_column(as.data.frame(forecast_result), var = "Date") %>%
-  mutate(Date = as.Date(as.yearqtr(Date, format = "%Y Q%q"), frac = 1)) #end of quarter
-ts_vs_real <- inner_join(forecast_df, PR_quarterly , by = "Date")
+  mutate(Date = as.yearmon(Date, format = "%b %Y"),
+         Date = as.Date(Date, format = "%b %y", frac = 1)) #end of month
+ts_vs_real <- inner_join(forecast_df, PR_monthly , by = "Date")
 
 ts_vs_real %>%
   filter(Date <= as.Date("2016-09-01")) %>%
   ggplot(aes(x = Date)) +
   geom_line(aes(y = `Point Forecast`, color = "Point Forecast")) +
-  geom_line(aes(y = `Hi 95`, color = "Hi 95")) +
-  geom_line(aes(y = `Lo 95`, color = "Lo 95")) +
-  geom_line(aes(y = Total_pop, color = "Total_pop")) +
-  scale_color_manual(values = c("Point Forecast" = "blue", "Lo 95" = "orange", "Hi 95" = "orange", "Total_pop" = "red")) +
+  geom_line(aes(y = `Total_pop`, color = "Total_pop")) +
+  scale_color_manual(values = c("Point Forecast" = "blue", "Total_pop" = "red")) +
   labs(title = "Forecast vs Real",
        x = "Date", 
        y = "Population")
-
 ```
 
 
@@ -874,6 +875,9 @@ dfs <- list(PM_female, PM_male, PM_Remand, PM_Sentenced, PM_u25, PM_25_40, PM_40
 PM_quarterly <- reduce(dfs, left_join, by = "Date")
 PM_quarterly <- na.omit(PM_quarterly)
 
+dfs_2 <- list(PM_female, PM_male, PM_Remand, PM_Sentenced, PM_total)
+PM_monthly <- reduce(dfs, left_join, by = "Date")
+
 #event date
 event_date <- as.Date("2016-07-13")
 
@@ -881,13 +885,16 @@ event_date <- as.Date("2016-07-13")
 PM_quarterly <- PM_quarterly %>%
   mutate(event_occurred = ifelse(Date < event_date, 0, 1))
 
+PM_monthly <- PM_monthly %>%
+  mutate(event_occurred = ifelse(Date < event_date, 0, 1))
+
 #t test (measures mean before and after events)
-PM_t_test <- t.test(Total_pop ~ event_occurred, data = PM_quarterly) %>%
+PM_t_test <- t.test(Total_pop ~ event_occurred, data = PM_monthly) %>%
   tidy()
 print(PM_t_test)
 
 #t test is mostly not visualisable so this can kinda be used as a visual representation
-ggplot(PM_quarterly, aes(x = as.factor(event_occurred), y = Total_pop, fill = as.factor(event_occurred))) +
+ggplot(PM_monthly, aes(x = as.factor(event_occurred), y = Total_pop, fill = as.factor(event_occurred))) +
   geom_boxplot() +
   labs(title = "Boxplot of Total Population by Event Occurrence",
        x = "Event Occurred",
@@ -910,22 +917,21 @@ r_squared
 adj_r_squared 
 
 #time series analysis (can be used to see the difference in predicted vs actual)
-ts_data <- ts(PM_quarterly$Total_pop, frequency = 4) 
-
 #number of quarters in a year
-PM_quarterly_to_2012 <- PM_quarterly %>%
+PM_monthly_to_2012 <- PM_monthly %>%
   filter(Date >= as.Date("2010-04-01") & Date <= as.Date("2016-07-13"))
-ts_data <- ts(PM_quarterly_to_2012$Total_pop,  start = c(2010, 2), frequency = 4)  #number of quarters in a year
+ts_data <- ts(PM_monthly_to_2012$Total_pop,  start = c(2010, 2), frequency = 12)  #number of quarters in a year
 fit_arima <- auto.arima(ts_data)
-forecast_result <- forecast(fit_arima, h = 12) 
+forecast_result <- forecast(fit_arima, h = 36) 
 
 #forecasting the next 12 periods
 print(forecast_result)
 
 #clean ts data
 forecast_df <- rownames_to_column(as.data.frame(forecast_result), var = "Date") %>%
-  mutate(Date = as.Date(as.yearqtr(Date, format = "%Y Q%q"), frac = 1)) #end of quarter
-ts_vs_real <- inner_join(forecast_df, PM_quarterly , by = "Date")
+  mutate(Date = as.yearmon(Date, format = "%b %Y"),
+         Date = as.Date(Date, format = "%b %y", frac = 1)) #end of month
+ts_vs_real <- inner_join(forecast_df, PM_monthly , by = "Date")
 
 # Ensure the ts_vs_real data frame has the correct structure
 ts_vs_real %>%
