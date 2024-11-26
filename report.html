@@ -540,23 +540,28 @@ campaigns.</li>
 <h4>How lockdown affect the prisoner population</h4>
 <p>To prove our findings further. We start an analysis aimed to model
 the rate of change in the prisoner population (d1_Count) over time,
-focusing on adult prisoners in sentenced custody, and considering the
-impact of the COVID-19 lockdown period. Three linear regression models
-were fitted to the data:</p>
-<p>Model 1 (custody_fit_yesInt): This model included the variables Date,
-lockdown_happens, and the interaction between these two variables (Date
-* lockdown_happens). This allowed us to assess how the lockdown period
-affected the population change in sentenced custody over time, while
-accounting for the general time trend.</p>
-<p>Model 2 (custody_fit_noInt): This model excluded the interaction
-term, considering only the main effects of Date and lockdown_happens.
-The model suggested that while the lockdown period significantly
-influenced the population change (p &lt; 0.001), the overall time trend
-(Date) did not show a statistically significant effect (p = 0.284).</p>
-<p>Model 3 (custody_fit_Simple): The simplest model included only
-lockdown_happens as a predictor. It showed a large negative effect of
-the lockdown period on the population change (p &lt; 0.001), with the
-population dropping significantly during lockdown.</p>
+considering the impact of the COVID-19 lockdown period.</p>
+</div>
+<div id="methods" class="section level4">
+<h4>Methods</h4>
+<p>Three linear regression models were fitted to the data:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Model 1 (custody_fit_yesInt)</strong>: This model
+included the variables <code>Date</code>, <code>lockdown_happens</code>,
+and the interaction between these two variables
+(<code>Date * lockdown_happens</code>). This model assesses how the
+lockdown period affected the population change in sentenced custody over
+time while accounting for the general time trend.</p></li>
+<li><p><strong>Model 2 (custody_fit_noInt)</strong>: This model excluded
+the interaction term and included only the main effects of
+<code>Date</code> and <code>lockdown_happens</code>.</p></li>
+<li><p><strong>Model 3 (custody_fit_Simple)</strong>: The simplest model
+included only <code>lockdown_happens</code> as a predictor.</p></li>
+</ol>
+</div>
+<div id="results" class="section level4">
+<h4>Results</h4>
+<p><strong>Model 1 (custody_fit_yesInt) Results:</strong></p>
 <p>The R-squared values indicate the proportion of variance explained by
 each model. The model with the interaction term (custody_fit_yesInt) had
 the highest R-squared (0.195), suggesting that adding the interaction
@@ -564,6 +569,9 @@ term improved the model fit compared to the simpler models. Despite
 this, the overall explanatory power remains relatively low, indicating
 that other factors may influence population changes in custody that were
 not included in the model.</p>
+<p><strong>Model 1 (custody_fit_yesInt)</strong> R-squared: 0.195</p>
+<p><strong>Model 2 (custody_fit_noInt)</strong> R-squared: 0.134</p>
+<p><strong>Model 3 (custody_fit_Simple)</strong> R-squared: 0.127</p>
 <p>The length should be roughly 1,500 words. If you want to use a word
 count addin, you can install this by copying and pasting the following
 into RStudio:</p>
