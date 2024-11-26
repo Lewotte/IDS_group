@@ -116,8 +116,8 @@ custody_plot <- Custody_PD_sliced %>%
     year >= 2015,
     # Age == "Adult",
     Custody == c(
-      "Sentenced",
-      "Untried"
+      "Sentenced"
+      # "Untried"
     ),
   ) %>% 
   ggplot(
@@ -144,13 +144,31 @@ ggsave("img/custody_plot_testing.jpg", plot = custody_plot, width = export.width
 
 ```{r Sky-modeling}
 Custody_modeling <- Custody_PD_sliced %>%
-  filter(Custody == "Sentenced")
+  filter(
+    year >= 2015,
+    Age == "Adult",
+    Custody == c(
+      "Sentenced"
+    )
+  )
 
-custody_COVID_fit <- linear_reg() %>%
+custody_fit_yesInt <- linear_reg() %>%
   set_engine("lm") %>%
-  fit(d1_Count ~ Date, data = Custody_modeling)
+  fit(d1_Count ~ Date + lockdown_happens + Date * lockdown_happens, data = Custody_modeling)
 
-tidy(custody_COVID_fit)
+custody_fit_noInt <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(d1_Count ~ Date + lockdown_happens, data = Custody_modeling)
+
+custody_fit_Simple <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(d1_Count ~ lockdown_happens, data = Custody_modeling)
+
+tidy(custody_fit_yesInt)
+
+glance(custody_fit_noInt)$r.squared
+glance(custody_fit_yesInt)$r.squared
+glance(custody_fit_Simple)$r.squared
 ```
 
 
