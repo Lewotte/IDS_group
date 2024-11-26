@@ -154,7 +154,7 @@ knitr::include_graphics("img/Marcel_sid_graph2.png")
 .pull-right[
 ```{R Marcel_Siddhi_graph3, out.width="500%", fig.width=4,echo = FALSE}
 
-knitr::include_graphics("img/Marcel_Sid_3.png")
+knitr::include_graphics("img/boxplot.png")
 
 ```
 ]
