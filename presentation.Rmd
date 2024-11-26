@@ -350,6 +350,24 @@ Social Media: Highlighted incidents and raised public awareness.
 - Introduced the Modern Slavery Act 2015, targeting exploitation and human trafficking.
 
 ---
+###8. Motoring Offenses
+####Trend: During Theresa May’s time, arrests for motoring offenses dropped due to increased use of automated systems like speed cameras, reducing the need for police intervention.
+
+####Key Issues:
+- Fewer arrests raised concerns about gaps in addressing reckless driving.
+- Police presence on roads decreased due to budget cuts.
+
+####Factors:
+- Technology: Automated tools like speed cameras took over traffic enforcement.
+- Awareness: Road safety campaigns improved driver behavior.
+- Austerity: Police had fewer resources for traffic enforcement.
+
+####Government Response:
+- Supported automated traffic systems.
+- Promoted road safety campaigns.
+- Prioritized police resources for more urgent crimes.
+
+---
 # Hello World
 
 - Click the `Knit` button to compile your presentation
