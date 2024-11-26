@@ -40,36 +40,37 @@ class: inverse
 
 
 
-# Correlation Between Nation-wide Events and Prison Population of England and Wales
+class: middle, center
+
+## A look at the effect of COVID-19 on prison population of different custody types
 
 ---
 
-class: middle
-
-## A look at the effect of COVID-19 on prison population
+## Custody types
 
 We explored the effect of lockdown measures in UK on the prison population.
 
+--
+
 Data we looked at is grouped by Custody type:
-1. Sentenced (supergroup of all length-determined sentences, e.g. 7-10 yrs)
-  - This group contains miscellaneous subgroups such as "Sentence length not recorded".
+1. Sentenced (supergroup of all length-determined sentences, e.g. 7-10 yrs). This group contains miscellaneous subgroups such as "Sentence length not recorded".
+
+--
+
 2. Remand (i.e. pre-trial detention)
+
+--
+
 3. Non-criminal prisoners (civil offenders)
 
-And is sorted by gender (Male &amp; Female). Most prisoners are male.
+--
 
----
-background-image: url(https://github.com/yihui/xaringan/releases/download/v0.0.2/karl-moustache.jpg)
+And everything is sorted by gender (Male &amp; Female).
 ---
 
 ## Important dates used for modeling
 
-- First lockdown enforced: `\(^1\)`
-  - March 26, 2020
-- Most lockdown restrictions lifted (until start of 2nd lockdown): `\(^2\)`
-  - July 4, 2020
-- All lockdown restrictions lifted for the last time: `\(^3\)`
-  - June 19, 2021
+- First lockdown enforced: `\(^1\)` March 26, 2020
 
 .footnote[
 [1] Institute for Government analysis, https://www.instituteforgovernment.org.uk/sites/default/files/timeline-lockdown-web.pdf , retrieved November 26, 2024
@@ -79,19 +80,98 @@ background-image: url(https://github.com/yihui/xaringan/releases/download/v0.0.2
 [3] BBC, Covid: England lockdown rules to end on 19 July, PM confirms, https://www.bbc.co.uk/news/uk-57809691
 ]
 
+--
+  
+- Most lockdown restrictions lifted (until start of 2nd lockdown): `\(^2\)` July 4, 2020
+
+--
+
+- All lockdown restrictions lifted for the last time: `\(^3\)` June 19, 2021
+
 ---
 
-(Explain custody types with pos and neg reaction to covid.)
+## Important dates used for modeling
+
+(insert plot of sentenced, adult, male &amp; female separate, with annotation)
 
 ---
 
-.pull-left[
+## How is the data modelled?
 
-![test](img/custody_plot_posReaction.jpg)
-]
-.pull-right[
+We first produced the rate of change of prisoner population using the `diff {base}` function:
 
-]
+``` r
+d1_Count = diff(c(0,Count))
+```
+
+--
+
+We created a binary variable `lockdown_happens` where the value of it is 0 for all date entries when UK was not under lock-down, and 1 when it is.
+
+``` r
+lockdown_happens = ifelse(Date &lt; ymd("2020-03-26") | Date &gt; ymd("2021-06-19"), 0, 1)
+```
+
+--
+
+
+```
+## # A tibble: 7 × 9
+##   Custody Gender Age   Date       Count  year month lockdown_happens d1_Count
+##   &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt; &lt;date&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt;    &lt;dbl&gt;
+## 1 Remand  Male   Adult 2020-01-31  8244  2020     1                0      200
+## 2 Remand  Male   Adult 2020-02-29  8404  2020     2                0      160
+## 3 Remand  Male   Adult 2020-03-31  8320  2020     3                1      -84
+## 4 Remand  Male   Adult 2020-04-30  8484  2020     4                1      164
+## 5 Remand  Male   Adult 2020-05-31  9149  2020     5                1      665
+## 6 Remand  Male   Adult 2020-06-30  9600  2020     6                1      451
+## 7 Remand  Male   Adult 2020-07-31  9919  2020     7                1      319
+```
+
+
+
+---
+
+## The model
+
+**Response Variable**: the rate of change of prisoner population, `d1_Count`.
+
+**Explainatory variables:** `lockdown_happens` and `Date` .
+
+--
+
+We made three simple linear models:
+
+
+``` r
+custody_fit_yesInt &lt;- linear_reg() %&gt;%
+  set_engine("lm") %&gt;%
+  fit(&lt;...&gt;, data = Custody_modeling)
+  ...
+```
+
+- `d1_Count ~ Date + lockdown_happens + Date * lockdown_happens`
+This takes into consideration of both explanatory variables and their interaction effect.
+
+--
+
+- `d1_Count ~ Date + lockdown_happens`
+This takes into consideration of both explanatory variables without interaction effect.
+
+--
+
+- `d1_Count ~ lockdown_happens`
+This takes into consideration of just the lockdown indicator variable.
+
+---
+
+## Results
+
+
+
+---
+
+## Interpretation of the model
 
 ---
 #REFORMS
