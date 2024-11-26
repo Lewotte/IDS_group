@@ -436,9 +436,20 @@ Annual_Data_A1_1 <- as.data.frame(Custody_PD)
 
 #selects wanted data and the dates
 Annual_Data_A1_5ii <- Annual_Data_A1_5ii %>%
-  slice(1,16,17,18,22,25)
+  slice(1, #date
+    13, #rape
+    16, #robbery
+    17, #burglary
+    18, #theft and handling
+    22, #fraud and forgery
+    25) #drug offences
 Annual_Data_A1_5i <- Annual_Data_A1_5i %>%
-  slice(1,61,62,89,128)
+  slice(1, #date
+        34, #rape
+        61, #robbery
+        62, #theft offences
+        89, #drug offences
+        128) #fraud offences
 Annual_Data_A1_1 <- Annual_Data_A1_1 %>%
   slice(1,3,4,5,7,21)
 
