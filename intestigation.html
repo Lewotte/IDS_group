@@ -11,7 +11,7 @@
 
 <meta name="author" content="by GOMAKASHI: Sky, Hanna, Maggie, Marcel, Siddhi, Vivi" />
 
-<meta name="date" content="2024-11-26" />
+<meta name="date" content="2024-11-27" />
 
 <title>IDS investigation worksheet</title>
 
@@ -353,7 +353,7 @@ display: none;
 <h1 class="title toc-ignore">IDS investigation worksheet</h1>
 <h4 class="author">by GOMAKASHI: Sky, Hanna, Maggie, Marcel, Siddhi,
 Vivi</h4>
-<h4 class="date">2024-11-26</h4>
+<h4 class="date">2024-11-27</h4>
 
 </div>
 
@@ -749,7 +749,7 @@ ggsave(&quot;img/custody_plot_testing.jpg&quot;, plot = custody_plot, width = ex
     )
   )
 
-#Model 1
+#Model 1: With interaction
 custody_fit_yesInt &lt;- linear_reg() %&gt;%
   set_engine(&quot;lm&quot;) %&gt;%
   fit(d1_Count ~ Date + lockdown_happens + Date * lockdown_happens, data = Custody_modeling)

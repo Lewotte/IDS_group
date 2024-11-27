@@ -155,7 +155,7 @@ Custody_modeling <- Custody_PD_sliced %>%
     )
   )
 
-#Model 1
+#Model 1: With interaction
 custody_fit_yesInt <- linear_reg() %>%
   set_engine("lm") %>%
   fit(d1_Count ~ Date + lockdown_happens + Date * lockdown_happens, data = Custody_modeling)
@@ -189,6 +189,7 @@ cat("\n")
 cat("Adjusted R-squared for custody_fit_yesInt:", adj_r_squared_yesInt, "\n")
 cat("Adjusted R-squared for custody_fit_noInt:", adj_r_squared_noInt, "\n")
 cat("Adjusted R-squared for custody_fit_Simple:", adj_r_squared_Simple, "\n")
+
 
 ```
 

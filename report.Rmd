@@ -213,7 +213,7 @@ Government Response:
 
 #### How lockdown affect the prisoner population
 
-To prove our findings further. We start an analysis aimed to model the rate of change in the prisoner population (d1_Count) over time, considering the impact of the COVID-19 lockdown period. 
+To prove our findings further. We start an analysis aimed to model the rate of change in the prisoner population (d1_Count) over time, focusing on adult prisoners in sentenced custody, and considering the impact of the COVID-19 lockdown period. 
 
 ##### Methods
 
