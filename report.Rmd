@@ -227,15 +227,18 @@ Three linear regression models were fitted to the data:
 
 ##### Results
 
-**Model 1 (custody_fit_yesInt) Results:**
+**Model 1 (custody_fit_yesInt)** Adjusted R-squared for custody_fit_yesInt: 0.1662803 
 
-The R-squared values indicate the proportion of variance explained by each model. The model with the interaction term (custody_fit_yesInt) had the highest R-squared (0.195), suggesting that adding the interaction term improved the model fit compared to the simpler models. Despite this, the overall explanatory power remains relatively low, indicating that other factors may influence population changes in custody that were not included in the model.
+**Model 2 (custody_fit_noInt)** Adjusted R-squared for custody_fit_noInt: 0.1699272 
 
-**Model 1 (custody_fit_yesInt)** R-squared: 0.195
+**Model 3 (custody_fit_Simple)** Adjusted R-squared for custody_fit_Simple: 0.1734328 
 
-**Model 2 (custody_fit_noInt)** R-squared: 0.134
+##### Interpretion
 
-**Model 3 (custody_fit_Simple)** R-squared: 0.127
+According to Occam's Razor, the simplest model that still provides meaningful explanatory power should be choosed. The differences between the three models is not significant. Since the adjusted r-squared of Model 3 is the highest and its simplicity, this makes it the most interpretable for directly assessing the lockdown’s effect. 
+   
+The lower Adjusted R-squared values across all models suggest that other unaccounted factors might also influence changes in the prisoner population. Variables such as policy changes, release rates, or crime trends could play a role.
+
 
 
 
