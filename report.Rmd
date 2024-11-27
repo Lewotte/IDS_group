@@ -136,7 +136,7 @@ For the Prime Minister section, we analyzed the full data set across all years t
 **Government Response** : Strengthened the National Crime Agency (NCA) and introduced targeted interventions.
 
 
-##### 2.Fraud Offenses
+##### 2.Fraud Offences
 
 **Trend** : Continue declined due to a shift towards cyber fraud. 
 
