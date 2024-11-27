@@ -4,7 +4,7 @@
     <title>Correlation Between Significant Events and Prison Population</title>
     <meta charset="utf-8" />
     <meta name="author" content="Members  Sky, Marcel, Siddhi, Maggie, Vivi, Hanna" />
-    <meta name="date" content="2024-11-26" />
+    <meta name="date" content="2024-11-27" />
     <script src="libs/header-attrs-2.28/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
@@ -25,9 +25,13 @@ class: center, middle, inverse, title-slide
 ### University of Edinburgh
 ]
 .date[
-### 2024-11-26
+### 2024-11-27
 ]
 
+---
+
+layout: true
+class: inverse
 ---
 
 
@@ -36,7 +40,7 @@ class: center, middle, inverse, title-slide
 
 
 
-
+class: middle, center
 
 
 
@@ -53,29 +57,32 @@ class: center, middle
 
 
 ---
-class: inverse, left, middle
 
-## A look at the effect of COVID-19 on prison population
+## Custody types
 
 We explored the effect of lockdown measures in UK on the prison population.
 
+--
+
 Data we looked at is grouped by Custody type:
-1. Sentenced (supergroup of all length-determined sentences, e.g. 7-10 yrs)
-  - This group contains miscellaneous subgroups such as "Sentence length not recorded".
+1. Sentenced (supergroup of all length-determined sentences, e.g. 7-10 yrs). This group contains miscellaneous subgroups such as "Sentence length not recorded".
+
+--
+
 2. Remand (i.e. pre-trial detention)
+
+--
+
 3. Non-criminal prisoners (civil offenders)
 
-And is sorted by gender (Male &amp; Female). Most prisoners are male.
+--
 
+And everything is sorted by gender (Male &amp; Female).
 ---
+
 ## Important dates used for modeling
 
-- First lockdown enforced: `\(^1\)`
-  - March 26, 2020
-- Most lockdown restrictions lifted (until start of 2nd lockdown): `\(^2\)`
-  - July 4, 2020
-- All lockdown restrictions lifted for the last time: `\(^3\)`
-  - June 19, 2021
+- First lockdown enforced: `\(^1\)` March 26, 2020
 
 .footnote[
 [1] Institute for Government analysis, https://www.instituteforgovernment.org.uk/sites/default/files/timeline-lockdown-web.pdf , retrieved November 26, 2024
@@ -85,18 +92,196 @@ And is sorted by gender (Male &amp; Female). Most prisoners are male.
 [3] BBC, Covid: England lockdown rules to end on 19 July, PM confirms, https://www.bbc.co.uk/news/uk-57809691
 ]
 
----
-(Explain custody types with pos and neg reaction to covid.)
+--
+  
+- Most lockdown restrictions lifted (until start of 2nd lockdown): `\(^2\)` July 4, 2020
+
+--
+
+- All lockdown restrictions lifted for the last time: `\(^3\)` June 19, 2021
 
 ---
 
-.pull-left[
+class: center, middle
 
-![test](img/custody_plot_posReaction.jpg)
-]
-.pull-right[
+&lt;img src="img/Sky-ppt_1.jpg" width="80%" /&gt;
+&lt;!-- ![](img/Sky-ppt_1.jpg) --&gt;
 
-]
+---
+
+## How is the data modelled?
+
+We first produced the rate of change of prisoner population using the `diff {base}` function:
+
+``` r
+d1_Count = diff(c(0,Count))
+```
+
+--
+
+We created a binary variable `lockdown_happens` where the value of it is 0 for all date entries when UK was not under lock-down, and 1 when it is.
+
+``` r
+lockdown_start &lt;- ymd("2020-03-26")
+lockdown_end &lt;- ymd("2020-07-04")
+...
+lockdown_happens = ifelse(Date &lt; lockdown_start | Date &gt; lockdown_end, 0, 1)
+```
+
+--
+
+
+```
+## # A tibble: 6 × 9
+##   Custody Gender Age   Date       Count  year month lockdown_happens d1_Count
+##   &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt; &lt;date&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt;    &lt;dbl&gt;
+## 1 Remand  Male   Adult 2020-01-31  8244  2020     1                0      200
+## 2 Remand  Male   Adult 2020-02-29  8404  2020     2                0      160
+## 3 Remand  Male   Adult 2020-03-31  8320  2020     3                1      -84
+## 4 Remand  Male   Adult 2020-04-30  8484  2020     4                1      164
+## 5 Remand  Male   Adult 2020-05-31  9149  2020     5                1      665
+## 6 Remand  Male   Adult 2020-06-30  9600  2020     6                1      451
+```
+
+---
+
+## The model
+
+**Response Variable**: the rate of change of prisoner population, `d1_Count`.
+
+**Explainatory variables:** `lockdown_happens` and `Date` .
+
+--
+
+We made three simple linear models:
+
+
+``` r
+custody_fit_yesInt &lt;- linear_reg() %&gt;%
+  set_engine("lm") %&gt;%
+  fit(&lt;...&gt;, data = Custody_modeling)
+```
+
+- `d1_Count ~ Date + lockdown_happens + Date * lockdown_happens`
+This takes into consideration of both explanatory variables and their interaction effect.
+
+--
+
+- `d1_Count ~ Date + lockdown_happens`
+This takes into consideration of both explanatory variables without interaction effect.
+
+--
+
+- `d1_Count ~ lockdown_happens`
+This takes into consideration of just the lockdown indicator variable.
+
+---
+
+## The model
+
+We then applied this model to the a subset of our data:
+- Age group: Adults (others are 15-17 and 18-20)
+- custody type: Sentenced
+- year &gt; 2014 (because some data under Sentenced don't have entry until 2015)
+
+---
+
+class: center, middle
+
+&lt;img src="img/Sky-ppt_2.jpg" width="80%" /&gt;
+&lt;!-- ![](img/Sky-ppt_2.jpg) --&gt;
+
+---
+
+
+
+## Results for the model with interaction effect
+
+- `d1_Count ~ Date + lockdown_happens + Date * lockdown_happens`
+
+```
+## # A tibble: 4 × 5
+##   term                     estimate  std.error statistic p.value
+##   &lt;chr&gt;                       &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 (Intercept)            -115.        375.        -0.307   0.759
+## 2 Date                      0.00801     0.0208     0.385   0.701
+## 3 lockdown_happens      17006.      50749.         0.335   0.738
+## 4 Date:lockdown_happens    -0.959       2.76      -0.348   0.729
+```
+
+And the R-squared value is:
+
+```
+## [1] 0.1786013
+```
+
+---
+
+## Results for the model without interaction effect
+
+- `d1_Count ~ Date + lockdown_happens`
+
+```
+## # A tibble: 3 × 5
+##   term               estimate std.error statistic  p.value
+##   &lt;chr&gt;                 &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)      -114.       374.        -0.305 7.60e- 1
+## 2 Date                0.00795    0.0208     0.383 7.02e- 1
+## 3 lockdown_happens -632.        95.8       -6.60  3.65e-10
+```
+
+And the R-squared value is:
+
+```
+## [1] 0.1781052
+```
+
+---
+
+## Results for the model only depending on the indicator variable
+
+- `d1_Count ~ lockdown_happens`
+
+```
+## # A tibble: 2 × 5
+##   term             estimate std.error statistic  p.value
+##   &lt;chr&gt;               &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)          28.9      18.9      1.53 1.26e- 1
+## 2 lockdown_happens   -629.       95.2     -6.60 3.49e-10
+```
+
+And the R-squared value is:
+
+```
+## [1] 0.1775046
+```
+
+---
+
+## Interpretation of the model
+
+
+- `d1_Count ~ Date + lockdown_happens + Date * lockdown_happens`
+
+```
+## [1] 0.1786013
+```
+
+- `d1_Count ~ Date + lockdown_happens`
+
+```
+## [1] 0.1781052
+```
+
+- `d1_Count ~ lockdown_happens`
+
+```
+## [1] 0.1775046
+```
+
+As we can see the models all gave similar R-squared values, albeit very low (suggesting the model was not great).
+
+Applying Occam's Razor, the method we tried suggests that the rate of change of prison population was indeed impacted by COVID-19 lockdown measures, and does not have a correlation with time.
 
 ---
 #REFORMS
@@ -179,215 +364,6 @@ And is sorted by gender (Male &amp; Female). Most prisoners are male.
 ---
 #####The graph below shows how different leadership styles, policy priorities, or external events under Cameron and May could have influenced prison population trends. The Point forecast (blue) represents a steady, expected trajectory, derived from the prison population data from Cameron's period, while the Total_pop (red) highlights the variability and challenges that arose during May's period. 
 
-&lt;img src="img/PM_forecastvsactual.png" width="80%" /&gt;
----
-# Hello World
-
-
-- Click the `Knit` button to compile your presentation
-
-- Make sure to commit and push all resulting files to your GitHub repo
-
----
-
-class: inverse, middle, center
-
-# Using xaringan
-
----
-
-# xaringan
-
-- The presentation is created using the `xaringan` package
-
-- Use `---` to separate slides and `--` for incremental builds
-
---
-
-- Like this
-
----
-
-# Layouts
-
-You can use plain text
-
-- or bullet points
-
-.pull-left[
-or text in two columns `\(^*\)`
-]
-.pull-right[
-- like
-- this
-]
-
-.footnote[
-[*] And add footnotes
-]
-
----
-
-# Code
-
-
-``` r
-# a boring regression
-model &lt;- lm(dist ~ speed, data = cars)
-tidy(model)
-```
-
-```
-## # A tibble: 2 × 5
-##   term        estimate std.error statistic  p.value
-##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-## 1 (Intercept)   -17.6      6.76      -2.60 1.23e- 2
-## 2 speed           3.93     0.416      9.46 1.49e-12
-```
-
-``` r
-glance(model)
-```
-
-```
-## # A tibble: 1 × 12
-##   r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
-##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1     0.651         0.644  15.4      89.6 1.49e-12     1  -207.  419.  425.
-## # ℹ 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;
-```
-
----
-
-# Plots
-
-
-
-&lt;img src="presentation_files/figure-html/plot-iris-1.png" width="80%" /&gt;
-
----
-
-## Plot and text
-
-.pull-left[
-- Some text
-- goes here
-]
-.pull-right[
-&lt;img src="presentation_files/figure-html/unnamed-chunk-1-1.png" width="100%" /&gt;
-]
-
----
-
-# Tables
-
-If you want to generate a table, make sure it is in the HTML format (instead of Markdown or other formats), e.g.,
-
-&lt;table&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:right;"&gt; Sepal.Length &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; Sepal.Width &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; Petal.Length &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; Petal.Width &lt;/th&gt;
-   &lt;th style="text-align:left;"&gt; Species &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 5.1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.5 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1.4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.2 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; setosa &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 4.9 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1.4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.2 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; setosa &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 4.7 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.2 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1.3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.2 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; setosa &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 4.6 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1.5 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.2 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; setosa &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 5.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.6 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1.4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.2 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; setosa &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 5.4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.9 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1.7 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.4 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; setosa &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
----
-
-# Images
-
-&lt;div class="figure" style="text-align: center"&gt;
-&lt;img src="img/edinburgh-castle.jpg" alt="Image credit: Photo by Jörg Angeli on Unsplash." width="55%" /&gt;
-&lt;p class="caption"&gt;Image credit: Photo by Jörg Angeli on Unsplash.&lt;/p&gt;
-&lt;/div&gt;
-
-Or you can also include a full page image. See next slide.
-
----
-
-
-class: inverse, center, middle
-background-image: url(img/edinburgh-castle.jpg)
-background-size: contain
----
-
-# Math Expressions
-
-You can write LaTeX math expressions inside a pair of dollar signs, e.g. &amp;#36;\alpha+\beta$ renders `\(\alpha+\beta\)`. You can use the display style with double dollar signs:
-
-```
-$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
-```
-
-`$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$`
-
-Limitations:
-
-1. The source code of a LaTeX math expression must be in one line, unless it is inside a pair of double dollar signs, in which case the starting `$$` must appear in the very beginning of a line, followed immediately by a non-space character, and the ending `$$` must be at the end of a line, led by a non-space character;
-
-1. There should not be spaces after the opening `$` or before the closing `$`.
-
-1. Math does not work on the title slide (see [#61](https://github.com/yihui/xaringan/issues/61) for a workaround).
-
----
-
-# Feeling adventurous?
-
-- Want to find out more about `xaringan`? See https://slides.yihui.name/xaringan/#1.
-
-- You are welcome to use the default styling of the slides. In fact, that's what I expect majority of you will do. You will differentiate yourself with the content of your presentation.
-
-- But some of you might want to play around with slide styling. The 
-`xaringanthemer` provides some solutions for this that: https://pkg.garrickadenbuie.com/xaringanthemer.
-
-- And if you want more bells and whistles, there is also `xaringanExtra`: https://pkg.garrickadenbuie.com/xaringanExtra.
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
