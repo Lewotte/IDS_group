@@ -68,25 +68,15 @@ For the Prime Minister section, we analyzed the full data set across all years t
 
 #### Main Steps Used in The Data
 
-##### 1. Data Preparation:
+**1.Data Preparation** : Renamed columns, combined multiple datasets, and added an event indicator (before/after 2016-07-13).
 
-- Renamed columns, combined multiple datasets, and added an event indicator (before/after 2016-07-13).
+**2.T-Test** : Compared average population before and after the event date. Created a boxplot to visualize differences.
 
-##### 2. T-Test:
+**3.Linear Regression** : Modeled the relationship between population, time, and the event using regression. Evaluated the model’s accuracy with R-squared values.
 
-- Compared average population before and after the event date. Created a boxplot to visualize differences.
+**4.Time Series Forecasting** : Used historical data (2010–2016) to forecast population for 36 months. Compared forecasts to actual data from 2016–2019.
 
-##### 3. Linear Regression:
-
-- Modeled the relationship between population, time, and the event using regression. Evaluated the model’s accuracy with R-squared values.
-
-##### 4. Time Series Forecasting:
-
-- Used historical data (2010–2016) to forecast population for 36 months. Compared forecasts to actual data from 2016–2019.
-
-##### 5. Visualizations:
-
-- Plotted population trends and compared forecasts vs. real data using clear, color-coded charts.
+**5.Visualizations** : Plotted population trends and compared forecasts vs. real data using clear, color-coded charts.
 
 #### Results (Key Issues and Possible Related Government Responses) 
 
@@ -94,142 +84,97 @@ For the Prime Minister section, we analyzed the full data set across all years t
 
 ##### 1.Drug Offences
 
-Trend: 
-Significant decline after 2010
+**Trend** : Significant decline after 2010
 
-Key Issues:
+**Key Issues** : Shift from punitive measures to rehabilitation and tackling high-level trafficking.
 
-- Shift from punitive measures to rehabilitation and tackling high-level trafficking.
-
-Government Response:
-
-- Expanded funding for drug treatment and harm reduction initiatives.
+**Government Response** : Expanded funding for drug treatment and harm reduction initiatives.
 
 ##### 2.Fraud Offences
 
-Trend: 
-Declined, reflecting a transition to cyber fraud.
+**Trend** : Declined, reflecting a transition to cyber fraud.
 
-Key Issues:
+**Key Issues** : Limited resources allocated for investigating complex fraud and increasing online scams
 
-- Limited resources allocated for investigating complex fraud and increasing online scams
-
-Government Response:
-
-- Strengthened cybercrime units and encouraged private sector involvement in fraud prevention. 
+**Government Response** : Strengthened cybercrime units and encouraged private sector involvement in fraud prevention. 
 
 ##### 3.Rape
 
-Trend: 
-Reports and imprisonments steadily increased.
+**Trend** : Reports and imprisonments steadily increased.
 
-Key Issues:
+**Key Issues** : Greater awareness and public demand for action
 
-- Greater awareness and public demand for action
-
-Government Response:
-
-- Funded support services and introduced training for handling rape cases.
+**Government Response** : Funded support services and introduced training for handling rape cases.
 
 
 ##### 4.Robbery
 
-Trend: 
-Peaked early, then declined significantly
+**Trend** : Peaked early, then declined significantly
 
-Key Issues:
+**Key Issues** : Economic recession initially drove rates up, while urban safety measures later reduced offenses.
 
-- Economic recession initially drove rates up, while urban safety measures later reduced offenses.
-
-Government Response:
-
-- Promoted urban safety initiatives like CCTV and improved penalties for violent robbery.
+**Government Response** : Promoted urban safety initiatives like CCTV and improved penalties for violent robbery.
 
 
 ##### 5.Theft Offences 
 
-Trend: 
-Declined after an intial rise.
+**Trend** : Declined after an intial rise.
 
-Key Issues:
+**Key Issues** : Technological advancements in security deterred theft.
 
-- Technological advancements in security deterred theft.
-
-Government Response:
-
-- Supported public safety campaigns and neighbourhood watch programs.
+**Government Response**: Supported public safety campaigns and neighbourhood watch programs.
 
 
 #### Theresa May(2016-2019):
 
 ##### 1.Drug Offences
 
-Trend:
-Fluctuated, with a rise linked to county lines operations.
+**Trend** : Fluctuated, with a rise linked to county lines operations.
 
-Key Issues:
+**Key Issues** : Vulnerable individuals exploited by organized crime.
 
-- Vulnerable individuals exploited by organized crime.
-
-Government Response:
-
-- Strengthened the National Crime Agency (NCA) and introduced targeted interventions.
+**Government Response** : Strengthened the National Crime Agency (NCA) and introduced targeted interventions.
 
 
 ##### 2.Fraud Offenses
 
-Trend: 
-Continue declined due to a shift towards cyber fraud. 
+**Trend** : Continue declined due to a shift towards cyber fraud. 
 
-Key Issues:
+**Key Issues** : Limited resources for complex fraud investigations.
 
-- Limited resources for complex fraud investigations.
-
-Government Response:
-
-- Promoted private sector collaboration and expanded cybercrime units.
+**Government Response** : Promoted private sector collaboration and expanded cybercrime units.
 
 
 ##### 3.Rape
 
-Trend: 
-Reports rose sharply, reflecting increased awareness
+**Trend** : Reports rose sharply, reflecting increased awareness
 
-Key Issues:
+**Key Issues** : Persistent gaps in convictions despite higher reporting.
 
-- Persistent gaps in convictions despite higher reporting.
-
-Government Response:
-
-- Improved victim support and police training for sensitive cases.
+**Government Response** : Improved victim support and police training for sensitive cases.
 
 ##### 4.Robbery
 
-Trend: 
-Steep decline due to improved surveillance and urban safety measures.
+**Trend** : Steep decline due to improved surveillance and urban safety measures.
 
-Key Issues:
+**Key Issues** : Economic challenges and reduced police presence.
 
-- Economic challenges and reduced police presence.
-
-Government Response:
-
-- Strengthened penalties and promoted urbvan safety programs.
+**Government Response** : Strengthened penalties and promoted urbvan safety programs.
 
 
 ##### 5.Theft Offences
 
-Trend: 
-Consistently declined due to imporved security measures.
+**Trend** : Consistently declined due to imporved security measures.
 
-Key Issues:
+**Key Issues** : Shift from physical theft to online fraud
 
-- Shift from physical theft to online fraud
+**Government Response** : Supported neighborhood watch programs and public awareness campaigns. 
 
-Government Response:
+#### Final Analysis
 
-- Supported neighborhood watch programs and public awareness campaigns. 
+Based on the final graph in the presentation slides, here are the key observations :
 
+The graph compares the predicted prison population (blue line) with the actual population (red line). During Cameron's period, the population followed a steady forecast, but under May, the red line shows more fluctuations and even deviates from the forecast, indicating unexpected challenges or policy changes. The orange lines (Hi 95 and Lo 95) represent expected variation, but the actual population sometimes falls outside this range, showing greater instability during May's term.
 
 ### COVID
 
