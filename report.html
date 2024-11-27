@@ -536,6 +536,9 @@ campaigns.</li>
 </div>
 <div id="covid" class="section level3">
 <h3>COVID</h3>
+<div id="how-custody-types-changes" class="section level4">
+<h4>How custody types changes</h4>
+</div>
 <div id="how-lockdown-affect-the-prisoner-population" class="section level4">
 <h4>How lockdown affect the prisoner population</h4>
 <p>To prove our findings further. We start an analysis aimed to model
@@ -561,20 +564,30 @@ included only <code>lockdown_happens</code> as a predictor.</p></li>
 </div>
 <div id="results" class="section level5">
 <h5>Results</h5>
-<p><strong>Model 1 (custody_fit_yesInt)</strong> Adjusted R-squared for
-custody_fit_yesInt: 0.1662803</p>
-<p><strong>Model 2 (custody_fit_noInt)</strong> Adjusted R-squared for
-custody_fit_noInt: 0.1699272</p>
-<p><strong>Model 3 (custody_fit_Simple)</strong> Adjusted R-squared for
-custody_fit_Simple: 0.1734328</p>
+<p><strong>Model 1 (custody_fit_yesInt)</strong> The estimates for Date
+and the interaction term are negligible and statistically insignificant
+(p-values &gt; 0.7). The lockdown_happens estimate is large (17006) but
+not significant (p = 0.738). It has the lowest adjusted R-squared
+(0.1663), suggesting minimal explanatory power for the interaction
+effect.</p>
+<p><strong>Model 2 (custody_fit_noInt)</strong> Without interaction, the
+lockdown_happens variable retains a strong negative estimate (-632, p
+&lt; 0.001), while Date’s estimate (0.00795) is not significant (p =
+0.702). It has a slightly higher adjusted R-squared (0.1699), indicating
+that the interaction term does not add significant value.</p>
+<p><strong>Model 3 (custody_fit_Simple)</strong> With only
+lockdown_happens, it shows a strong negative estimate for
+lockdown_happens (-629, p &lt; 0.001). It has the highest adjusted
+R-squared (0.1734), showing that lockdown_happens is the key factor of
+variance in d1_Count without additional predictors or interactions.</p>
 </div>
 <div id="interpretion" class="section level5">
 <h5>Interpretion</h5>
 <p>According to Occam’s Razor, the simplest model that still provides
-meaningful explanatory power should be choosed. The differences between
-the three models is not significant. Since the adjusted r-squared of
+meaningful explanatory power should be choosed. Since the r-squared of
 Model 3 is the highest and its simplicity, this makes it the most
-interpretable for directly assessing the lockdown’s effect.</p>
+interpretable for directly assessing the lockdown’s effect without
+accounting for temporal trends or interactions.</p>
 <p>The lower Adjusted R-squared values across all models suggest that
 other unaccounted factors might also influence changes in the prisoner
 population. Variables such as policy changes, release rates, or crime
