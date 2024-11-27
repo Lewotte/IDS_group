@@ -434,3 +434,8 @@ knitr::include_graphics("img/New_vivi_hanna_graph.png")
 ---
 #####The graph below shows how different leadership styles, policy priorities, or external events under Cameron and May could have influenced prison population trends. The Point forecast (blue) represents a steady, expected trajectory, derived from the prison population data from Cameron's period, while the Total_pop (red) highlights the variability and challenges that arose during May's period. 
 
+```{r, echo = FALSE}
+knitr::include_graphics("img/PM_forecastvsactual.png")
+
+```
+
