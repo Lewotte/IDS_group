@@ -117,8 +117,9 @@ custody_plot <- Custody_PD_sliced %>%
     year >= 2015,
     Age == "Adult",
     Custody == c(
-      "Sentenced"
-      # "Untried"
+      "Recalls",
+      "Non-criminal prisoners",
+      "Length not recorded"
     ),
   ) %>% 
   ggplot(
@@ -126,28 +127,28 @@ custody_plot <- Custody_PD_sliced %>%
   geom_line(aes(group = Gender, colour = Gender),
          ) +
   facet_wrap(
-    nrow=6,
+    nrow=2,
     Age + Gender ~ Custody,
     scales = "free_y"
              ) +
-  scale_color_manual(values = c(Male = "#19babf",Female = "#ff0048")) +
   labs(x = "Time", y = "Population change") +
-  geom_vline(xintercept = lockdown_start, linetype = "dotted", size = 0.5) +
-  geom_vline(xintercept = lockdown_end, linetype = "dotted", size = 0.5) +
-  geom_vline(xintercept = ymd("2021-07-19"), linetype = "dotted", size = 0.5) +
+  geom_vline(xintercept = lockdown_start, linetype = "dotted", size = 0.5, alpha = 0.5) +
+  geom_vline(xintercept = lockdown_end, linetype = "dotted", size = 0.5, alpha = 0.5) +
+  # geom_vline(xintercept = ymd("2021-07-19"), linetype = "dotted", size = 0.5) +
   annotate(
     "rect",
     fill = "coral",
-    xmin = lockdown_start, xmax = ymd("2021-07-19"), 
-    ymin = -Inf, ymax = Inf, alpha = 0.5
+    xmin = lockdown_start, xmax = lockdown_end, 
+    ymin = -Inf, ymax = Inf, alpha = 0.33
     ) +
-  theme(text = element_text(size = 10))
+  theme(text = element_text(size = 10)) +
+  scale_color_manual(values = c(Male = "#19babf",Female = "#ff0048"))
   
 print(custody_plot)
 
   #in = 100 pixels. Keep commented unless need to export plot
-export.width <- 1440 / 100
-ggsave("img/Sky-ppt_2.jpg", plot = custody_plot, width = export.width, height = export.width*9/16, units = "in")
+export.width <- 1440 / 200
+ggsave("img/Sky-ppt_noReaction.jpg", plot = custody_plot, width = export.width, height = export.width*9/16, units = "in")
 
 ```
 
