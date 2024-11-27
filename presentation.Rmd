@@ -50,6 +50,8 @@ style_xaringan(
 Custody_PD <- read_ods('data/Population_30June2023_Annual.ods', sheet = 2)
 
 offset <- 2
+lockdown_start <- ymd("2020-03-26")
+lockdown_end <- ymd("2020-07-04")
 
 Custody_PD_sliced <- Custody_PD %>%
   row_to_names(row_number = 1) %>%
@@ -69,6 +71,11 @@ Custody_PD_sliced <- Custody_PD %>%
   mutate(
     Custody = case_when(
       .default = as.character(Custody),
+      # Custody == "Remand" ~ "",
+      # Custody == "Untried" ~ "",
+      # Custody == "Convicted unsentenced" ~ "",
+      # Custody == "Sentenced" ~ "",
+      # Custody == "Fine defaulter" ~ "",
       Custody == "Less than or equal to 6 months" ~ "0.5 yrs",
       Custody == "Greater than 6 months to less than 12 months" ~ "0.5-1 yrs",
       Custody == "12 months to less than 4 years" ~ "1-4 yrs",
@@ -80,6 +87,9 @@ Custody_PD_sliced <- Custody_PD %>%
       Custody == "7 years to less than 10 years" ~ "7-10 yrs",
       Custody == "10 years to less than 14 years" ~ "10-14 yrs",
       Custody == "14 years or more (excluding indeterminate sentences)" ~ ">14 yrs",
+      # Custody == "Extended determinate sentence" ~ "",
+      # Custody == "Indeterminate sentences" ~ "",
+      # Custody == "Recalls" ~ "",
       Custody == "Sentence length not recorded" ~ "Length not recorded",
       Custody == "Non-criminal prisoners(2)" ~ "Non-criminal prisoners"
     ),
@@ -87,7 +97,10 @@ Custody_PD_sliced <- Custody_PD %>%
     Count = as.numeric(Count),
     Date = dmy(Date),
     year = year(Date), month = month(Date),
-    lockdown_happens = ifelse(Date < ymd("2020-03-26") | Date > ymd("2021-06-19"), 0, 1),
+    #FOR MODELING
+    lockdown_happens = ifelse(Date < lockdown_start | Date > lockdown_end, 0, 1),
+    
+    #rate of change
     d1_Count = diff(c(0,Count))
          )
 ```
@@ -144,7 +157,7 @@ And everything is sorted by gender (Male & Female).
 
 ## Important dates used for modeling
 
-(insert plot of sentenced, adult, male & female separate, with annotation)
+
 
 ---
 
@@ -159,22 +172,23 @@ d1_Count = diff(c(0,Count))
 
 We created a binary variable `lockdown_happens` where the value of it is 0 for all date entries when UK was not under lock-down, and 1 when it is.
 ```{r, eval=FALSE}
-lockdown_happens = ifelse(Date < ymd("2020-03-26") | Date > ymd("2021-06-19"), 0, 1)
+lockdown_start <- ymd("2020-03-26")
+lockdown_end <- ymd("2020-07-04")
+...
+lockdown_happens = ifelse(Date < lockdown_start | Date > lockdown_end, 0, 1)
 ```
 
 --
 
-```{r echo=FALSE, output.lines=7}
+```{r echo=FALSE, warning = FALSE, output.lines=7}
 head(
   subset(
    Custody_PD_sliced,
    year >= 2020
   ),
-  7
+  6
 )
 ```
-
-
 
 ---
 
@@ -192,7 +206,6 @@ We made three simple linear models:
 custody_fit_yesInt <- linear_reg() %>%
   set_engine("lm") %>%
   fit(<...>, data = Custody_modeling)
-  ...
 ```
 
 - `d1_Count ~ Date + lockdown_happens + Date * lockdown_happens`
@@ -210,13 +223,90 @@ This takes into consideration of just the lockdown indicator variable.
 
 ---
 
-## Results
+```{r echo = FALSE, warning = FALSE, message = FALSE}
+Custody_modeling <- Custody_PD_sliced %>%
+  filter(
+    year >= 2015,
+    Age == "Adult",
+    Custody == c(
+      "Sentenced"
+    )
+  )
 
+custody_fit_yesInt <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(d1_Count ~ Date + lockdown_happens + Date * lockdown_happens, data = Custody_modeling)
 
+custody_fit_noInt <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(d1_Count ~ Date + lockdown_happens, data = Custody_modeling)
+
+custody_fit_Simple <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(d1_Count ~ lockdown_happens, data = Custody_modeling)
+```
+
+## Results for the model with interaction effect
+
+- `d1_Count ~ Date + lockdown_happens + Date * lockdown_happens`
+```{r echo=FALSE}
+tidy(custody_fit_yesInt)
+```
+
+And the R-squared value is:
+```{r echo=FALSE}
+glance(custody_fit_yesInt)$r.squared
+```
+
+---
+
+## Results for the model without interaction effect
+
+- `d1_Count ~ Date + lockdown_happens`
+```{r echo=FALSE}
+tidy(custody_fit_noInt)
+```
+
+And the R-squared value is:
+```{r echo=FALSE}
+glance(custody_fit_noInt)$r.squared
+```
+
+---
+
+## Results for the model only depending on the indicator variable
+
+- `d1_Count ~ lockdown_happens`
+```{r echo=FALSE}
+tidy(custody_fit_Simple)
+```
+
+And the R-squared value is:
+```{r echo=FALSE}
+glance(custody_fit_Simple)$r.squared
+```
 
 ---
 
 ## Interpretation of the model
+
+
+- `d1_Count ~ Date + lockdown_happens + Date * lockdown_happens`
+```{r echo=FALSE}
+glance(custody_fit_yesInt)$r.squared
+```
+
+- `d1_Count ~ Date + lockdown_happens`
+```{r echo=FALSE}
+glance(custody_fit_noInt)$r.squared
+```
+
+- `d1_Count ~ lockdown_happens`
+```{r echo=FALSE}
+glance(custody_fit_Simple)$r.squared
+```
+
+As we can see the model with interaction effects gave the highest R-squared value by a long shot... although they all gave very low R-squared values.
 
 ---
 #REFORMS

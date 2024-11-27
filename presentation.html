@@ -4,7 +4,7 @@
     <title>Correlation Between Significant Events and Prison Population</title>
     <meta charset="utf-8" />
     <meta name="author" content="Members  Sky, Marcel, Siddhi, Maggie, Vivi, Hanna" />
-    <meta name="date" content="2024-11-26" />
+    <meta name="date" content="2024-11-27" />
     <script src="libs/header-attrs-2.28/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
@@ -25,7 +25,7 @@ class: center, middle, inverse, title-slide
 ### University of Edinburgh
 ]
 .date[
-### 2024-11-26
+### 2024-11-27
 ]
 
 ---
@@ -116,7 +116,7 @@ lockdown_happens = ifelse(Date &lt; ymd("2020-03-26") | Date &gt; ymd("2021-06-1
 
 
 ```
-## # A tibble: 7 × 9
+## # A tibble: 8 × 9
 ##   Custody Gender Age   Date       Count  year month lockdown_happens d1_Count
 ##   &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt; &lt;date&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt;    &lt;dbl&gt;
 ## 1 Remand  Male   Adult 2020-01-31  8244  2020     1                0      200
@@ -126,6 +126,7 @@ lockdown_happens = ifelse(Date &lt; ymd("2020-03-26") | Date &gt; ymd("2021-06-1
 ## 5 Remand  Male   Adult 2020-05-31  9149  2020     5                1      665
 ## 6 Remand  Male   Adult 2020-06-30  9600  2020     6                1      451
 ## 7 Remand  Male   Adult 2020-07-31  9919  2020     7                1      319
+## 8 Remand  Male   Adult 2020-08-31 10142  2020     8                1      223
 ```
 
 
@@ -165,13 +166,96 @@ This takes into consideration of just the lockdown indicator variable.
 
 ---
 
-## Results
 
 
+## Results for the model with interaction effect
+
+- `d1_Count ~ Date + lockdown_happens + Date * lockdown_happens`
+
+```
+## # A tibble: 4 × 3
+##   term                     estimate std.error
+##   &lt;chr&gt;                       &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)             -362.      382.    
+## 2 Date                       0.0229    0.0213
+## 3 lockdown_happens      -26742.     6778.    
+## 4 Date:lockdown_happens      1.42      0.365
+```
+
+And the R-squared value is:
+
+```
+## [1] 0.1950568
+```
+
+---
+
+## Results for the model without interaction effect
+
+- `d1_Count ~ Date + lockdown_happens`
+
+```
+## # A tibble: 3 × 5
+##   term              estimate std.error statistic      p.value
+##   &lt;chr&gt;                &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;
+## 1 (Intercept)      -449.      394.         -1.14 0.256       
+## 2 Date                0.0277    0.0220      1.26 0.209       
+## 3 lockdown_happens -310.       55.6        -5.57 0.0000000812
+```
+
+And the R-squared value is:
+
+```
+## [1] 0.13385
+```
+
+---
+
+## Results for the model only depending on the indicator variable
+
+- `d1_Count ~ lockdown_happens`
+
+```
+## # A tibble: 2 × 5
+##   term             estimate std.error statistic     p.value
+##   &lt;chr&gt;               &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;
+## 1 (Intercept)          47.2      20.6      2.29 0.0233     
+## 2 lockdown_happens   -292.       53.8     -5.42 0.000000168
+```
+
+And the R-squared value is:
+
+```
+## [1] 0.1270062
+```
 
 ---
 
 ## Interpretation of the model
+
+
+- `d1_Count ~ Date + lockdown_happens + Date * lockdown_happens`
+
+```
+## [1] 0.1950568
+```
+
+--
+
+- `d1_Count ~ Date + lockdown_happens`
+
+```
+## [1] 0.13385
+```
+
+--
+
+- `d1_Count ~ lockdown_happens`
+
+```
+## [1] 0.1270062
+```
+
 
 ---
 #REFORMS
