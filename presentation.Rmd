@@ -155,9 +155,12 @@ And everything is sorted by gender (Male & Female).
 
 ---
 
-## Important dates used for modeling
+class: center, middle
 
-
+```{r echo = FALSE}
+knitr::include_graphics("img/Sky-ppt_1.jpg")
+```
+<!-- ![](img/Sky-ppt_1.jpg) -->
 
 ---
 
@@ -220,6 +223,24 @@ This takes into consideration of both explanatory variables without interaction 
 
 - `d1_Count ~ lockdown_happens`
 This takes into consideration of just the lockdown indicator variable.
+
+---
+
+## The model
+
+We then applied this model to the a subset of our data:
+- Age group: Adults (others are 15-17 and 18-20)
+- custody type: Sentenced
+- year > 2014 (because some data under Sentenced don't have entry until 2015)
+
+---
+
+class: center, middle
+
+```{r echo = FALSE}
+knitr::include_graphics("img/Sky-ppt_2.jpg")
+```
+<!-- ![](img/Sky-ppt_2.jpg) -->
 
 ---
 
@@ -306,7 +327,11 @@ glance(custody_fit_noInt)$r.squared
 glance(custody_fit_Simple)$r.squared
 ```
 
-As we can see the model with interaction effects gave the highest R-squared value by a long shot... although they all gave very low R-squared values.
+-- 
+
+As we can see the models all gave similar R-squared values, albeit very low (suggesting the model was not great).
+
+Applying Occam's Razor, the method we tried suggests that the rate of change of prison population was indeed impacted by COVID-19 lockdown measures, and does not have a correlation with time.
 
 ---
 #REFORMS
