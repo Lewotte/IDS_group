@@ -408,7 +408,7 @@ knitr::include_graphics("img/New_vivi_hanna_graph.png")
 ---
 #PRIME MINISTERS - Theresa May
 
-#####Theresa May is a British politician who served as the Prime Minister of the United Kingdom from July 2016 to July 2019. A member of the Conservative Party, she was the second woman to hold the office of Prime Minister, after Margaret Thatcher.
+#####Theresa May is a British politician who served as the Prime Minister of the United Kingdom from July 2016 to July 2019. She is a member of the Conservative Party, she was the second woman to hold the office of Prime Minister, after Margaret Thatcher.
 
 ```{R Hanna_Vivi_2 graph,echo = FALSE}
 knitr::include_graphics("img/New_vivi_hanna_graph.png")
@@ -418,21 +418,18 @@ knitr::include_graphics("img/New_vivi_hanna_graph.png")
 ###Key Insights from Results:
 
 ####Drug Offenses:
-- Drug-related imprisonments fluctuated as May emphasized tackling organized drug operations and county lines. Budget constraints limited police capacity, but efforts were made to safeguard vulnerable individuals exploited in drug trafficking.
+- Drug-related imprisonments fluctuated with an increase up till round 2017 before decreasing and increasing again mid 2018. May emphasized tackling organized drug operations and county lines. Budget constraints limited police capacity, but efforts were made to safeguard vulnerable individuals exploited in drug trafficking.
 ####Fraud and Forgery:
-- Fraud arrests declined as traditional financial crimes shifted to cyber fraud. May prioritized cybercrime prevention by strengthening the National Crime Agency (NCA) and encouraging businesses to adopt stronger fraud detection measures.
-####Motoring Offenses:
-- Motoring offense imprisonments consistently declined due to technological advancements (e.g., speed cameras) and reduced police traffic enforcement capacity under austerity. May promoted automated systems and public awareness campaigns for road safety.
+- Fraud arrests steadily declined as traditional financial crimes shifted to cyber fraud. May prioritized cybercrime prevention by strengthening the National Crime Agency (NCA) and encouraging businesses to adopt stronger fraud detection measures.
+####Rape and Sexual Offenses:
+- Same trend was seen during Camerons time in office with a setady increase in imprisonment rates. This could be due to Increased awareness campaigns, like #MeToo, and harsher sentencing policies resulted in a rise in imprisonments for sexual offenses. May expanded victim support services and improved police training for handling sensitive cases.
+
 ---
 
-####Rape and Sexual Offenses:
-- Increased awareness campaigns, like #MeToo, and harsher sentencing policies resulted in a rise in imprisonments for sexual offenses. May expanded victim support services and improved police training for handling sensitive cases.
 ####Robbery:
-- Robbery imprisonment trends fluctuated, reflecting targeted interventions in high-crime areas and economic challenges. May emphasized urban safety through community policing and data-driven resource allocation.
-####Violence Against the Person:
-- Prison populations for violent crimes grew during May's tenure, reflecting increased reporting and tougher sentencing. She introduced legislation to combat domestic violence and funded community-based initiatives to address knife crime and hate crimes.
-####Burglary:
-- Declining arrests reflected improved home security technologies but highlighted gaps in enforcement due to reduced police presence under austerity. Community policing and public safety awareness were prioritized.
+- Robbery imprisonment trends steadily decreased throughout May's time in office, which reflects on her emphasises on urban safety through community policing and data-driven resource allocation.
+####Theft Offences:
+- Declining arrests similar to robbery imprisonment rates reflected the improved home security technologies but highlighted gaps in enforcement due to reduced police presence under austerity. Community policing and public safety awareness were prioritized.
 
 ---
 #####The graph below shows how different leadership styles, policy priorities, or external events under Cameron and May could have influenced prison population trends. The Point forecast (blue) represents a steady, expected trajectory, derived from the prison population data from Cameron's period, while the Total_pop (red) highlights the variability and challenges that arose during May's period. 
