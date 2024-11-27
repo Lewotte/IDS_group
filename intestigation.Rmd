@@ -21,17 +21,15 @@ library(readODS)
 library(janitor) #for changing row names
 library(RColorBrewer)
 library(forecast)
-library("zoo")
-#removed zoo because it is under forecast
 ```
 
 
 ```{r load-data-and-func}
-Ethnic_PD <- read_ods('data/Population_30June2023_Annual.ods', sheet = 14)
-A1_7 <- read_ods('data/Population_30June2023_Annual.ods', sheet = 12)
-TypeOfCrime <- read_ods('data/Population_30June2023_Annual.ods', sheet = 10)
+# Ethnic_PD <- read_ods('data/Population_30June2023_Annual.ods', sheet = 14)
+# A1_7 <- read_ods('data/Population_30June2023_Annual.ods', sheet = 12)
+# TypeOfCrime <- read_ods('data/Population_30June2023_Annual.ods', sheet = 10)
 Custody_PD <- read_ods('data/Population_30June2023_Annual.ods', sheet = 2)
-A1_5i <- read_ods('data/Population_30June2023_Annual.ods', sheet = 9)
+# A1_5i <- read_ods('data/Population_30June2023_Annual.ods', sheet = 9)
 
 #wrapper function for generating title of plots
 wrapper <- function(x, ...) 
@@ -55,6 +53,8 @@ normalise_01 <- function(x)
 ```{r custody-data_wrang}
 #use facet grid: (<Male/Female>,<Age group>, <custody type>)
 offset <- 2
+lockdown_start <- ymd("2020-03-26")
+lockdown_end <- ymd("2020-07-04")
 
 Custody_PD_sliced <- Custody_PD %>%
   row_to_names(row_number = 1) %>%
@@ -101,7 +101,7 @@ Custody_PD_sliced <- Custody_PD %>%
     Date = dmy(Date),
     year = year(Date), month = month(Date),
     #FOR MODELING
-    lockdown_happens = ifelse(Date < ymd("2020-03-26") | Date > ymd("2021-06-19"), 0, 1),
+    lockdown_happens = ifelse(Date < lockdown_start | Date > lockdown_end, 0, 1),
     
     #rate of change
     d1_Count = diff(c(0,Count))
@@ -114,7 +114,7 @@ custody_plot <- Custody_PD_sliced %>%
   group_by(Custody, Gender) %>%
   filter(
     year >= 2015,
-    # Age == "Adult",
+    Age == "Adult",
     Custody == c(
       "Sentenced"
       # "Untried"
@@ -131,15 +131,23 @@ custody_plot <- Custody_PD_sliced %>%
              ) +
   scale_color_manual(values = c(Male = "#19babf",Female = "#ff0048")) +
   labs(x = "Time", y = "Population change") +
-  geom_vline(xintercept = ymd("2020-03-26"), linetype = "dotted", size = 0.5) +
+  geom_vline(xintercept = lockdown_start, linetype = "dotted", size = 0.5) +
+  geom_vline(xintercept = lockdown_end, linetype = "dotted", size = 0.5) +
+  geom_vline(xintercept = ymd("2021-07-19"), linetype = "dotted", size = 0.5) +
+  annotate(
+    "rect",
+    fill = "coral",
+    xmin = lockdown_start, xmax = ymd("2021-07-19"), 
+    ymin = -Inf, ymax = Inf, alpha = 0.5
+    ) +
   theme(text = element_text(size = 10))
   
-# print(custody_plot)
+print(custody_plot)
 
   #in = 100 pixels. Keep commented unless need to export plot
-export.width <- 12 
-ggsave("img/custody_plot_testing.jpg", plot = custody_plot, width = export.width, height = export.width, units = "in")
-  
+export.width <- 1440 / 100
+ggsave("img/Sky-ppt_2.jpg", plot = custody_plot, width = export.width, height = export.width*9/16, units = "in")
+
 ```
 
 ```{r Sky-modeling}
