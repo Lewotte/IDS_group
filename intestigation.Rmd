@@ -136,8 +136,6 @@ cat("\n")
 cat("Adjusted R-squared for custody_fit_yesInt:", adj_r_squared_yesInt, "\n")
 cat("Adjusted R-squared for custody_fit_noInt:", adj_r_squared_noInt, "\n")
 cat("Adjusted R-squared for custody_fit_Simple:", adj_r_squared_Simple, "\n")
-
-
 ```
 
 ```{r custody-plot}
@@ -148,9 +146,7 @@ custody_plot <- Custody_PD_sliced %>%
     year >= 2015,
     Age == "Adult",
     Custody == c(
-      "Recalls",
-      "Non-criminal prisoners",
-      "Length not recorded"
+      "Sentenced"
     ),
   ) %>% 
   ggplot(
@@ -172,6 +168,7 @@ custody_plot <- Custody_PD_sliced %>%
     xmin = lockdown_start, xmax = lockdown_end, 
     ymin = -Inf, ymax = Inf, alpha = 0.33
     ) +
+  
   theme(text = element_text(size = 10)) +
   scale_color_manual(values = c(Male = "#19babf",Female = "#ff0048"))
   

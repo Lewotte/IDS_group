@@ -30,7 +30,7 @@ library(broom)
 
 ## Research Question: Correlation between significant events and prison population of England and Wales
 
-We have picked some major worldwide events to see whether if there is a noticeable correlation between them and changes in prison population.
+We have picked some major worldwide events to see whether if there is a noticeable correlation between them and changes in the prison population.
 
 ## Findings
 ### Prime Minister
@@ -182,20 +182,24 @@ Government Response:
 ## A look at the effect of COVID-19 on prison population of different custody types
 
 ### How lockdown affected the prisoner population
-We analysed the rate of change in the prisoner population (d1_Count) over time, using a subset of our data that is only the adult prisoners in sentenced custody, since it is the most populous category in our data and roughly reflects all other age subsets.
 
-#### Methods
-We created an indicator variable `lockdown_happens` which is 1 during the first lockdown period (2020 March 26 to July 4), and 0 at any other given time. This will be used as the explanatory variable for our model.
+We analysed the rate of change in the prisoner population, `d1_Count`, over time, using a subset of our data that is only the adult prisoners in sentenced custody, since it is the most populous category in our data and roughly reflects all other age subsets.
+
+### Methods
+
+We created an indicator variable `lockdown_happens` which takes the value of 1 during the first lockdown period (2020 March 26 to July 4), and 0 at any other given time. This will be used as an explanatory variable for our model.
 
 We used linear regression for our models, the response variable being the rate of change of prisoner population `d1_Count`, and the explanatory variables being `lockdown_happens` and `Date`. `Date` is included to test whether there was a trend with respect to time in `d1_Count`.
+
+The reason we chose these variables for the following reasons. From preliminary assessment of the data through graphs, we saw that although `d1_Count` is unstable, it oscillates roughly around 0 throughout time, and in some cases like Extended determinate sentences, there appeared to be a decreasing trend with respect to time.
 
 1. **Model 1 (custody_fit_yesInt)**: This model included the variables `Date`, `lockdown_happens`, and the interaction between these two variables (`Date * lockdown_happens`). This model assesses how the lockdown period affected the population change in sentenced custody over time while accounting for any general time trend.
 
 2. **Model 2 (custody_fit_noInt)**: This model is did not include interaction term and only considers the effects of `Date` and `lockdown_happens`.
 
-3. **Model 3 (custody_fit_Simple)**: The simplest model of the three, which only uses `lockdown_happens` as a predictor. Since `lockdown_happens` takes the value of either 0 or 1, the modelled line of fit would be horizontal lines. This was considered because from preliminary assessment of the data through graphs, we saw that although `d1_Count` is unstable, it oscillates roughly around 0 throughout time, and in some cases like Extended determinate sentences, there appeared to be a decreasing trend with respect to time.
+3. **Model 3 (custody_fit_Simple)**: The simplest model of the three, which only uses `lockdown_happens` as a predictor.
 
-#### Results
+### Results
 
 **Model 1 (custody_fit_yesInt)** The estimates for Date and the interaction term are negligible and statistically insignificant (p-values > 0.7). The lockdown_happens estimate is large (17006) but not significant (p = 0.738). It has the lowest adjusted R-squared (0.1663), suggesting minimal explanatory power for the interaction effect. 
 
@@ -203,11 +207,13 @@ We used linear regression for our models, the response variable being the rate o
 
 **Model 3 (custody_fit_Simple)** With only lockdown_happens, it shows a strong negative estimate for lockdown_happens (-629, p < 0.001). It has the highest adjusted R-squared (0.1734), showing that lockdown_happens is the key factor of variance in d1_Count without additional predictors or interactions.
 
-#### Interpretation
+### Interpretation
 
-Using Occam's Razor, the simplest model that still provides meaningful explanatory power should be used. Since the r-squared of Model 3 is the highest and simplest, this makes it the most interpretable for directly assessing the lockdown’s effect without accounting for temporal trends or interactions. 
+Applying Occam's Razor, the simplest model that still provides meaningful explanatory power should be used. Since the r-squared of Model 3 is the highest and simplest, this makes it the most interpretable for directly assessing the lockdown’s effect without accounting for temporal trends or interactions. 
    
-The lower Adjusted R-squared values across all models suggest that other unaccounted factors might also influence changes in the prisoner population, and the presence of noise within the data. Variables such as policy changes, release rates, or crime trends could play a role.
+The lower Adjusted R-squared values across all models suggest that other unaccounted factors might also influence changes in the prisoner population, such as policy changes, release rates, or crime trends. A scan at the plots we immediately can see fluctuations that makes the dent lockdown left hard to discern from the rest. These fluctuations could be caused by many unnacounted factors, and other events, which makes it hard to obtain control data (i.e. what would the prison population look like in 2020-21 if COVID-19 did not happen).
+
+Overall, 
 
 
 ## References
