@@ -389,19 +389,19 @@ knitr::include_graphics("img/New_vivi_hanna_graph.png")
 ---
 ###Key Insights from Results:
 
-####Drug Offenses:
-- Prison populations for drug offenses significantly declined till around 2013 before it increases slightly between then and the end of his time. 
+####Drug Offences:
+- Prison populations for drug offences significantly declined till around 2013 before it increases slightly between then and the end of his time. 
 - This could possibly be due to Cameron's government prioritized dismantling organized drug networks and de-emphasized minor drug possession. Expanded funding for drug rehabilitation programs and harm reduction reflected this shift.
 ####Fraud and Forgery:
 - Fraud-related overall imprisonment rate decreased, with random increases throughout which could be driven by a shift toward online financial crimes, which were harder to prosecute under reduced police resources. Cameron's government encouraged private sector involvement in financial crime prevention.
-####Rape and Sexual Offenses:
+####Rape and Sexual Offences:
 - Rape imprisonment rates steadily increased throughout Cameron's time in office.
 - Increased awareness campaigns and judicial reforms led to rising imprisonment for rape offenses. Initiatives like #MeToo and longer sentencing reflected societal shifts.
 
 ---
 
 ####Robbery:
-- Prison populations for robbery offenses fluctuated, peaking around 2013 due to economic challenges and declining thereafter. Urban safety initiatives and improved surveillance reduced robbery rates.
+- Prison populations for robbery offences fluctuated, peaking around 2013 due to economic challenges and declining thereafter. Urban safety initiatives and improved surveillance reduced robbery rates.
 ####Theft Offences: 
 - theft offences also peaked around 2013 which could also be due to economic challenges, however declining arrests reflect improved security technologies and reduced police presence under austerity. Emphasis on community policing and public safety campaigns shaped outcomes.
 
@@ -417,12 +417,12 @@ knitr::include_graphics("img/New_vivi_hanna_graph.png")
 ---
 ###Key Insights from Results:
 
-####Drug Offenses:
+####Drug Offences:
 - Drug-related imprisonments fluctuated with an increase up till round 2017 before decreasing and increasing again mid 2018. May emphasized tackling organized drug operations and county lines. Budget constraints limited police capacity, but efforts were made to safeguard vulnerable individuals exploited in drug trafficking.
 ####Fraud and Forgery:
 - Fraud arrests steadily declined as traditional financial crimes shifted to cyber fraud. May prioritized cybercrime prevention by strengthening the National Crime Agency (NCA) and encouraging businesses to adopt stronger fraud detection measures.
 ####Rape and Sexual Offenses:
-- Same trend was seen during Camerons time in office with a setady increase in imprisonment rates. This could be due to Increased awareness campaigns, like #MeToo, and harsher sentencing policies resulted in a rise in imprisonments for sexual offenses. May expanded victim support services and improved police training for handling sensitive cases.
+- Same trend was seen during Cameron's time in office with a setady increase in imprisonment rates. This could be due to Increased awareness campaigns, like #MeToo, and harsher sentencing policies resulted in a rise in imprisonments for sexual offenses. May expanded victim support services and improved police training for handling sensitive cases.
 
 ---
 
