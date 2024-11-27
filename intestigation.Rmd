@@ -151,6 +151,7 @@ ggsave("img/Sky-ppt_2.jpg", plot = custody_plot, width = export.width, height = 
 ```
 
 ```{r Sky-modeling}
+
 Custody_modeling <- Custody_PD_sliced %>%
   filter(
     year >= 2015,
@@ -160,23 +161,42 @@ Custody_modeling <- Custody_PD_sliced %>%
     )
   )
 
+#Model 1: With interaction
 custody_fit_yesInt <- linear_reg() %>%
   set_engine("lm") %>%
   fit(d1_Count ~ Date + lockdown_happens + Date * lockdown_happens, data = Custody_modeling)
 
+#Model 2
 custody_fit_noInt <- linear_reg() %>%
   set_engine("lm") %>%
   fit(d1_Count ~ Date + lockdown_happens, data = Custody_modeling)
 
+#Model 3
 custody_fit_Simple <- linear_reg() %>%
   set_engine("lm") %>%
   fit(d1_Count ~ lockdown_happens, data = Custody_modeling)
 
 tidy(custody_fit_yesInt)
 
-glance(custody_fit_noInt)$r.squared
-glance(custody_fit_yesInt)$r.squared
-glance(custody_fit_Simple)$r.squared
+# Get R-squared and Adjusted R-squared for each model
+r_squared_yesInt <- glance(custody_fit_yesInt)$r.squared
+r_squared_noInt  <- glance(custody_fit_noInt)$r.squared
+r_squared_Simple <- glance(custody_fit_Simple)$r.squared
+
+adj_r_squared_yesInt <- glance(custody_fit_yesInt)$adj.r.squared
+adj_r_squared_noInt  <- glance(custody_fit_noInt)$adj.r.squared
+adj_r_squared_Simple <- glance(custody_fit_Simple)$adj.r.squared
+
+# Print the results
+cat("R-squared for custody_fit_yesInt:", r_squared_yesInt, "\n")
+cat("R-squared for custody_fit_noInt:", r_squared_noInt, "\n")
+cat("R-squared for custody_fit_Simple:", r_squared_Simple, "\n")
+cat("\n")
+cat("Adjusted R-squared for custody_fit_yesInt:", adj_r_squared_yesInt, "\n")
+cat("Adjusted R-squared for custody_fit_noInt:", adj_r_squared_noInt, "\n")
+cat("Adjusted R-squared for custody_fit_Simple:", adj_r_squared_Simple, "\n")
+
+
 ```
 
 
@@ -444,9 +464,20 @@ Annual_Data_A1_1 <- as.data.frame(Custody_PD)
 
 #selects wanted data and the dates
 Annual_Data_A1_5ii <- Annual_Data_A1_5ii %>%
-  slice(1,16,17,18,22,25)
+  slice(1, #date
+    13, #rape
+    16,#robbery
+    17, #burglary
+    18, #theft and handling
+    22, #fraud and forgery
+    25) #drug offences
 Annual_Data_A1_5i <- Annual_Data_A1_5i %>%
-  slice(1,61,62,89,128)
+  slice(1, #date
+        34, #rape
+        61,#robbery
+        62, #theft offences
+        89, #drug offences
+        128)
 Annual_Data_A1_1 <- Annual_Data_A1_1 %>%
   slice(1,3,4,5,7,21)
 
@@ -492,11 +523,11 @@ Annual_Date_A1_5 <- Annual_Data_A1_5ii %>%
 
 #filter years
 Annual_Date_A1_5 <- Annual_Date_A1_5 %>%
-  filter(Date > as.Date("2011-01-01"),
-         Date < as.Date("2018-01-01"))
+  filter(Date > as.Date("2010-05-11"),
+         Date < as.Date("2019-07-24"))
 Annual_Date_A1_1 <- Annual_Data_A1_1 %>%
-  filter(Date > as.Date("2011-01-01"),
-         Date < as.Date("2018-01-01"))
+  filter(Date > as.Date("2010-05-11"),
+         Date < as.Date("2019-07-24"))
 
 #basic data plot by Group
 ggplot(data = (Annual_Date_A1_5),
