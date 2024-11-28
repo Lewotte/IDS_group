@@ -203,16 +203,15 @@ cat("Adjusted R-squared for custody_fit_Simple:", adj_r_squared_Simple, "\n")
 
 
 
-```{r basic A1_7 plotting,fig.width=10, fig.height=5}
+```{r basic A1_7 plotting,fig.width=10, fig.height=2}
 
 Annual_Data_A1_7 <- as.data.frame(A1_7)
 
 #selects wanted data and the dates
 Annual_Data_A1_7 <- Annual_Data_A1_7 %>%
-  slice(1,2,13,24,35)
+  slice(1,2,13,24)
 
 #cleans names
-Annual_Data_A1_7[5,1] <- "Non-criminal prisoners"
 Annual_Data_A1_7[2,1] <- "Total"
 
 #makes the column names the Date
@@ -229,90 +228,20 @@ Annual_Data_A1_7 <- Annual_Data_A1_7 %>%
 
 Annual_Data_A1_7 <- na.omit(Annual_Data_A1_7)
 
+Annual_Data_A1_7_filter <- Annual_Data_A1_7 %>%
+  filter(Date > as.Date("2010-01-01"), 
+         Date < as.Date("2019-01-01"))
+
 #basic data plot by Group
-ggplot(data = (Annual_Data_A1_7),
+ggplot(data = (Annual_Data_A1_7_filter),
        mapping = aes( 
          x = Date,
          y = Arrests,
          group = Group,
          colour = Group)) + 
   geom_line(size = 1) + 
-  facet_wrap(~Group, scales = "free") 
-```
-
-```{r A1_7 change plotting,fig.width=10, fig.height=5}
-#Calculates the % change from previous value (note first value is set to NA)
-diff_Annual_Data_A1_7 <- Annual_Data_A1_7 %>%
-  filter(year(Date) > 2009) %>%
-  arrange(Group, Date) %>%
-  group_by(Group) %>%
-  mutate(
-    Arrests_diff = c(NA, diff(Arrests)),
-    Arrests_pct_change = (Arrests_diff / lag(Arrests)) * 100
-    ) %>%
-  ungroup
-Total_group_data <- diff_Annual_Data_A1_7 %>%
-  filter(Group == "Total")
-#plots difference between each data point by group
-ggplot(data = na.omit(Total_group_data),
-       mapping = aes( 
-         x = Date,
-         y = Arrests_pct_change,
-         group = Group,
-         colour = Group)) + 
-  geom_line(size = 1) + 
-  annotate(
-    "rect",
-    xmin= as.Date("2012-01-01"), xmax=as.Date("2014-06-01"),
-    ymin=-Inf, ymax=Inf,
-    alpha = 0.2, fill = "black", color = "black"
-  ) +
-  annotate(
-    "rect",
-    xmin= as.Date("2017-03-01"), xmax=as.Date("2020-01-01"),
-    ymin=-Inf, ymax=Inf,
-    alpha = 0.2, fill = "black", color = "black"
-  ) +
-  facet_wrap(~Group, scales = "free")
-
- 
-```
-
-```{r Gradient of A1_7,fig.width=10, fig.height=5}
-#quarter is measured in days / 91.3125 (Ave days in a quarter)
-grad_Annual_Data_A1_7 <- diff_Annual_Data_A1_7 %>%
-  filter(year(Date) > 2009) %>%
-  arrange(Group, Date) %>%
-  group_by(Group) %>%
-  mutate(
-    Date_diff = c(NA, as.numeric(difftime(Date[-1], Date[-length(Date)], units = "days")/ 91.3125)),
-    Gradient = Arrests_diff / Date_diff
-    ) %>%
-  ungroup()
-Total_group_data <- grad_Annual_Data_A1_7 %>%
-  filter(Group == "Total")
-
-#plots gradient by group
-ggplot(data = na.omit(Total_group_data),
-       mapping = aes( 
-         x = Date,
-         y = Gradient,
-         group = Group,
-         colour = Group)) + 
-  geom_line(size = 1) + 
-  annotate(
-    "rect",
-    xmin= as.Date("2012-01-01"), xmax=as.Date("2014-06-01"),
-    ymin=-Inf, ymax=Inf,
-    alpha = 0.2, fill = "black", color = "black"
-  ) +
-  annotate(
-    "rect",
-    xmin= as.Date("2017-03-01"), xmax=as.Date("2020-01-01"),
-    ymin=-Inf, ymax=Inf,
-    alpha = 0.2, fill = "black", color = "black"
-  ) +
-  facet_wrap(~Group, scales = "free") 
+  facet_wrap(~Group, scales = "free") +
+  labs(y = "population")
 ```
 
 ```{r 2012-17 type of crime and sentence type,fig.width=10, fig.height=5}
