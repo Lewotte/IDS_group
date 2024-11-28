@@ -176,63 +176,66 @@ Based on the final graph in the presentation slides, here are the key observatio
 
 The graph compares the predicted prison population (blue line) with the actual population (red line). During Cameron's period, the population followed a steady forecast, but under May, the red line shows more fluctuations and even deviates from the forecast, indicating unexpected challenges or policy changes. The orange lines (Hi 95 and Lo 95) represent expected variation, but the actual population sometimes falls outside this range, showing greater instability during May's term.
 
-### COVID
+## The effect of COVID-19 on prison population of different custody types
+*Sky and Maggie*
 
-#### How custody types changes
+We analysed the rate of change in the prisoner population, `d1_Count`, over time, using different subsets of custody type.
 
-#### How lockdown affect the prisoner population
+### Methods
 
-To prove our findings further. We start an analysis aimed to model the rate of change in the prisoner population (d1_Count) over time, focusing on adult prisoners in sentenced custody, and considering the impact of the COVID-19 lockdown period. 
+We created an indicator variable `lockdown_happens` which takes the value of 1 during the first lockdown period (2020 March 26 to July 4) [^covid_date1][^covid_date2], and 0 at any other given time. This will be used as an explanatory variable for our model.
 
-##### Methods
+We used linear regression for our models, the response variable being the rate of change of prisoner population `d1_Count`, and the explanatory variables being `lockdown_happens` and `Date`. `Date` is included to test whether there was a trend with respect to time in `d1_Count`.
 
-Three linear regression models were fitted to the data:
+The reason we chose these variables for the following reasons. From preliminary assessment of the data through graphs, we saw that although `d1_Count` is unstable, it oscillates roughly around 0 throughout time, and in some cases like Extended determinate sentences, there appeared to be a decreasing trend with respect to time.
 
-1. **Model 1 (custody_fit_yesInt)**: This model included the variables `Date`, `lockdown_happens`, and the interaction between these two variables (`Date * lockdown_happens`). This model assesses how the lockdown period affected the population change in sentenced custody over time while accounting for the general time trend.
 
-2. **Model 2 (custody_fit_noInt)**: This model excluded the interaction term and included only the main effects of `Date` and `lockdown_happens`.
 
-3. **Model 3 (custody_fit_Simple)**: The simplest model included only `lockdown_happens` as a predictor.
+1. **Model 1 (custody_fit_yesInt)**: This model included the variables `Date`, `lockdown_happens`, and the interaction between these two variables (`Date * lockdown_happens`). This model assesses how the lockdown period affected the population change in sentenced custody over time while accounting for any general time trend.
 
-##### Results
+2. **Model 2 (custody_fit_noInt)**: This model is did not include interaction term and only considers the effects of `Date` and `lockdown_happens`.
 
-**Model 1 (custody_fit_yesInt)** The estimates for Date and the interaction term are negligible and statistically insignificant (p-values > 0.7). The lockdown_happens estimate is large (17006) but not significant (p = 0.738). It has the lowest adjusted R-squared (0.1663), suggesting minimal explanatory power for the interaction effect. 
+3. **Model 3 (custody_fit_Simple)**: The simplest model of the three, which only uses `lockdown_happens` as a predictor.
 
-**Model 2 (custody_fit_noInt)** Without interaction, the lockdown_happens variable retains a strong negative estimate (-632, p < 0.001), while Date’s estimate (0.00795) is not significant (p = 0.702). It has a slightly higher adjusted R-squared (0.1699), indicating that the interaction term does not add significant value.
+### Results
 
-**Model 3 (custody_fit_Simple)** With only lockdown_happens, it shows a strong negative estimate for lockdown_happens (-629, p < 0.001). It has the highest adjusted R-squared (0.1734), showing that lockdown_happens is the key factor of variance in d1_Count without additional predictors or interactions.
+#### Subset "adult sentenced"
+This subset showed the strongest reponse to the specified lockdown dates.
 
-##### Interpretion
+**Model 1 `(custody_fit_yesInt)`** The all estimated coefficients are statistically insignificant (p-values > 0.7), suggesting that this model is invalid. $\bar{R}^2 = 0.166$ (adjusted $R^2$) , it is the lowest among the models we used.
 
-According to Occam's Razor, the simplest model that still provides meaningful explanatory power should be choosed. Since the r-squared of Model 3 is the highest and its simplicity, this makes it the most interpretable for directly assessing the lockdown’s effect without accounting for temporal trends or interactions. 
+**Model 2 `(custody_fit_noInt)`** Without the interaction effect, `lockdown_happens` has a negative estimated coefficient of $-600 \pm 100$ (SE), while `Date`’s coefficient is insignificant (p = 0.702). $\bar{R}^2 = 0.170$.
+
+**Model 3 `(custody_fit_Simple)`** With the only explanatory variable being `lockdown_happens`, it's estimated coefficient is $-600 \pm 100$ (SE), similar to Model 2. This suggests that during the period of lockdown, the rate of change of prison population for the selected subset is about 600 less than during normal times. It has the highest adjusted R-squared (0.1734), suggesting that `lockdown_happens` is the key factor of variance in d1_Count without additional predictors or interactions. $\bar{R}^2 = 0.173$, the highest among the models used.
+
+#### Other subsets
+Other subsets showed different responses to COVID:
+
+| Subset chosen | $\bar{R}^2_{yesInt}$ | $\bar{R}^2_{noInt}$ | $\bar{R}^2_{simple}$  | `lockdown_happens` coefficient in `(custody_fit_Simple)` |
+|---|---|---|---|---|
+| Sentenced | 0.166 |  0.170  |  0.173  | $600 \pm 100$ |
+| Remand | 0.0998  | 0.0777  | 0.0249  | $140 \pm 60$ |
+|  Length not recorded |  0.00459 | -0.00426  | 0.000854 | $-20 \pm 10$ |  |
+
+Remand showed a positive correlation with lockdown (it was negative for Sentenced), and Length not recorded did not show any noticeable response.
+
+![Subsets that showed negative reaction, Setenced on the right.](img/Sky-ppt_negReaction.jpg)
+
+![Subsets that showed positive reaction, Remand.](img/Sky-ppt_posReaction.jpg)
+
+![Subsets that showed no reaction, Length not recorded on the left.](img/Sky-ppt_noReaction.jpg)
+
+### Interpretation
+
+Applying Occam's Razor, the simplest model that still provides meaningful explanatory power should be used. Our result suggests time (i.e. `Date`) has no significant correlation with change in adult sentenced prisoners, and lockdown in UK has a correlation with the decrease in population.
    
-The lower Adjusted R-squared values across all models suggest that other unaccounted factors might also influence changes in the prisoner population. Variables such as policy changes, release rates, or crime trends could play a role.
-
-
-
-
-
-
-
-
-
-
-The length should be roughly 1,500 words. 
-If you want to use a word count addin, you can install this by copying and pasting the following into RStudio:
-
-`devtools::install_github("benmarwick/wordcountaddin", type = "source", dependencies = TRUE)`
-
-You will then need to restart RStudio. Once you have done that, select the text you want to count the words of, go to Addins, and select the `Word count` addin.
-This addin counts words using two different algorithms, but the results should be similar and as long as you're in the ballpark of 1,500 words, you're good! 
-The addin will ignore code chunks and only count the words in prose. If you don't want to use the addin you can always copy and paste the text into Microsoft Word to do a Word Count!
-
-You can also load your data here and present any analysis results / plots.
-Make sure to hide your code with  `echo = FALSE` unless the point you are trying to make is about the code itself, in which case you should show your code.
-
-
-
+The relatively low $\bar{R}^2$ values across all models is expected, since all sorts of external factors and the inaccuracies of our model can influence the results. Our linear model is simplistic in nature, and `lockdown_happens` is only based on dates that might not accurately reflect prisoner flux dynamics (i.e. did lockdown itself caused the change in prison population, or COVID-19 itself, some other factors, or a combination of everything?).
 
 ## References
 
-Ministry of Justice, Offender Management Statistics Quarterly publications, "Prison population: 30 June 2023", Retrieved November 8, 2024, Available at: https://www.gov.uk/government/collections/offender-management-statistics-quarterly
+[^origin]: Ministry of Justice, Offender Management Statistics Quarterly publications, "Prison population: 30 June 2023", retrieved on November 8, 2024, available at: https://www.gov.uk/government/collections/offender-management-statistics-quarterly
+
+[^covid_date1]: Institute for Government analysis, https://www.instituteforgovernment.org.uk/sites/default/files/timeline-lockdown-web.pdf , retrieved November 26, 2024
+
+[^covid_date2]: UK Parliment, "Coronavirus: A history of English lockdown laws", https://commonslibrary.parliament.uk/research-briefings/cbp-9068/ , retrieved November 26, 2024
 
