@@ -499,6 +499,137 @@ Model 5 and Model 7 have similar r squared values hwoever they can't be compared
 
 &lt;img src="img/PM_forecastvsactual.png" width="80%" /&gt;
 
+---
+####The final analysis illustrates the forecasted vs actual trends in the prison population from 2010 to 2019, emphasizing the period before and after July 2016. The analysis leverages time series modeling with an ARIMA model, combining forecasts with actual data to evaluate the potential impact of policy changes. 
+
+#####WHAT IS AN ARIMA MODEL ?
+The ARIMA model (AutoRegressive Integrated Moving Average) is a powerful statistical tool used for time series forecasting. It analyzes historical data to capture:
+
+- Trend: Long-term increases or decreases.
+- Seasonality: Repeated patterns over time (e.g., monthly or yearly cycles).
+- Noise: Random fluctuations.
+
+ARIMA works by combining:
+
+ 1. AutoRegression (AR): The relationship between a variable and its lagged (past) values.
+ 2. Integrated (I): Differencing the data to make it stationary (removing trends).
+ 3. Moving Average (MA): Using past forecast errors to improve predictions.
+
+This makes ARIMA ideal for forecasting trends in structured datasets like population counts.
+
+---
+
+
+
+
+###Code Process Explanation
+####1.Data Preparation
+- Monthly prison population data (PM_monthly) was filtered to include only the period before July 2016:
+
+
+``` r
+PM_monthly_to_2012 &lt;- PM_monthly %&gt;%
+  filter(Date &gt;= as.Date("2010-04-01") &amp; Date &lt;= as.Date("2016-07-13"))
+```
+
+- The filtered dataset was converted into a time series object for ARIMA modeling:
+
+
+``` r
+ts_data &lt;- ts(PM_monthly_to_2012$Total_pop, start = c(2010, 2), frequency = 12)
+```
+
+- Here, frequency = 12 specifies monthly data.
+---
+####2.ARIMA Model Application:
+- The auto.arima() function was used to automatically select the best ARIMA parameters (p, d, q):
+
+
+``` r
+fit_arima &lt;- auto.arima(ts_data)
+```
+
+- p: Number of lagged terms (AR).
+- d: Degree of differencing (I).
+- q: Size of the moving average (MA).
+
+- The fitted ARIMA model was then used to forecast the prison population for the next 36 months:
+
+
+``` r
+forecast_result &lt;- forecast(fit_arima, h = 36)
+```
+---
+####3.Merging Forecasts with Actual Data:
+- The forecast results were transformed into a dataframe and formatted to align with actual prison population data:
+
+
+``` r
+forecast_df &lt;- rownames_to_column(as.data.frame(forecast_result), var = "Date") %&gt;%
+  mutate(Date = as.yearmon(Date, format = "%b %Y"),
+         Date = as.Date(Date, format = "%b %y", frac = 1))
+```
+
+- The forecast data was joined with actual prison population data to create a comparison:
+
+
+``` r
+ts_vs_real &lt;- inner_join(forecast_df, PM_monthly, by = "Date")
+```
+---
+####4.Visualization:
+- The forecasted population (blue line) and actual population (red line) were plotted, along with 95% confidence intervals (orange bands):
+
+
+
+
+
+``` r
+# Ensure the ts_vs_real data frame has the correct structure
+ts_vs_real %&gt;%
+  filter(Date &lt;= as.Date("2019-07-24")) %&gt;%
+  ggplot(aes(x = Date)) +
+  geom_line(aes(
+    y = `Point Forecast`, color = "Point Forecast")) +
+  geom_line(aes(y = `Hi 95`, color = "Hi 95")) +
+  geom_line(aes(y = `Lo 95`, color = "Lo 95")) +
+  geom_line(aes(y = Total_pop, color = "Total_pop")) +
+  scale_color_manual(values = c("Point Forecast" = "blue", 
+                                "Lo 95" = "orange", 
+                                "Hi 95" = "orange", 
+                                "Total_pop" = "red")) +
+  labs(title = "Forecast vs Real",
+       x = "Date", 
+       y = "Population") 
+```
+
+---
+#####The graph below shows how different leadership styles, policy priorities, or external events under Cameron and May could have influenced prison population trends. The Point forecast (blue) represents a steady, expected trajectory, derived from the prison population data from Cameron's period, while the Total_pop (red) highlights the variability and challenges that arose during May's period. 
+
+&lt;img src="img/PM_forecastvsactual.png" width="80%" /&gt;
+---
+####Graph Analysis
+
+#####Actual vs. Forecast:
+
+- The red line (actual population) deviates significantly from the blue line (forecast) after 2016. This highlights the impact of unforeseen changes, possibly related to policy decisions or external events.
+- The ARIMA model’s predictions were relatively accurate pre-2016, but the divergence post-2016 indicates that the model could not fully account for new factors introduced after this period.
+
+#####Confidence Intervals:
+
+- The orange bands represent the 95% confidence interval. The red line occasionally falls outside these bounds, showing unexpected changes beyond the model’s assumptions.
+
+#####Implications:
+
+- The results suggest that while ARIMA is effective for capturing historical trends, real-world changes—such as political or policy shifts—can create unpredictable variations.
+
+This analysis demonstrates the usefulness of ARIMA in time series forecasting but also underscores the limitations of statistical models in accounting for external influences. This insight is critical when assessing prison population trends and their relation to policy changes.
+---
+## Conclusion
+
+- We can therefore conclude that the rate of change of prison population was indeed impacted by COVID-19 lockdown measures.
+
+- There is sufficient evidence to support that penal reforms impact the Prison population in England and wales
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
