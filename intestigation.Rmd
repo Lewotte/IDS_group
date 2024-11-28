@@ -555,6 +555,26 @@ PR_t_test <- t.test(Total_pop ~ event_occurred, data = PR_monthly) %>%
   tidy()
 print(PR_t_test)
 
+PR_t_test_2 <- t.test(Remand_pop ~ event_occurred, data = PR_monthly) %>%
+  tidy()
+print(PR_t_test_2)
+
+PR_t_test_3 <- t.test(Sentenced_pop ~ event_occurred, data = PR_monthly) %>%
+  tidy()
+print(PR_t_test_3)
+
+PR_t_test_4 <- t.test(at_25_40_pop ~ event_occurred, data = PR_quarterly) %>%
+  tidy()
+print(PR_t_test_4)
+
+PR_t_test_5 <- t.test(Under_25_pop ~ event_occurred, data = PR_quarterly) %>%
+  tidy()
+print(PR_t_test_5)
+
+PR_t_test_6 <- t.test(Male_pop ~ event_occurred, data = PR_monthly) %>%
+  tidy()
+print(PR_t_test_6)
+
 #t test is mostly not visualisable so this can kinda be used as a visual representation
 ggplot(PR_monthly, aes(x = as.factor(event_occurred), y = Total_pop, fill = as.factor(event_occurred))) +
   geom_boxplot() +
@@ -565,18 +585,98 @@ ggplot(PR_monthly, aes(x = as.factor(event_occurred), y = Total_pop, fill = as.f
 
 #convert Date to numeric for regression modelling
 PR_quarterly$Date_num <- as.numeric(as.Date(PR_quarterly$Date))
+PR_monthly$Date_num <- as.numeric(as.Date(PR_monthly$Date))
 
 #linear regression model with Date and Event indicator for quarters
-PR_model <- linear_reg() %>%
-  set_engine("lm") %>%
-  fit(Total_pop ~ Date_num + event_occurred, data = PR_quarterly) 
-model_summary <- summary(PR_model$fit)
+PR_model_1 <- linear_reg() %>%
+  set_engine("glm") %>%
+  fit(Total_pop ~ event_occurred, data = PR_monthly) 
+model_summary <- summary(PR_model_1$fit)
 model_summary
-# Print R-squared and Adjusted R-squared
-r_squared <- model_summary$r.squared
-adj_r_squared <- model_summary$adj.r.squared
-r_squared
-adj_r_squared 
+
+PR_model_2 <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(Total_pop ~ Date_num + event_occurred, data = PR_monthly) 
+model_summary <- summary(PR_model_2$fit)
+model_summary
+
+PR_model_3 <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(Total_pop ~ Date_num + event_occurred + Remand_pop, data = PR_monthly) 
+model_summary <- summary(PR_model_3$fit)
+model_summary
+
+PR_model_4 <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(Total_pop ~ Date_num + event_occurred + Sentenced_pop, data = PR_monthly) 
+model_summary <- summary(PR_model_4$fit)
+model_summary
+
+PR_model_5 <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(Total_pop ~ Date_num + event_occurred + Sentenced_pop + Remand_pop, data = PR_monthly) 
+model_summary <- summary(PR_model_5$fit)
+model_summary
+
+PR_model_6 <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(Remand_pop ~ Date_num + event_occurred, data = PR_monthly) 
+model_summary <- summary(PR_model_6$fit)
+model_summary
+
+PR_model_7 <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(Remand_pop ~ Date_num + event_occurred + Total_pop + Sentenced_pop, data = PR_monthly) 
+model_summary <- summary(PR_model_7$fit)
+model_summary
+
+#testing model 4 and 5
+# Create 5-fold cross-validation splits
+set.seed(123)
+cv_splits <- vfold_cv(PR_monthly, v = 5)
+
+# Function to calculate RMSE and MAE for each fold
+cv_results <- map_dfr(cv_splits$splits, function(split) {
+  
+  # Training and testing sets for this fold
+  train_data <- analysis(split)
+  test_data <- assessment(split)
+  
+  # Fit models on training data
+  model_cv_4 <- lm(Total_pop ~ Date_num + event_occurred + Sentenced_pop, data = train_data)
+  model_cv_5 <- lm(Total_pop ~ Date_num + event_occurred + Sentenced_pop + Remand_pop, data = train_data)
+  model_cv_7 <- lm(Remand_pop ~ Date_num + event_occurred + Sentenced_pop + Total_pop, data = train_data)
+  
+  # Predict on test data for the models
+  test_data_4 <- test_data %>%
+    mutate(pred_4 = predict(model_cv_4, newdata = test_data))
+  test_data_5 <- test_data %>%
+    mutate(pred_5 = predict(model_cv_5, newdata = test_data))
+  test_data_7 <- test_data %>%
+    mutate(pred_7 = predict(model_cv_7, newdata = test_data))
+  
+  # Calculate RMSE and MAE for both models
+  tibble(
+    model = c("Model 4", "Model 5", "Model 7"),
+    rmse = c(
+      rmse(test_data_4, truth = Total_pop, estimate = pred_4)$.estimate,
+      rmse(test_data_5, truth = Total_pop, estimate = pred_5)$.estimate,
+      rmse(test_data_7, truth = Total_pop, estimate = pred_7)$.estimate
+    ),
+    mae = c(
+      mae(test_data_4, truth = Total_pop, estimate = pred_4)$.estimate,
+      mae(test_data_5, truth = Total_pop, estimate = pred_5)$.estimate,
+      mae(test_data_7, truth = Total_pop, estimate = pred_7)$.estimate
+      ))})
+print(cv_results)
+
+average_results <- cv_results %>%
+  group_by(model) %>%
+  summarise(
+    avg_rmse = mean(rmse),
+    avg_mae = mean(mae),
+    .groups = 'drop')  # Removes grouping for cleaner output
+print(average_results)
 
 #time series analysis (can be used to see the difference in predicted vs actual)
 PR_monthly_to_2012 <- PR_monthly %>%
