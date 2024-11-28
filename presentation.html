@@ -302,16 +302,101 @@ Applying Occam's Razor, the method we tried suggests that the rate of change of 
 - The Offender Rehabilitation Act 2014 reformed offender management before and after conviction, created new offenses related to healthcare neglect, police misconduct, and privacy violations, and made provisions on judicial review and court procedures.
 
 ---
+&lt;img src="img/New_vivi_hanna_graph.png" width="80%" /&gt;
 
-&lt;img src="img/Marcel_sid_graph2.png" width="80%" /&gt;
+We simplified the crime types down to non violent and violent. We then further simplified to remand and sentenced.
+
+Violent crimes generally tend to be sentenced while non violent tends to be under remand.
 ---
-.pull-left[
-- Siddhi
-- Marcel
-]
-.pull-right[
-&lt;img src="img/boxplot.png" width="500%" /&gt;
-]
+&lt;img src="img/MS.png" width="80%" /&gt;
+
+These are the main data points used in this section.
+
+Using Occam's Razor, we have simplified the data to focus on the most essential elements while maintaining accuracy. This has made the graph clearer and more effective at highlighting the key patterns and trends in the data, improving both its readability and overall quality.
+---
+
+##The Model
+
+Multiple models where used to predict trends however the best was to be determined as thus:
+
+**Response Variable**:- `Total_pop`
+
+**Explainatory variables:**  - `event_occurred`, `Date_num`, `Remand_pop`, `Sentenced_pop`
+--
+
+
+We tried making multiple linear models, with the best 2 being:
+
+
+``` r
+PR_model_5 &lt;- linear_reg() %&gt;%
+  set_engine("lm") %&gt;%
+  fit(Total_pop ~ Date_num + event_occurred + Sentenced_pop + Remand_pop, data = PR_monthly) 
+```
+
+
+``` r
+PR_model_4 &lt;- linear_reg() %&gt;%
+  set_engine("lm") %&gt;%
+  fit(Total_pop ~ Date_num + event_occurred + Sentenced_pop, data = PR_monthly) 
+```
+
+---
+## Model 5 performance
+
+
+```
+## 
+## Call:
+## stats::lm(formula = Total_pop ~ Date_num + event_occurred + Sentenced_pop + 
+##     Remand_pop, data = data)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -587.87 -254.17  -34.43  264.30  832.64 
+## 
+## Coefficients:
+##                      Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)         576.42744 2646.65949   0.218    0.828    
+## Date_num             -0.07937    0.05427  -1.462    0.146    
+## event_occurredTRUE  473.81466   68.58149   6.909 2.96e-10 ***
+## Sentenced_pop         1.02977    0.02621  39.290  &lt; 2e-16 ***
+## Remand_pop            0.97718    0.04736  20.635  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 311.4 on 114 degrees of freedom
+## Multiple R-squared:  0.9555,	Adjusted R-squared:  0.9539 
+## F-statistic:   612 on 4 and 114 DF,  p-value: &lt; 2.2e-16
+```
+---
+## Model 4 performance
+
+
+```
+## 
+## Call:
+## stats::lm(formula = Total_pop ~ Date_num + event_occurred + Sentenced_pop, 
+##     data = data)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1818.71  -551.42   -42.67   540.12  1569.35 
+## 
+## Coefficients:
+##                      Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)         4.245e+04  3.681e+03   11.53  &lt; 2e-16 ***
+## Date_num           -1.024e+00  6.321e-02  -16.20  &lt; 2e-16 ***
+## event_occurredTRUE  6.023e+02  1.480e+02    4.07 8.65e-05 ***
+## Sentenced_pop       8.155e-01  5.214e-02   15.64  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 674.5 on 115 degrees of freedom
+## Multiple R-squared:  0.7893,	Adjusted R-squared:  0.7838 
+## F-statistic: 143.6 on 3 and 115 DF,  p-value: &lt; 2.2e-16
+```
+
 ---
 #PRIME MINISTERS - David Cameron
 #####David Cameron, a Conservative, was the UK Prime Minister from 2010 to 2016. He implemented austerity measures and held the 2016 EU referendum, leading to Brexit and his resignation.
@@ -320,19 +405,19 @@ Applying Occam's Razor, the method we tried suggests that the rate of change of 
 ---
 ###Key Insights from Results:
 
-####Drug Offenses:
-- Prison populations for drug offenses significantly declined till around 2013 before it increases slightly between then and the end of his time. 
+####Drug Offences:
+- Prison populations for drug offences significantly declined till around 2013 before it increases slightly between then and the end of his time. 
 - This could possibly be due to Cameron's government prioritized dismantling organized drug networks and de-emphasized minor drug possession. Expanded funding for drug rehabilitation programs and harm reduction reflected this shift.
 ####Fraud and Forgery:
 - Fraud-related overall imprisonment rate decreased, with random increases throughout which could be driven by a shift toward online financial crimes, which were harder to prosecute under reduced police resources. Cameron's government encouraged private sector involvement in financial crime prevention.
-####Rape and Sexual Offenses:
+####Rape and Sexual Offences:
 - Rape imprisonment rates steadily increased throughout Cameron's time in office.
 - Increased awareness campaigns and judicial reforms led to rising imprisonment for rape offenses. Initiatives like #MeToo and longer sentencing reflected societal shifts.
 
 ---
 
 ####Robbery:
-- Prison populations for robbery offenses fluctuated, peaking around 2013 due to economic challenges and declining thereafter. Urban safety initiatives and improved surveillance reduced robbery rates.
+- Prison populations for robbery offences fluctuated, peaking around 2013 due to economic challenges and declining thereafter. Urban safety initiatives and improved surveillance reduced robbery rates.
 ####Theft Offences: 
 - theft offences also peaked around 2013 which could also be due to economic challenges, however declining arrests reflect improved security technologies and reduced police presence under austerity. Emphasis on community policing and public safety campaigns shaped outcomes.
 
@@ -345,12 +430,12 @@ Applying Occam's Razor, the method we tried suggests that the rate of change of 
 ---
 ###Key Insights from Results:
 
-####Drug Offenses:
+####Drug Offences:
 - Drug-related imprisonments fluctuated with an increase up till round 2017 before decreasing and increasing again mid 2018. May emphasized tackling organized drug operations and county lines. Budget constraints limited police capacity, but efforts were made to safeguard vulnerable individuals exploited in drug trafficking.
 ####Fraud and Forgery:
 - Fraud arrests steadily declined as traditional financial crimes shifted to cyber fraud. May prioritized cybercrime prevention by strengthening the National Crime Agency (NCA) and encouraging businesses to adopt stronger fraud detection measures.
 ####Rape and Sexual Offenses:
-- Same trend was seen during Camerons time in office with a setady increase in imprisonment rates. This could be due to Increased awareness campaigns, like #MeToo, and harsher sentencing policies resulted in a rise in imprisonments for sexual offenses. May expanded victim support services and improved police training for handling sensitive cases.
+- Same trend was seen during Cameron's time in office with a setady increase in imprisonment rates. This could be due to Increased awareness campaigns, like #MeToo, and harsher sentencing policies resulted in a rise in imprisonments for sexual offenses. May expanded victim support services and improved police training for handling sensitive cases.
 
 ---
 
@@ -361,6 +446,8 @@ Applying Occam's Razor, the method we tried suggests that the rate of change of 
 
 ---
 #####The graph below shows how different leadership styles, policy priorities, or external events under Cameron and May could have influenced prison population trends. The Point forecast (blue) represents a steady, expected trajectory, derived from the prison population data from Cameron's period, while the Total_pop (red) highlights the variability and challenges that arose during May's period. 
+
+&lt;img src="img/PM_forecastvsactual.png" width="80%" /&gt;
 
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>

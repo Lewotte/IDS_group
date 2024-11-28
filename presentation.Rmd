@@ -362,22 +362,213 @@ Applying Occam's Razor, the method we tried suggests that the rate of change of 
 - The Offender Rehabilitation Act 2014 reformed offender management before and after conviction, created new offenses related to healthcare neglect, police misconduct, and privacy violations, and made provisions on judicial review and court procedures.
 
 ---
+```{R Marcel_Siddhi_graph3, fig.height=2, fig.width=2,echo = FALSE}
+knitr::include_graphics("img/New_vivi_hanna_graph.png")
+```
 
+We simplified the crime types down to non violent and violent. We then further simplified to remand and sentenced.
+
+Violent crimes generally tend to be sentenced while non violent tends to be under remand.
+---
 ```{R Marcel_Siddhi_graph2,echo = FALSE, fig.width=4, fig.height=4,}
-knitr::include_graphics("img/Marcel_sid_graph2.png")
+knitr::include_graphics("img/MS.png")
+```
+
+These are the main data points used in this section.
+
+Using Occam's Razor, we have simplified the data to focus on the most essential elements while maintaining accuracy. This has made the graph clearer and more effective at highlighting the key patterns and trends in the data, improving both its readability and overall quality.
+---
+
+##The Model
+
+Multiple models where used to predict trends however the best was to be determined as thus:
+
+**Response Variable**:- `Total_pop`
+
+**Explainatory variables:**  - `event_occurred`, `Date_num`, `Remand_pop`, `Sentenced_pop`
+--
+
+
+We tried making multiple linear models, with the best 2 being:
+
+```{r eval=FALSE}
+PR_model_5 <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(Total_pop ~ Date_num + event_occurred + Sentenced_pop + Remand_pop, data = PR_monthly) 
+```
+
+```{r eval=FALSE}
+PR_model_4 <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(Total_pop ~ Date_num + event_occurred + Sentenced_pop, data = PR_monthly) 
+```
+
+---
+## Model 5 performance
+
+```{r echo = FALSE, warning = FALSE, message = FALSE}
+Ethnic_PD <- read_ods('data/Population_30June2023_Annual.ods', sheet = 14)
+A1_7 <- read_ods('data/Population_30June2023_Annual.ods', sheet = 12)
+TypeOfCrime <- read_ods('data/Population_30June2023_Annual.ods', sheet = 10)
+Custody_PD <- read_ods('data/Population_30June2023_Annual.ods', sheet = 2)
+A1_5i <- read_ods('data/Population_30June2023_Annual.ods', sheet = 9)
+#this has repeat code but this can therefore be used as a template
+#load data
+PR_A1_1 <- as.data.frame(Custody_PD)
+PR_A1_7 <- as.data.frame(A1_7)
+
+#selects wanted data and the dates
+PR_A1_1 <- PR_A1_1 %>%
+  slice(1,2,3,6,25,28,96,190)
+PR_A1_7 <- PR_A1_7 %>%
+  slice(1,3,4,5,6,7,8,9,10)
+#makes the column names the Date and changes col name (col 1 changes based on data)
+colnames(PR_A1_1)[-1] <- PR_A1_1[1,-1]
+colnames(PR_A1_1)[1] <- "Custody_type"
+colnames(PR_A1_7)[-1] <- PR_A1_7[1,-1]
+colnames(PR_A1_7)[1] <- "Age"
+
+#pivots the data frame creating 3 columns
+PR_A1_1 <- PR_A1_1 %>%
+  slice(-1) %>%
+  pivot_longer(!Custody_type, names_to = "Date", values_to = "Prison_pop") %>%
+  mutate(Date = as.Date(Date, format = "%d-%m月-%y"),
+         Prison_pop = as.numeric(Prison_pop)) %>%
+  distinct(Date, Custody_type, .keep_all = TRUE)
+PR_A1_7 <- PR_A1_7 %>%
+  slice(-1) %>%
+  pivot_longer(!Age, names_to = "Date", values_to = "Prison_pop") %>%
+  mutate(Date = as.Date(Date, format = "%d-%m月-%y"),
+         Prison_pop = as.numeric(Prison_pop)) %>%
+   distinct(Date, Age, .keep_all = TRUE)
+PR_A1_1 <- na.omit(PR_A1_1)
+PR_A1_7 <- na.omit(PR_A1_7)
+
+#to make code neater i added gender and total into PR_A1_1 and filtered time here
+#filter to selected time indicator (this case is monthly)
+
+PR_A1_7 <- PR_A1_7 %>%
+  filter(Date >= as.Date("2010-06-01"),
+         Date <= as.Date("2020-06-01"))
+PR_A1_1 <- PR_A1_1 %>%
+  filter(Date >= as.Date("2010-06-01"),
+         Date <= as.Date("2020-06-01"))
+
+#add a new data frame for total
+PR_total <- PR_A1_1 %>%
+  filter(Custody_type == "Males and Females")
+colnames(PR_total)[3] <- "Total_pop"
+PR_total <- PR_total %>%
+  select(!1)
+
+#new data frame for males then females
+PR_male <- PR_A1_1 %>%
+    filter(Custody_type == "Males")
+colnames(PR_male)[3] <- "Male_pop"
+PR_male <- PR_male %>%
+  select(!1)
+PR_female <- PR_A1_1 %>%
+    filter(Custody_type == "Females")
+colnames(PR_female)[3] <- "Female_pop"
+PR_female <- PR_female %>%
+  select(!1)
+
+#custody type data frames
+PR_Remand <- PR_A1_1 %>%
+  filter(Custody_type == "Remand")
+colnames(PR_Remand)[3] <- "Remand_pop"
+PR_Remand <- PR_Remand %>%
+  select(!1)
+PR_Sentenced <- PR_A1_1 %>%
+  filter(Custody_type == "Sentenced")
+colnames(PR_Sentenced)[3] <- "Sentenced_pop"
+PR_Sentenced <- PR_Sentenced %>%
+  select(!1)
+
+#age data frames
+PR_age <- PR_A1_7 %>%
+  mutate(Age = case_when(
+     Age %in% c("15-17","18-20", "21-24") ~ "Under 25",
+      Age %in% c("25-29", "30-39") ~ "25-40",
+      Age %in% c("40-49","50-59") ~ "40-60",
+      Age %in% c("60 and over") ~ "60+",
+      TRUE ~ "Unknown")) %>%
+  group_by(Age,Date) %>%
+  summarise(Prison_pop = sum(Prison_pop), .groups = "drop")
+PR_u25 <- PR_age %>%
+  filter(Age == "Under 25")
+
+colnames(PR_u25)[3] <- "Under_25_pop"
+PR_u25 <- PR_u25 %>%
+  select(!1)
+
+PR_25_40 <- PR_age %>%
+  filter(Age == "25-40")
+colnames(PR_25_40)[3] <- "at_25_40_pop"
+
+PR_25_40 <- PR_25_40 %>%
+  select(!1)
+
+PR_40_60 <- PR_age %>%
+  filter(Age == "40-60")
+colnames(PR_40_60)[3] <- "at_40_60_pop"
+
+PR_40_60 <- PR_40_60 %>%
+  select(!1)
+
+PR_a60 <- PR_age %>%
+  filter(Age == "60+")
+
+colnames(PR_a60)[3] <- "Above_60_pop"
+PR_a60 <- PR_a60 %>%
+  select(!1)
+
+#list of data frames
+dfs <- list(PR_female, PR_male, PR_Remand, PR_Sentenced, PR_u25, PR_25_40, PR_40_60, PR_a60, PR_total)
+
+#use reduce to join all data frames in the list by "Date"
+PR_quarterly <- reduce(dfs, left_join, by = "Date")
+PR_quarterly <- na.omit(PR_quarterly)
+
+dfs_2 <- list(PR_female, PR_male, PR_Remand, PR_Sentenced, PR_total)
+PR_monthly <- reduce(dfs_2, left_join, by = "Date")
+
+#event dates
+event_dates <- as.Date(c("2012-05-01", "2013-04-25", "2014-03-13", "2015-02-12"))
+event_quarters <- quarter(event_dates, with_year = TRUE)
+
+#checking if in same quarter
+PR_quarterly <- PR_quarterly %>%
+  mutate(event_occurred = if_else(quarter(Date, with_year = TRUE) %in% event_quarters, 1, 0))
+
+PR_monthly <- PR_monthly %>%
+  rowwise() %>%
+  mutate(event_occurred = any(Date > event_dates & Date <= event_dates + months(8))) %>%
+  ungroup()
+
+#t test (messures mean before and after events)
+
+PR_quarterly$Date_num <- as.numeric(as.Date(PR_quarterly$Date))
+PR_monthly$Date_num <- as.numeric(as.Date(PR_monthly$Date))
+
+PR_model_5 <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(Total_pop ~ Date_num + event_occurred + Sentenced_pop + Remand_pop, data = PR_monthly) 
+model_summary <- summary(PR_model_5$fit)
+model_summary
+
 ```
 ---
-.pull-left[
-- Siddhi
-- Marcel
-]
-.pull-right[
-```{R Marcel_Siddhi_graph3, out.width="500%", fig.width=4,echo = FALSE}
+## Model 4 performance
 
-knitr::include_graphics("img/boxplot.png")
-
+```{r echo = FALSE}
+PR_model_4 <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(Total_pop ~ Date_num + event_occurred + Sentenced_pop, data = PR_monthly) 
+model_summary <- summary(PR_model_4$fit)
+model_summary
 ```
-]
+
 ---
 #PRIME MINISTERS - David Cameron
 #####David Cameron, a Conservative, was the UK Prime Minister from 2010 to 2016. He implemented austerity measures and held the 2016 EU referendum, leading to Brexit and his resignation.
@@ -389,19 +580,19 @@ knitr::include_graphics("img/New_vivi_hanna_graph.png")
 ---
 ###Key Insights from Results:
 
-####Drug Offenses:
-- Prison populations for drug offenses significantly declined till around 2013 before it increases slightly between then and the end of his time. 
+####Drug Offences:
+- Prison populations for drug offences significantly declined till around 2013 before it increases slightly between then and the end of his time. 
 - This could possibly be due to Cameron's government prioritized dismantling organized drug networks and de-emphasized minor drug possession. Expanded funding for drug rehabilitation programs and harm reduction reflected this shift.
 ####Fraud and Forgery:
 - Fraud-related overall imprisonment rate decreased, with random increases throughout which could be driven by a shift toward online financial crimes, which were harder to prosecute under reduced police resources. Cameron's government encouraged private sector involvement in financial crime prevention.
-####Rape and Sexual Offenses:
+####Rape and Sexual Offences:
 - Rape imprisonment rates steadily increased throughout Cameron's time in office.
 - Increased awareness campaigns and judicial reforms led to rising imprisonment for rape offenses. Initiatives like #MeToo and longer sentencing reflected societal shifts.
 
 ---
 
 ####Robbery:
-- Prison populations for robbery offenses fluctuated, peaking around 2013 due to economic challenges and declining thereafter. Urban safety initiatives and improved surveillance reduced robbery rates.
+- Prison populations for robbery offences fluctuated, peaking around 2013 due to economic challenges and declining thereafter. Urban safety initiatives and improved surveillance reduced robbery rates.
 ####Theft Offences: 
 - theft offences also peaked around 2013 which could also be due to economic challenges, however declining arrests reflect improved security technologies and reduced police presence under austerity. Emphasis on community policing and public safety campaigns shaped outcomes.
 
@@ -417,12 +608,12 @@ knitr::include_graphics("img/New_vivi_hanna_graph.png")
 ---
 ###Key Insights from Results:
 
-####Drug Offenses:
+####Drug Offences:
 - Drug-related imprisonments fluctuated with an increase up till round 2017 before decreasing and increasing again mid 2018. May emphasized tackling organized drug operations and county lines. Budget constraints limited police capacity, but efforts were made to safeguard vulnerable individuals exploited in drug trafficking.
 ####Fraud and Forgery:
 - Fraud arrests steadily declined as traditional financial crimes shifted to cyber fraud. May prioritized cybercrime prevention by strengthening the National Crime Agency (NCA) and encouraging businesses to adopt stronger fraud detection measures.
 ####Rape and Sexual Offenses:
-- Same trend was seen during Camerons time in office with a setady increase in imprisonment rates. This could be due to Increased awareness campaigns, like #MeToo, and harsher sentencing policies resulted in a rise in imprisonments for sexual offenses. May expanded victim support services and improved police training for handling sensitive cases.
+- Same trend was seen during Cameron's time in office with a setady increase in imprisonment rates. This could be due to Increased awareness campaigns, like #MeToo, and harsher sentencing policies resulted in a rise in imprisonments for sexual offenses. May expanded victim support services and improved police training for handling sensitive cases.
 
 ---
 
@@ -433,4 +624,9 @@ knitr::include_graphics("img/New_vivi_hanna_graph.png")
 
 ---
 #####The graph below shows how different leadership styles, policy priorities, or external events under Cameron and May could have influenced prison population trends. The Point forecast (blue) represents a steady, expected trajectory, derived from the prison population data from Cameron's period, while the Total_pop (red) highlights the variability and challenges that arose during May's period. 
+
+```{r, echo = FALSE}
+knitr::include_graphics("img/PM_forecastvsactual.png")
+
+```
 
