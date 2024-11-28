@@ -98,7 +98,7 @@ Custody_modeling <- Custody_PD_sliced %>%
     year >= 2015,
     Age == "Adult",
     Custody == c(
-      "Sentenced"
+      "Length not recorded"
     )
   )
 
@@ -118,6 +118,8 @@ custody_fit_Simple <- linear_reg() %>%
   fit(d1_Count ~ lockdown_happens, data = Custody_modeling)
 
 tidy(custody_fit_yesInt)
+tidy(custody_fit_noInt)
+tidy(custody_fit_Simple)
 
 # Get R-squared and Adjusted R-squared for each model
 r_squared_yesInt <- glance(custody_fit_yesInt)$r.squared
@@ -127,6 +129,7 @@ r_squared_Simple <- glance(custody_fit_Simple)$r.squared
 adj_r_squared_yesInt <- glance(custody_fit_yesInt)$adj.r.squared
 adj_r_squared_noInt  <- glance(custody_fit_noInt)$adj.r.squared
 adj_r_squared_Simple <- glance(custody_fit_Simple)$adj.r.squared
+
 
 # Print the results
 cat("R-squared for custody_fit_yesInt:", r_squared_yesInt, "\n")
@@ -146,7 +149,7 @@ custody_plot <- Custody_PD_sliced %>%
     year >= 2015,
     Age == "Adult",
     Custody == c(
-      "Sentenced"
+      "Untried"
     ),
   ) %>% 
   ggplot(
