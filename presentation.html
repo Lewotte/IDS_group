@@ -325,7 +325,7 @@ Multiple models where used to predict trends however the best was to be determin
 --
 
 
-We tried making multiple linear models, with the best 2 being:
+We tried making multiple linear models, with the best 3 being:
 
 
 ``` r
@@ -339,6 +339,13 @@ PR_model_5 &lt;- linear_reg() %&gt;%
 PR_model_4 &lt;- linear_reg() %&gt;%
   set_engine("lm") %&gt;%
   fit(Total_pop ~ Date_num + event_occurred + Sentenced_pop, data = PR_monthly) 
+```
+
+
+``` r
+PR_model_7 &lt;- linear_reg() %&gt;%
+  set_engine("lm") %&gt;%
+  fit(Remand_pop ~ Date_num + event_occurred + Total_pop+ Sentenced_pop, data = PR_monthly) 
 ```
 
 ---
@@ -396,7 +403,53 @@ PR_model_4 &lt;- linear_reg() %&gt;%
 ## Multiple R-squared:  0.7893,	Adjusted R-squared:  0.7838 
 ## F-statistic: 143.6 on 3 and 115 DF,  p-value: &lt; 2.2e-16
 ```
+---
+## Model 7 performance
 
+```
+## 
+## Call:
+## stats::lm(formula = Remand_pop ~ Date_num + event_occurred + 
+##     Total_pop + Sentenced_pop, data = data)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -781.5 -235.8  104.0  216.6  486.3 
+## 
+## Coefficients:
+##                      Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)        8585.39442 2267.67344   3.786 0.000246 ***
+## Date_num             -0.14003    0.04803  -2.915 0.004278 ** 
+## event_occurredTRUE -354.71079   66.39650  -5.342 4.75e-07 ***
+## Total_pop             0.80723    0.03912  20.635  &lt; 2e-16 ***
+## Sentenced_pop        -0.87757    0.03868 -22.688  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 283 on 114 degrees of freedom
+## Multiple R-squared:  0.9547,	Adjusted R-squared:  0.9531 
+## F-statistic: 600.9 on 4 and 114 DF,  p-value: &lt; 2.2e-16
+```
+
+---
+## Model Evaluation
+
+```
+## # A tibble: 3 × 3
+##   model   avg_rmse avg_mae
+##   &lt;chr&gt;      &lt;dbl&gt;   &lt;dbl&gt;
+## 1 Model 4     688.    575.
+## 2 Model 5     317.    275.
+## 3 Model 7   73978.  73967.
+```
+
+Model 5 demonstrates superior performance compared to Model 4, as evidenced by its lower Root Mean Squared Error (RMSE) and Mean Absolute Error (MAE) values, which indicate better predictive accuracy and reduced deviations between predicted and actual values. Furthermore, Model 5's higher R-squared value reflects a stronger proportion of variance in the dependent variable being explained by the model, further validating its effectiveness over Model 4.
+
+Model 5 and Model 7 have similar r squared values hwoever they can't be compared using RMSE and MAE since they have got different predictor values.
+---
+## CONCLUSION
+
+There is some data to support that there is a correlation between reforms and prison population.
 ---
 #PRIME MINISTERS - David Cameron
 #####David Cameron, a Conservative, was the UK Prime Minister from 2010 to 2016. He implemented austerity measures and held the 2016 EU referendum, leading to Brexit and his resignation.

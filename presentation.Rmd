@@ -389,7 +389,7 @@ Multiple models where used to predict trends however the best was to be determin
 --
 
 
-We tried making multiple linear models, with the best 2 being:
+We tried making multiple linear models, with the best 3 being:
 
 ```{r eval=FALSE}
 PR_model_5 <- linear_reg() %>%
@@ -401,6 +401,12 @@ PR_model_5 <- linear_reg() %>%
 PR_model_4 <- linear_reg() %>%
   set_engine("lm") %>%
   fit(Total_pop ~ Date_num + event_occurred + Sentenced_pop, data = PR_monthly) 
+```
+
+```{r eval = FALSE}
+PR_model_7 <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(Remand_pop ~ Date_num + event_occurred + Total_pop+ Sentenced_pop, data = PR_monthly) 
 ```
 
 ---
@@ -568,7 +574,73 @@ PR_model_4 <- linear_reg() %>%
 model_summary <- summary(PR_model_4$fit)
 model_summary
 ```
+---
+## Model 7 performance
+```{r, echo = FALSE}
+PR_model_7 <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(Remand_pop ~ Date_num + event_occurred + Total_pop + Sentenced_pop, data = PR_monthly) 
+model_summary <- summary(PR_model_7$fit)
+model_summary
+```
 
+---
+## Model Evaluation
+```{r echo = FALSE}
+set.seed(123)
+cv_splits <- vfold_cv(PR_monthly, v = 5)
+
+# Function to calculate RMSE and MAE for each fold
+cv_results <- map_dfr(cv_splits$splits, function(split) {
+  
+  # Training and testing sets for this fold
+  train_data <- analysis(split)
+  test_data <- assessment(split)
+  
+  # Fit models on training data
+  model_cv_4 <- lm(Total_pop ~ Date_num + event_occurred + Sentenced_pop, data = train_data)
+  model_cv_5 <- lm(Total_pop ~ Date_num + event_occurred + Sentenced_pop + Remand_pop, data = train_data)
+  model_cv_7 <- lm(Remand_pop ~ Date_num + event_occurred + Sentenced_pop + Total_pop, data = train_data)
+  
+  # Predict on test data for the models
+  test_data_4 <- test_data %>%
+    mutate(pred_4 = predict(model_cv_4, newdata = test_data))
+  test_data_5 <- test_data %>%
+    mutate(pred_5 = predict(model_cv_5, newdata = test_data))
+  test_data_7 <- test_data %>%
+    mutate(pred_7 = predict(model_cv_7, newdata = test_data))
+  
+  # Calculate RMSE and MAE for both models
+  tibble(
+    model = c("Model 4", "Model 5", "Model 7"),
+    rmse = c(
+      rmse(test_data_4, truth = Total_pop, estimate = pred_4)$.estimate,
+      rmse(test_data_5, truth = Total_pop, estimate = pred_5)$.estimate,
+      rmse(test_data_7, truth = Total_pop, estimate = pred_7)$.estimate
+    ),
+    mae = c(
+      mae(test_data_4, truth = Total_pop, estimate = pred_4)$.estimate,
+      mae(test_data_5, truth = Total_pop, estimate = pred_5)$.estimate,
+      mae(test_data_7, truth = Total_pop, estimate = pred_7)$.estimate
+      ))})
+
+average_results <- cv_results %>%
+  group_by(model) %>%
+  summarise(
+    avg_rmse = mean(rmse),
+    avg_mae = mean(mae),
+    .groups = 'drop')  # Removes grouping for cleaner output
+print(average_results)
+
+```
+
+Model 5 demonstrates superior performance compared to Model 4, as evidenced by its lower Root Mean Squared Error (RMSE) and Mean Absolute Error (MAE) values, which indicate better predictive accuracy and reduced deviations between predicted and actual values. Furthermore, Model 5's higher R-squared value reflects a stronger proportion of variance in the dependent variable being explained by the model, further validating its effectiveness over Model 4.
+
+Model 5 and Model 7 have similar r squared values hwoever they can't be compared using RMSE and MAE since they have got different predictor values.
+---
+## CONCLUSION
+
+There is some data to support that there is a correlation between reforms and prison population.
 ---
 #PRIME MINISTERS - David Cameron
 #####David Cameron, a Conservative, was the UK Prime Minister from 2010 to 2016. He implemented austerity measures and held the 2016 EU referendum, leading to Brexit and his resignation.
