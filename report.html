@@ -374,6 +374,7 @@ Minister’s term. However, limitations included difficulty in directly
 linking changes to specific policies, leading to some assumptions. To
 address this, we examined different crime types and related
 policies.</p>
+<<<<<<< HEAD
 <p>We then looked into key issues and possible related government
 responses for both Lord Cameron and Theresa May.</p>
 <div id="lord-cameron2010-2016" class="section level3">
@@ -513,7 +514,133 @@ measures.</p>
 <li>Supported neighborhood watch programs and public awareness
 campaigns.</li>
 </ul>
+=======
+<div id="main-steps-used-in-the-data" class="section level4">
+<h4>Main Steps Used in The Data</h4>
+<p><strong>1.Data Preparation</strong> : Renamed columns, combined
+multiple datasets, and added an event indicator (before/after
+2016-07-13).</p>
+<p><strong>2.T-Test</strong> : Compared average population before and
+after the event date. Created a boxplot to visualize differences.</p>
+<p><strong>3.Linear Regression</strong> : Modeled the relationship
+between population, time, and the event using regression. Evaluated the
+model’s accuracy with R-squared values.</p>
+<p><strong>4.Time Series Forecasting</strong> : Used historical data
+(2010–2016) to forecast population for 36 months. Compared forecasts to
+actual data from 2016–2019.</p>
+<p><strong>5.Visualizations</strong> : Plotted population trends and
+compared forecasts vs. real data using clear, color-coded charts.</p>
 </div>
+<div id="results-key-issues-and-possible-related-government-responses" class="section level4">
+<h4>Results (Key Issues and Possible Related Government Responses)</h4>
+</div>
+<div id="lord-cameron2010-2016" class="section level4">
+<h4>Lord Cameron(2010-2016):</h4>
+<div id="drug-offences" class="section level5">
+<h5>1.Drug Offences</h5>
+<p><strong>Trend</strong> : Significant decline after 2010</p>
+<p><strong>Key Issues</strong> : Shift from punitive measures to
+rehabilitation and tackling high-level trafficking.</p>
+<p><strong>Government Response</strong> : Expanded funding for drug
+treatment and harm reduction initiatives.</p>
+</div>
+<div id="fraud-offences" class="section level5">
+<h5>2.Fraud Offences</h5>
+<p><strong>Trend</strong> : Declined, reflecting a transition to cyber
+fraud.</p>
+<p><strong>Key Issues</strong> : Limited resources allocated for
+investigating complex fraud and increasing online scams</p>
+<p><strong>Government Response</strong> : Strengthened cybercrime units
+and encouraged private sector involvement in fraud prevention.</p>
+</div>
+<div id="rape" class="section level5">
+<h5>3.Rape</h5>
+<p><strong>Trend</strong> : Reports and imprisonments steadily
+increased.</p>
+<p><strong>Key Issues</strong> : Greater awareness and public demand for
+action</p>
+<p><strong>Government Response</strong> : Funded support services and
+introduced training for handling rape cases.</p>
+</div>
+<div id="robbery" class="section level5">
+<h5>4.Robbery</h5>
+<p><strong>Trend</strong> : Peaked early, then declined
+significantly</p>
+<p><strong>Key Issues</strong> : Economic recession initially drove
+rates up, while urban safety measures later reduced offenses.</p>
+<p><strong>Government Response</strong> : Promoted urban safety
+initiatives like CCTV and improved penalties for violent robbery.</p>
+</div>
+<div id="theft-offences" class="section level5">
+<h5>5.Theft Offences</h5>
+<p><strong>Trend</strong> : Declined after an intial rise.</p>
+<p><strong>Key Issues</strong> : Technological advancements in security
+deterred theft.</p>
+<p><strong>Government Response</strong>: Supported public safety
+campaigns and neighbourhood watch programs.</p>
+</div>
+</div>
+<div id="theresa-may2016-2019" class="section level4">
+<h4>Theresa May(2016-2019):</h4>
+<div id="drug-offences-1" class="section level5">
+<h5>1.Drug Offences</h5>
+<p><strong>Trend</strong> : Fluctuated, with a rise linked to county
+lines operations.</p>
+<p><strong>Key Issues</strong> : Vulnerable individuals exploited by
+organized crime.</p>
+<p><strong>Government Response</strong> : Strengthened the National
+Crime Agency (NCA) and introduced targeted interventions.</p>
+</div>
+<div id="fraud-offences-1" class="section level5">
+<h5>2.Fraud Offences</h5>
+<p><strong>Trend</strong> : Continue declined due to a shift towards
+cyber fraud.</p>
+<p><strong>Key Issues</strong> : Limited resources for complex fraud
+investigations.</p>
+<p><strong>Government Response</strong> : Promoted private sector
+collaboration and expanded cybercrime units.</p>
+</div>
+<div id="rape-1" class="section level5">
+<h5>3.Rape</h5>
+<p><strong>Trend</strong> : Reports rose sharply, reflecting increased
+awareness</p>
+<p><strong>Key Issues</strong> : Persistent gaps in convictions despite
+higher reporting.</p>
+<p><strong>Government Response</strong> : Improved victim support and
+police training for sensitive cases.</p>
+</div>
+<div id="robbery-1" class="section level5">
+<h5>4.Robbery</h5>
+<p><strong>Trend</strong> : Steep decline due to improved surveillance
+and urban safety measures.</p>
+<p><strong>Key Issues</strong> : Economic challenges and reduced police
+presence.</p>
+<p><strong>Government Response</strong> : Strengthened penalties and
+promoted urbvan safety programs.</p>
+</div>
+<div id="theft-offences-1" class="section level5">
+<h5>5.Theft Offences</h5>
+<p><strong>Trend</strong> : Consistently declined due to imporved
+security measures.</p>
+<p><strong>Key Issues</strong> : Shift from physical theft to online
+fraud</p>
+<p><strong>Government Response</strong> : Supported neighborhood watch
+programs and public awareness campaigns.</p>
+>>>>>>> 821c197247fedd153515d3bed3740d001dab97a1
+</div>
+</div>
+<div id="final-analysis" class="section level4">
+<h4>Final Analysis</h4>
+<p>Based on the final graph in the presentation slides, here are the key
+observations :</p>
+<p>The graph compares the predicted prison population (blue line) with
+the actual population (red line). During Cameron’s period, the
+population followed a steady forecast, but under May, the red line shows
+more fluctuations and even deviates from the forecast, indicating
+unexpected challenges or policy changes. The orange lines (Hi 95 and Lo
+95) represent expected variation, but the actual population sometimes
+falls outside this range, showing greater instability during May’s
+term.</p>
 </div>
 </div>
 <div id="the-effect-of-covid-19-on-prison-population-of-different-custody-types" class="section level2">
