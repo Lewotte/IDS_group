@@ -364,20 +364,16 @@ Applying Occam's Razor, the method we tried suggests that the rate of change of 
 ---
 
 ```{R Marcel_Siddhi_graph2,echo = FALSE, fig.width=4, fig.height=4,}
-knitr::include_graphics("img/Marcel_sid_graph2.png")
+knitr::include_graphics("img/MS.png")
 ```
 ---
-.pull-left[
-- Siddhi
-- Marcel
-]
-.pull-right[
+
 ```{R Marcel_Siddhi_graph3, out.width="500%", fig.width=4,echo = FALSE}
 
-knitr::include_graphics("img/boxplot.png")
+knitr::include_graphics("img/New_vivi_hanna_graph.png")
 
 ```
-]
+
 ---
 #PRIME MINISTERS - David Cameron
 #####David Cameron, a Conservative, was the UK Prime Minister from 2010 to 2016. He implemented austerity measures and held the 2016 EU referendum, leading to Brexit and his resignation.
