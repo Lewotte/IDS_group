@@ -636,7 +636,7 @@ print(average_results)
 
 Model 5 demonstrates superior performance compared to Model 4, as evidenced by its lower Root Mean Squared Error (RMSE) and Mean Absolute Error (MAE) values, which indicate better predictive accuracy and reduced deviations between predicted and actual values. Furthermore, Model 5's higher R-squared value reflects a stronger proportion of variance in the dependent variable being explained by the model, further validating its effectiveness over Model 4.
 
-Model 5 and Model 7 have similar r squared values hwoever they can't be compared using RMSE and MAE since they have got different predictor values.
+Model 5 and Model 7 have similar r squared values however they can't be compared using RMSE and MAE since they have got different predictor values.
 
 ---
 #Prime Ministers - David Cameron
