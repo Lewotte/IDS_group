@@ -663,7 +663,7 @@ knitr::include_graphics("img/New_vivi_hanna_graph.png")
 ####Robbery:
 - Prison populations for robbery offences fluctuated, peaking around 2013 due to economic challenges and declining thereafter. Urban safety initiatives and improved surveillance reduced robbery rates.
 ####Theft Offences: 
-- theft offences also peaked around 2013 which could also be due to economic challenges, however declining arrests reflect improved security technologies and reduced police presence under austerity. Emphasis on community policing and public safety campaigns shaped outcomes.
+- Theft offences also peaked around 2013 which could also be due to economic challenges, however declining arrests reflect improved security technologies and reduced police presence under austerity. Emphasis on community policing and public safety campaigns shaped outcomes.
 
 ---
 #Prime Ministers - Theresa May
@@ -990,7 +990,7 @@ ts_vs_real %>%
 
 #####Confidence Intervals:
 
-- The orange bands represent the 95% confidence interval. The red line occasionally falls outside these bounds, showing unexpected changes beyond the model’s assumptions.
+- The orange bands represent the 95% confidence interval. The red line falls inside these bounds, showing unexpected changes are not extreme enough for the data to fall outside these confidence intervals.
 
 #####Implications:
 
