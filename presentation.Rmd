@@ -6,7 +6,7 @@ institute: "University of Edinburgh"
 date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
-    yolo: false
+    yolo: true
     css: ["./xaringan-themer.css"]
     lib_dir: libs
     nature:
@@ -1000,8 +1000,10 @@ This analysis demonstrates the usefulness of ARIMA in time series forecasting bu
 ---
 ## Conclusion
 
-- We can therefore conclude that the rate of change of prison population was indeed impacted by COVID-19 lockdown measures.
+With the models we constructed, we could demonstrate to some degree that the events we covered impacted the prison population. Namely:
 
-- There is sufficient evidence to support that penal reforms impact the Prison population in England and wales.
+- The rate of change of prison population in correlation to the COVID-19 lockdown measures.
 
-- We also concluded that various polical polices under different prime ministers do impact prison population.
+- Penal reforms in correlation to the Prison population in England and Wales.
+
+- Political polices under different prime ministers in correlation to prison population.
