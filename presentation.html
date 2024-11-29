@@ -47,10 +47,10 @@ class: center, middle
 ##How do significant events correlate with changes in the prison population of England and Wales?
 
 
-#####Events analysed:
-#####1) Covid - 19
-#####2) Penal Refroms
-#####3) Prime Ministers
+####Events analysed:
+####1) Covid - 19
+####2) Penal Refroms
+####3) Prime Ministers
 
 ---
 
@@ -149,7 +149,7 @@ lockdown_happens = ifelse(Date &lt; lockdown_start | Date &gt; lockdown_end, 0, 
 
 **Response Variable**: the rate of change of prisoner population, `d1_Count`.
 
-**Explainatory variables:** `lockdown_happens` and `Date` .
+**Explanatory variables:** `lockdown_happens` and `Date` .
 
 --
 
@@ -321,7 +321,7 @@ Multiple models where used to predict trends however the best was to be determin
 
 **Response Variable**:- `Total_pop`
 
-**Explainatory variables:**  - `event_occurred`, `Date_num`, `Remand_pop`, `Sentenced_pop`
+**Explanatory variables:**  - `event_occurred`, `Date_num`, `Remand_pop`, `Sentenced_pop`
 --
 
 
@@ -345,7 +345,7 @@ PR_model_4 &lt;- linear_reg() %&gt;%
 ``` r
 PR_model_7 &lt;- linear_reg() %&gt;%
   set_engine("lm") %&gt;%
-  fit(Remand_pop ~ Date_num + event_occurred + Total_pop+ Sentenced_pop, data = PR_monthly) 
+  fit(Remand_pop ~ Date_num + event_occurred + Total_pop + Sentenced_pop, data = PR_monthly) 
 ```
 
 ---
