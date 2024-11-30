@@ -62,7 +62,62 @@ Elaborate in this section on:
 - the time resolution (how much time is spaced between consecutive data), how it went from once a year to once a month in 2011, etc.)
 - explaination of other data set used
 
-## Findings
+
+## The effect of COVID-19 on prison population of different custody types
+*Sky and Maggie*
+
+We analysed the rate of change in the prisoner population, `d1_Count`, over time, using different subsets of custody type.
+
+### Methods
+
+We created an indicator variable `lockdown_happens` which takes the value of 1 during the first lockdown period (2020 March 26 to July 4) [^covid_date1][^covid_date2], and 0 at any other given time. This will be used as an explanatory variable for our model.
+
+We used linear regression for our models, the response variable being the rate of change of prisoner population `d1_Count`, and the explanatory variables being `lockdown_happens` and `Date`. `Date` is included to test whether there was a trend with respect to time in `d1_Count`.
+
+The reason we chose these variables for the following reasons. From preliminary assessment of the data through graphs, we saw that although `d1_Count` is unstable, it oscillates roughly around 0 throughout time, and in some cases like Extended determinate sentences, there appeared to be a decreasing trend with respect to time.
+
+
+
+1. **Model 1 (custody_fit_yesInt)**: This model included the variables `Date`, `lockdown_happens`, and the interaction between these two variables (`Date * lockdown_happens`). This model assesses how the lockdown period affected the population change in sentenced custody over time while accounting for any general time trend.
+
+2. **Model 2 (custody_fit_noInt)**: This model is did not include interaction term and only considers the effects of `Date` and `lockdown_happens`.
+
+3. **Model 3 (custody_fit_Simple)**: The simplest model of the three, which only uses `lockdown_happens` as a predictor.
+
+### Results
+
+#### Subset "adult sentenced"
+This subset showed the strongest response to the specified lock down dates.
+
+**Model 1 `(custody_fit_yesInt)`** The all estimated coefficients are statistically insignificant (p-values > 0.7), suggesting that this model is invalid. $\bar{R}^2 = 0.166$ (adjusted $R^2$) , it is the lowest among the models we used.
+
+**Model 2 `(custody_fit_noInt)`** Without the interaction effect, `lockdown_happens` has a negative estimated coefficient of $-600 \pm 100$ (SE), while `Date`’s coefficient is insignificant (p = 0.702). $\bar{R}^2 = 0.170$.
+
+**Model 3 `(custody_fit_Simple)`** With the only explanatory variable being `lockdown_happens`, it's estimated coefficient is $-600 \pm 100$ (SE), similar to Model 2. This suggests that during the period of lockdown, the rate of change of prison population for the selected subset is about 600 less than during normal times. It has the highest adjusted R-squared (0.1734), suggesting that `lockdown_happens` is the key factor of variance in d1_Count without additional predictors or interactions. $\bar{R}^2 = 0.173$, the highest among the models used.
+
+#### Other subsets
+Other subsets showed different responses to COVID:
+
+| Subset chosen | $\bar{R}^2_{yesInt}$ | $\bar{R}^2_{noInt}$ | $\bar{R}^2_{simple}$  | `lockdown_happens` coefficient in `(custody_fit_Simple)` |
+|---|---|---|---|---|
+| Sentenced | 0.166 |  0.170  |  0.173  | $600 \pm 100$ |
+| Remand | 0.0998  | 0.0777  | 0.0249  | $140 \pm 60$ |
+|  Length not recorded |  0.00459 | -0.00426  | 0.000854 | $-20 \pm 10$ |  |
+
+Remand showed a positive correlation with lockdown (it was negative for Sentenced), and Length not recorded did not show any noticeable response.
+
+![Subsets that showed negative reaction, Setenced on the right.](img/Sky-ppt_negReaction.jpg)
+
+![Subsets that showed positive reaction, Remand.](img/Sky-ppt_posReaction.jpg)
+
+![Subsets that showed no reaction, Length not recorded on the left.](img/Sky-ppt_noReaction.jpg)
+
+### Interpretation
+
+Applying Occam's Razor, the simplest model that still provides meaningful explanatory power should be used. Our result suggests time (i.e. `Date`) has no significant correlation with change in adult sentenced prisoners, and lockdown in UK has a correlation with the decrease in population.
+   
+The relatively low $\bar{R}^2$ values across all models is expected, since all sorts of external factors and the inaccuracies of our model can influence the results. Our linear model is simplistic in nature, and `lockdown_happens` is only based on dates that might not accurately reflect prisoner flux dynamics (i.e. did lockdown itself caused the change in prison population, or COVID-19 itself, some other factors, or a combination of everything?).
+
 ### Prime Minister
 For the Prime Minister section, we analyzed the full data set across all years to compare crime trends before and during each Prime Minister's term. However, limitations included difficulty in directly linking changes to specific policies, leading to some assumptions. To address this, we examined different crime types and related policies.
 
@@ -176,60 +231,6 @@ Based on the final graph in the presentation slides, here are the key observatio
 
 The graph compares the predicted prison population (blue line) with the actual population (red line). During Cameron's period, the population followed a steady forecast, but under May, the red line shows more fluctuations and even deviates from the forecast, indicating unexpected challenges or policy changes. The orange lines (Hi 95 and Lo 95) represent expected variation, but the actual population sometimes falls outside this range, showing greater instability during May's term.
 
-## The effect of COVID-19 on prison population of different custody types
-*Sky and Maggie*
-
-We analysed the rate of change in the prisoner population, `d1_Count`, over time, using different subsets of custody type.
-
-### Methods
-
-We created an indicator variable `lockdown_happens` which takes the value of 1 during the first lockdown period (2020 March 26 to July 4) [^covid_date1][^covid_date2], and 0 at any other given time. This will be used as an explanatory variable for our model.
-
-We used linear regression for our models, the response variable being the rate of change of prisoner population `d1_Count`, and the explanatory variables being `lockdown_happens` and `Date`. `Date` is included to test whether there was a trend with respect to time in `d1_Count`.
-
-The reason we chose these variables for the following reasons. From preliminary assessment of the data through graphs, we saw that although `d1_Count` is unstable, it oscillates roughly around 0 throughout time, and in some cases like Extended determinate sentences, there appeared to be a decreasing trend with respect to time.
-
-
-
-1. **Model 1 (custody_fit_yesInt)**: This model included the variables `Date`, `lockdown_happens`, and the interaction between these two variables (`Date * lockdown_happens`). This model assesses how the lockdown period affected the population change in sentenced custody over time while accounting for any general time trend.
-
-2. **Model 2 (custody_fit_noInt)**: This model is did not include interaction term and only considers the effects of `Date` and `lockdown_happens`.
-
-3. **Model 3 (custody_fit_Simple)**: The simplest model of the three, which only uses `lockdown_happens` as a predictor.
-
-### Results
-
-#### Subset "adult sentenced"
-This subset showed the strongest reponse to the specified lockdown dates.
-
-**Model 1 `(custody_fit_yesInt)`** The all estimated coefficients are statistically insignificant (p-values > 0.7), suggesting that this model is invalid. $\bar{R}^2 = 0.166$ (adjusted $R^2$) , it is the lowest among the models we used.
-
-**Model 2 `(custody_fit_noInt)`** Without the interaction effect, `lockdown_happens` has a negative estimated coefficient of $-600 \pm 100$ (SE), while `Date`’s coefficient is insignificant (p = 0.702). $\bar{R}^2 = 0.170$.
-
-**Model 3 `(custody_fit_Simple)`** With the only explanatory variable being `lockdown_happens`, it's estimated coefficient is $-600 \pm 100$ (SE), similar to Model 2. This suggests that during the period of lockdown, the rate of change of prison population for the selected subset is about 600 less than during normal times. It has the highest adjusted R-squared (0.1734), suggesting that `lockdown_happens` is the key factor of variance in d1_Count without additional predictors or interactions. $\bar{R}^2 = 0.173$, the highest among the models used.
-
-#### Other subsets
-Other subsets showed different responses to COVID:
-
-| Subset chosen | $\bar{R}^2_{yesInt}$ | $\bar{R}^2_{noInt}$ | $\bar{R}^2_{simple}$  | `lockdown_happens` coefficient in `(custody_fit_Simple)` |
-|---|---|---|---|---|
-| Sentenced | 0.166 |  0.170  |  0.173  | $600 \pm 100$ |
-| Remand | 0.0998  | 0.0777  | 0.0249  | $140 \pm 60$ |
-|  Length not recorded |  0.00459 | -0.00426  | 0.000854 | $-20 \pm 10$ |  |
-
-Remand showed a positive correlation with lockdown (it was negative for Sentenced), and Length not recorded did not show any noticeable response.
-
-![Subsets that showed negative reaction, Setenced on the right.](img/Sky-ppt_negReaction.jpg)
-
-![Subsets that showed positive reaction, Remand.](img/Sky-ppt_posReaction.jpg)
-
-![Subsets that showed no reaction, Length not recorded on the left.](img/Sky-ppt_noReaction.jpg)
-
-### Interpretation
-
-Applying Occam's Razor, the simplest model that still provides meaningful explanatory power should be used. Our result suggests time (i.e. `Date`) has no significant correlation with change in adult sentenced prisoners, and lockdown in UK has a correlation with the decrease in population.
-   
-The relatively low $\bar{R}^2$ values across all models is expected, since all sorts of external factors and the inaccuracies of our model can influence the results. Our linear model is simplistic in nature, and `lockdown_happens` is only based on dates that might not accurately reflect prisoner flux dynamics (i.e. did lockdown itself caused the change in prison population, or COVID-19 itself, some other factors, or a combination of everything?).
 
 ## References
 

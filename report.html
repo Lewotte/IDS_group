@@ -11,7 +11,7 @@
 
 <meta name="author" content="by Gomakashi: Marcel, Sky, Hanna, Vivi, Siddhi &amp; Maggie" />
 
-<meta name="date" content="2024-11-27" />
+<meta name="date" content="2024-11-30" />
 
 <title>Correlation Between Significant Events and Prison Population</title>
 
@@ -354,7 +354,7 @@ display: none;
 Prison Population</h1>
 <h4 class="author">by Gomakashi: Marcel, Sky, Hanna, Vivi, Siddhi &amp;
 Maggie</h4>
-<h4 class="date">2024-11-27</h4>
+<h4 class="date">2024-11-30</h4>
 
 </div>
 
@@ -382,8 +382,152 @@ resolution (how much time is spaced between consecutive data), how it
 went from once a year to once a month in 2011, etc.) - explaination of
 other data set used</p>
 </div>
-<div id="findings" class="section level2">
-<h2>Findings</h2>
+<div id="the-effect-of-covid-19-on-prison-population-of-different-custody-types" class="section level2">
+<h2>The effect of COVID-19 on prison population of different custody
+types</h2>
+<p><em>Sky and Maggie</em></p>
+<p>We analysed the rate of change in the prisoner population,
+<code>d1_Count</code>, over time, using different subsets of custody
+type.</p>
+<div id="methods" class="section level3">
+<h3>Methods</h3>
+<p>We created an indicator variable <code>lockdown_happens</code> which
+takes the value of 1 during the first lockdown period (2020 March 26 to
+July 4) <a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a><a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>, and 0 at any other given time. This will
+be used as an explanatory variable for our model.</p>
+<p>We used linear regression for our models, the response variable being
+the rate of change of prisoner population <code>d1_Count</code>, and the
+explanatory variables being <code>lockdown_happens</code> and
+<code>Date</code>. <code>Date</code> is included to test whether there
+was a trend with respect to time in <code>d1_Count</code>.</p>
+<p>The reason we chose these variables for the following reasons. From
+preliminary assessment of the data through graphs, we saw that although
+<code>d1_Count</code> is unstable, it oscillates roughly around 0
+throughout time, and in some cases like Extended determinate sentences,
+there appeared to be a decreasing trend with respect to time.</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Model 1 (custody_fit_yesInt)</strong>: This model
+included the variables <code>Date</code>, <code>lockdown_happens</code>,
+and the interaction between these two variables
+(<code>Date * lockdown_happens</code>). This model assesses how the
+lockdown period affected the population change in sentenced custody over
+time while accounting for any general time trend.</p></li>
+<li><p><strong>Model 2 (custody_fit_noInt)</strong>: This model is did
+not include interaction term and only considers the effects of
+<code>Date</code> and <code>lockdown_happens</code>.</p></li>
+<li><p><strong>Model 3 (custody_fit_Simple)</strong>: The simplest model
+of the three, which only uses <code>lockdown_happens</code> as a
+predictor.</p></li>
+</ol>
+</div>
+<div id="results" class="section level3">
+<h3>Results</h3>
+<div id="subset-adult-sentenced" class="section level4">
+<h4>Subset “adult sentenced”</h4>
+<p>This subset showed the strongest response to the specified lock down
+dates.</p>
+<p><strong>Model 1 <code>(custody_fit_yesInt)</code></strong> The all
+estimated coefficients are statistically insignificant (p-values &gt;
+0.7), suggesting that this model is invalid. <span class="math inline">\(\bar{R}^2 = 0.166\)</span> (adjusted <span class="math inline">\(R^2\)</span>) , it is the lowest among the models
+we used.</p>
+<p><strong>Model 2 <code>(custody_fit_noInt)</code></strong> Without the
+interaction effect, <code>lockdown_happens</code> has a negative
+estimated coefficient of <span class="math inline">\(-600 \pm
+100\)</span> (SE), while <code>Date</code>’s coefficient is
+insignificant (p = 0.702). <span class="math inline">\(\bar{R}^2 =
+0.170\)</span>.</p>
+<p><strong>Model 3 <code>(custody_fit_Simple)</code></strong> With the
+only explanatory variable being <code>lockdown_happens</code>, it’s
+estimated coefficient is <span class="math inline">\(-600 \pm
+100\)</span> (SE), similar to Model 2. This suggests that during the
+period of lockdown, the rate of change of prison population for the
+selected subset is about 600 less than during normal times. It has the
+highest adjusted R-squared (0.1734), suggesting that
+<code>lockdown_happens</code> is the key factor of variance in d1_Count
+without additional predictors or interactions. <span class="math inline">\(\bar{R}^2 = 0.173\)</span>, the highest among the
+models used.</p>
+</div>
+<div id="other-subsets" class="section level4">
+<h4>Other subsets</h4>
+<p>Other subsets showed different responses to COVID:</p>
+<table>
+<colgroup>
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Subset chosen</th>
+<th><span class="math inline">\(\bar{R}^2_{yesInt}\)</span></th>
+<th><span class="math inline">\(\bar{R}^2_{noInt}\)</span></th>
+<th><span class="math inline">\(\bar{R}^2_{simple}\)</span></th>
+<th><code>lockdown_happens</code> coefficient in
+<code>(custody_fit_Simple)</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Sentenced</td>
+<td>0.166</td>
+<td>0.170</td>
+<td>0.173</td>
+<td><span class="math inline">\(600 \pm 100\)</span></td>
+</tr>
+<tr class="even">
+<td>Remand</td>
+<td>0.0998</td>
+<td>0.0777</td>
+<td>0.0249</td>
+<td><span class="math inline">\(140 \pm 60\)</span></td>
+</tr>
+<tr class="odd">
+<td>Length not recorded</td>
+<td>0.00459</td>
+<td>-0.00426</td>
+<td>0.000854</td>
+<td><span class="math inline">\(-20 \pm 10\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>Remand showed a positive correlation with lockdown (it was negative
+for Sentenced), and Length not recorded did not show any noticeable
+response.</p>
+<div class="float">
+<img role="img" aria-label="Subsets that showed negative reaction, Setenced on the right." src="img/Sky-ppt_negReaction.jpg" alt="Subsets that showed negative reaction, Setenced on the right." />
+<div class="figcaption">Subsets that showed negative reaction, Setenced
+on the right.</div>
+</div>
+<div class="float">
+<img role="img" aria-label="Subsets that showed positive reaction, Remand." src="img/Sky-ppt_posReaction.jpg" alt="Subsets that showed positive reaction, Remand." />
+<div class="figcaption">Subsets that showed positive reaction,
+Remand.</div>
+</div>
+<div class="float">
+<img role="img" aria-label="Subsets that showed no reaction, Length not recorded on the left." src="img/Sky-ppt_noReaction.jpg" alt="Subsets that showed no reaction, Length not recorded on the left." />
+<div class="figcaption">Subsets that showed no reaction, Length not
+recorded on the left.</div>
+</div>
+</div>
+</div>
+<div id="interpretation" class="section level3">
+<h3>Interpretation</h3>
+<p>Applying Occam’s Razor, the simplest model that still provides
+meaningful explanatory power should be used. Our result suggests time
+(i.e. <code>Date</code>) has no significant correlation with change in
+adult sentenced prisoners, and lockdown in UK has a correlation with the
+decrease in population.</p>
+<p>The relatively low <span class="math inline">\(\bar{R}^2\)</span>
+values across all models is expected, since all sorts of external
+factors and the inaccuracies of our model can influence the results. Our
+linear model is simplistic in nature, and <code>lockdown_happens</code>
+is only based on dates that might not accurately reflect prisoner flux
+dynamics (i.e. did lockdown itself caused the change in prison
+population, or COVID-19 itself, some other factors, or a combination of
+everything?).</p>
+</div>
 <div id="prime-minister" class="section level3">
 <h3>Prime Minister</h3>
 <p>For the Prime Minister section, we analyzed the full data set across
@@ -519,89 +663,19 @@ falls outside this range, showing greater instability during May’s
 term.</p>
 </div>
 </div>
-<div id="covid" class="section level3">
-<h3>COVID</h3>
-<div id="how-custody-types-changes" class="section level4">
-<h4>How custody types changes</h4>
-</div>
-<div id="how-lockdown-affect-the-prisoner-population" class="section level4">
-<h4>How lockdown affect the prisoner population</h4>
-<p>To prove our findings further. We start an analysis aimed to model
-the rate of change in the prisoner population (d1_Count) over time,
-focusing on adult prisoners in sentenced custody, and considering the
-impact of the COVID-19 lockdown period.</p>
-<div id="methods" class="section level5">
-<h5>Methods</h5>
-<p>Three linear regression models were fitted to the data:</p>
-<ol style="list-style-type: decimal">
-<li><p><strong>Model 1 (custody_fit_yesInt)</strong>: This model
-included the variables <code>Date</code>, <code>lockdown_happens</code>,
-and the interaction between these two variables
-(<code>Date * lockdown_happens</code>). This model assesses how the
-lockdown period affected the population change in sentenced custody over
-time while accounting for the general time trend.</p></li>
-<li><p><strong>Model 2 (custody_fit_noInt)</strong>: This model excluded
-the interaction term and included only the main effects of
-<code>Date</code> and <code>lockdown_happens</code>.</p></li>
-<li><p><strong>Model 3 (custody_fit_Simple)</strong>: The simplest model
-included only <code>lockdown_happens</code> as a predictor.</p></li>
-</ol>
-</div>
-<div id="results" class="section level5">
-<h5>Results</h5>
-<p><strong>Model 1 (custody_fit_yesInt)</strong> The estimates for Date
-and the interaction term are negligible and statistically insignificant
-(p-values &gt; 0.7). The lockdown_happens estimate is large (17006) but
-not significant (p = 0.738). It has the lowest adjusted R-squared
-(0.1663), suggesting minimal explanatory power for the interaction
-effect.</p>
-<p><strong>Model 2 (custody_fit_noInt)</strong> Without interaction, the
-lockdown_happens variable retains a strong negative estimate (-632, p
-&lt; 0.001), while Date’s estimate (0.00795) is not significant (p =
-0.702). It has a slightly higher adjusted R-squared (0.1699), indicating
-that the interaction term does not add significant value.</p>
-<p><strong>Model 3 (custody_fit_Simple)</strong> With only
-lockdown_happens, it shows a strong negative estimate for
-lockdown_happens (-629, p &lt; 0.001). It has the highest adjusted
-R-squared (0.1734), showing that lockdown_happens is the key factor of
-variance in d1_Count without additional predictors or interactions.</p>
-</div>
-<div id="interpretion" class="section level5">
-<h5>Interpretion</h5>
-<p>According to Occam’s Razor, the simplest model that still provides
-meaningful explanatory power should be choosed. Since the r-squared of
-Model 3 is the highest and its simplicity, this makes it the most
-interpretable for directly assessing the lockdown’s effect without
-accounting for temporal trends or interactions.</p>
-<p>The lower Adjusted R-squared values across all models suggest that
-other unaccounted factors might also influence changes in the prisoner
-population. Variables such as policy changes, release rates, or crime
-trends could play a role.</p>
-<p>The length should be roughly 1,500 words. If you want to use a word
-count addin, you can install this by copying and pasting the following
-into RStudio:</p>
-<p><code>devtools::install_github(&quot;benmarwick/wordcountaddin&quot;, type = &quot;source&quot;, dependencies = TRUE)</code></p>
-<p>You will then need to restart RStudio. Once you have done that,
-select the text you want to count the words of, go to Addins, and select
-the <code>Word count</code> addin. This addin counts words using two
-different algorithms, but the results should be similar and as long as
-you’re in the ballpark of 1,500 words, you’re good! The addin will
-ignore code chunks and only count the words in prose. If you don’t want
-to use the addin you can always copy and paste the text into Microsoft
-Word to do a Word Count!</p>
-<p>You can also load your data here and present any analysis results /
-plots. Make sure to hide your code with <code>echo = FALSE</code> unless
-the point you are trying to make is about the code itself, in which case
-you should show your code.</p>
-</div>
-</div>
-</div>
 </div>
 <div id="references" class="section level2">
 <h2>References</h2>
-<p>Ministry of Justice, Offender Management Statistics Quarterly
-publications, “Prison population: 30 June 2023”, Retrieved November 8,
-2024, Available at: <a href="https://www.gov.uk/government/collections/offender-management-statistics-quarterly" class="uri">https://www.gov.uk/government/collections/offender-management-statistics-quarterly</a></p>
+</div>
+<div class="footnotes footnotes-end-of-document">
+<hr />
+<ol>
+<li id="fn1"><p>Institute for Government analysis, <a href="https://www.instituteforgovernment.org.uk/sites/default/files/timeline-lockdown-web.pdf" class="uri">https://www.instituteforgovernment.org.uk/sites/default/files/timeline-lockdown-web.pdf</a>
+, retrieved November 26, 2024<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>UK Parliment, “Coronavirus: A history of English
+lockdown laws”, <a href="https://commonslibrary.parliament.uk/research-briefings/cbp-9068/" class="uri">https://commonslibrary.parliament.uk/research-briefings/cbp-9068/</a>
+, retrieved November 26, 2024<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+</ol>
 </div>
 
 
