@@ -57,10 +57,6 @@ We explored the 'Prison population by type of custody, age group and sex' sectio
 
 The data set we looked at contained many custody groups like remand(individuals that are held in prison until their trial/hearing), intermediate sentence(individuals that have to stay in custody until they have been approved to be safe for the public), fine defaulter(individuals that are in prison due to refusing to pay a fine) and recalls(individuals that were released on parole/license but broke the rules of their probation and are back in prison). 
 
-Note to future editor:
-Elaborate in this section on:
-- the time resolution (how much time is spaced between consecutive data), how it went from once a year to once a month in 2011, etc.)
-- explaination of other data set used
 
 
 ## The effect of COVID-19 on prison population of different custody types
@@ -117,6 +113,8 @@ Remand showed a positive correlation with lockdown (it was negative for Sentence
 Applying Occam's Razor, the simplest model that still provides meaningful explanatory power should be used. Our result suggests time (i.e. `Date`) has no significant correlation with change in adult sentenced prisoners, and lockdown in UK has a correlation with the decrease in population.
    
 The relatively low $\bar{R}^2$ values across all models is expected, since all sorts of external factors and the inaccuracies of our model can influence the results. Our linear model is simplistic in nature, and `lockdown_happens` is only based on dates that might not accurately reflect prisoner flux dynamics (i.e. did lockdown itself caused the change in prison population, or COVID-19 itself, some other factors, or a combination of everything?).
+
+
 
 ### Prime Minister
 For the Prime Minister section, we analyzed the full data set across all years to compare crime trends before and during each Prime Minister's term. However, limitations included difficulty in directly linking changes to specific policies, leading to some assumptions. To address this, we examined different crime types and related policies.
