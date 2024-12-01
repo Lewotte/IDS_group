@@ -69,7 +69,7 @@ We used linear regression for our models, the response variable being the rate o
 
 1. **Model 1 (custody_fit_yesInt)**: This model included the variables `Date`, `lockdown_happens`, and the interaction between these two variables (`Date * lockdown_happens`). This model assesses how the lockdown period affected the population change in sentenced custody over time while accounting for any general time trend.
 
-2. **Model 2 (custody_fit_noInt)**: This model is did not include interaction term and only considers the effects of `Date` and `lockdown_happens`.
+2. **Model 2 (custody_fit_noInt)**: This model did not include interaction term and only considers the effects of `Date` and `lockdown_happens`.
 
 3. **Model 3 (custody_fit_Simple)**: The simplest model of the three, which only uses `lockdown_happens` as a predictor.
 
@@ -240,7 +240,7 @@ The ARMIA model (1,0,0)(2,0,0)[12] is a versatile tool for analysing and forecas
 
 ##### 5.Theft Offences 
 
-**Trend** : Declined after an intial rise.
+**Trend** : Declined after an initial rise.
 
 **Key Issues** : Technological advancements in security deterred theft.
 
@@ -281,12 +281,12 @@ The ARMIA model (1,0,0)(2,0,0)[12] is a versatile tool for analysing and forecas
 
 **Key Issues** : Economic challenges and reduced police presence.
 
-**Government Response** : Strengthened penalties and promoted urbvan safety programs.
+**Government Response** : Strengthened penalties and promoted urban safety programs.
 
 
 ##### 5.Theft Offences
 
-**Trend** : Consistently declined due to imporved security measures.
+**Trend** : Consistently declined due to improved security measures.
 
 **Key Issues** : Shift from physical theft to online fraud
 
@@ -296,7 +296,7 @@ The ARMIA model (1,0,0)(2,0,0)[12] is a versatile tool for analysing and forecas
 
 Based on the final graph in the presentation slides, here are the key observations :
 
-The graph compares the predicted prison population (blue line) with the actual population (red line). During Cameron's period, the population followed a steady forecast, but under May, the red line shows more fluctuations and even deviates from the forecast, indicating unexpected challenges or policy changes. The orange lines (Hi 95 and Lo 95) represent expected variation, but the actual population sometimes falls outside this range, showing greater instability during May's term.
+The graph compares the predicted prison population (blue line) with the actual population (red line). During Cameron's period, the population followed a steady forecast, but under May, the red line shows more fluctuations and even deviates from the forecast, indicating unexpected challenges or policy changes. The orange lines (Hi 95 and Lo 95) represent expected variation, but are not extreme enough to falls outside this range. 
 
 
 ## References
@@ -307,8 +307,19 @@ The graph compares the predicted prison population (blue line) with the actual p
 
 [^covid_date2]: UK Parliment, "Coronavirus: A history of English lockdown laws", https://commonslibrary.parliament.uk/research-briefings/cbp-9068/ , retrieved November 26, 2024
 
+Prime minister references :
+https://www.crimeandjustice.org.uk/resources/more-police-more-prosecutions-more-punishment
+
+https://theowp.org/reports/a-history-of-violence-the-story-of-u-k-knife-crime-so-far/
+
+https://www.gov.uk/government/publications/modern-crime-prevention-strategy
+
+
 Reforms retrived 10/11/24:
 https://www.legislation.gov.uk/ukpga/2012/10/contents
+
 https://www.legislation.gov.uk/ukpga/2013/22/contents
+
 https://www.legislation.gov.uk/ukpga/2014/11/contents
+
 https://www.legislation.gov.uk/ukpga/2015/2/contents
