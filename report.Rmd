@@ -95,11 +95,23 @@ Other subsets showed different responses to COVID:
 
 Remand showed a positive correlation with lockdown (it was negative for Sentenced), and Length not recorded did not show any noticeable response.
 
-![Subsets that showed negative reaction, Setenced on the right.](img/Sky-ppt_negReaction.jpg)
+Subsets that showed negative reaction, Setenced on the right.
 
-![Subsets that showed positive reaction, Remand.](img/Sky-ppt_posReaction.jpg)
+```{R,echo = FALSE, fig.width=4, fig.height=4,}
+knitr::include_graphics("img/Sky-ppt_negReaction.jpg")
+```
 
-![Subsets that showed no reaction, Length not recorded on the left.](img/Sky-ppt_noReaction.jpg)
+Subsets that showed positive reaction, Remand.
+
+```{R 2,echo = FALSE, fig.width=4, fig.height=4,}
+knitr::include_graphics("img/Sky-ppt_posReaction.jpg")
+```
+
+Subsets that showed no reaction, Length not recorded on the left.
+
+```{R 3,echo = FALSE, fig.width=4, fig.height=4,}
+knitr::include_graphics("img/Sky-ppt_noReaction.jpg")
+```
 
 ### Interpretation
 
