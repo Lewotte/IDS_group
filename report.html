@@ -368,20 +368,15 @@ population.</p>
 </div>
 <div id="data" class="section level2">
 <h2>Data</h2>
-<p>We explored the ‘Prison population by type of custody, age group and
-sex’ section of the data.</p>
-<p>The data set we looked at contained many custody groups like
-remand(individuals that are held in prison until their trial/hearing),
-intermediate sentence(individuals that have to stay in custody until
-they have been approved to be safe for the public), fine
-defaulter(individuals that are in prison due to refusing to pay a fine)
-and recalls(individuals that were released on parole/license but broke
-the rules of their probation and are back in prison).</p>
+<p>The dataset from the ‘Prison population by type of custody, age
+group, and sex’ section includes various custody groups such as remand
+(held until trial), intermediate sentence (awaiting public safety
+clearance), fine defaulter (imprisoned for not paying fines), and
+recalls (returned to prison for violating parole).</p>
 </div>
 <div id="the-effect-of-covid-19-on-prison-population-of-different-custody-types" class="section level2">
 <h2>The effect of COVID-19 on prison population of different custody
 types</h2>
-<p><em>Sky and Maggie</em></p>
 <p>We analysed the rate of change in the prisoner population,
 <code>d1_Count</code>, over time, using different subsets of custody
 type.</p>
@@ -565,18 +560,15 @@ the clearest)</p>
   fit(Total_pop ~ Date_num + event_occurred + Sentenced_pop + Remand_pop, data = PR_monthly) 
 model_summary &lt;- summary(PR_model_5$fit)
 model_summary</code></pre>
-<p>Model 4,5 and 7 performed the best The difference between model 4 and
-5 was Remand_pop being added this increased the fit of the model by ~27%
-Model 5 and 7 differ by the response variable (Total_pop) and
-explanatory variable (Remand_pop) being switched for greater insight
-into Remand_pops effect The other models are 1-3 being a reduction in
-explanatory variable which reduced R^2 leading to decreased fit, 6 and 8
-being the same as 7 but with reduced explanatory variable leading to the
-same issue as 1-3.</p>
-<p>The linear models were tested against themselves using 5
-cross-validation splits. We used RMSE and MAE to compare the models,
-models that used different response variables could not be directly
-compared.</p>
+<p>Models 4, 5, and 7 performed best. Model 5 improved fit by ~27% over
+Model 4 due to adding Remand_pop. Model 7 swapped the response
+(Total_pop) and explanatory (Remand_pop) variables to better assess
+Remand_pop’s impact. Models 1–3 reduced explanatory variables, lowering
+R^2 and fit, while Models 6 and 8 mirrored 7 but with similar
+reductions.</p>
+<p>Linear models were evaluated using 5-fold cross-validation with RMSE
+and MAE. Models with different response variables were not directly
+comparable.</p>
 <pre class="r"><code>average_results &lt;- readRDS(&quot;average_results.rds&quot;)
 
 print(average_results)</code></pre>
@@ -589,9 +581,12 @@ print(average_results)</code></pre>
 <p>We can use these results to conclude that model 5 is better than
 model 4, this was used to determine the best models. RMSE and MAE are
 measures of error with the smaller the error the better the model.</p>
+<p>##Conclusion</p>
+<p>There is evidence to suggest a correlation between Reforms and
+prision population.</p>
 <div id="prime-minister" class="section level3">
 <h3>Prime Minister</h3>
-<p>For the Prime Minister section, we analyzed the full data set across
+<p>For the Prime Minister section, we analysed the full data set across
 all years to compare crime trends before and during each Prime
 Minister’s term. However, limitations included difficulty in directly
 linking changes to specific policies, leading to some assumptions. To
@@ -610,13 +605,11 @@ model’s accuracy with R-squared values.</p>
 <p><strong>4.Time Series Forecasting</strong> : Used historical data
 (2010–2016) to forecast population for 36 months. Compared forecasts to
 actual data from 2016–2019.</p>
-<p>The ARMIA model (with parameters being: (1,0,0)(2,0,0)[12]) is used
-because it is a powerful, interpretable, and versatile tool for
-analysing and forecasting time series data, especially when patterns
-like trends and seasonality are key components of the data. It can be
-used to predict historic trends with later trends to see any change in
-trend, however, it can sometimes not be used to directly compare due
-insufficient data.</p>
+<p>The ARMIA model (1,0,0)(2,0,0)[12] is a versatile tool for analysing
+and forecasting time series data, particularly when trends and
+seasonality are important. While effective for identifying changes in
+trends, it can be limited by insufficient data for direct
+comparisons.</p>
 <p><strong>5.Visualizations</strong> : Plotted population trends and
 compared forecasts vs. real data using clear, color-coded charts.</p>
 </div>
