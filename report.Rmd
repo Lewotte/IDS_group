@@ -67,13 +67,9 @@ We analysed the rate of change in the prisoner population, `d1_Count`, over time
 
 ### Methods
 
-We created an indicator variable `lockdown_happens` which takes the value of 1 during the first lockdown period (2020 March 26 to July 4) [^covid_date1][^covid_date2], and 0 at any other given time. This will be used as an explanatory variable for our model.
+The indicator variable `lockdown_happens` is created. It takes the value of 1 during the first lockdown period (2020 March 26 to July 4) [^covid_date1][^covid_date2], and 0 at any other given time. 
 
 We used linear regression for our models, the response variable being the rate of change of prisoner population `d1_Count`, and the explanatory variables being `lockdown_happens` and `Date`. `Date` is included to test whether there was a trend with respect to time in `d1_Count`.
-
-The reason we chose these variables for the following reasons. From preliminary assessment of the data through graphs, we saw that although `d1_Count` is unstable, it oscillates roughly around 0 throughout time, and in some cases like Extended determinate sentences, there appeared to be a decreasing trend with respect to time.
-
-
 
 1. **Model 1 (custody_fit_yesInt)**: This model included the variables `Date`, `lockdown_happens`, and the interaction between these two variables (`Date * lockdown_happens`). This model assesses how the lockdown period affected the population change in sentenced custody over time while accounting for any general time trend.
 
@@ -113,7 +109,7 @@ Remand showed a positive correlation with lockdown (it was negative for Sentence
 
 Applying Occam's Razor, the simplest model that still provides meaningful explanatory power should be used. Our result suggests time (i.e. `Date`) has no significant correlation with change in adult sentenced prisoners, and lockdown in UK has a correlation with the decrease in population.
    
-The relatively low $\bar{R}^2$ values across all models is expected, since all sorts of external factors and the inaccuracies of our model can influence the results. Our linear model is simplistic in nature, and `lockdown_happens` is only based on dates that might not accurately reflect prisoner flux dynamics (i.e. did lockdown itself caused the change in prison population, or COVID-19 itself, some other factors, or a combination of everything?).
+The relatively low $\bar{R}^2$ values across all models is expected, since all sorts of external factors and the inaccuracies of our model can influence the results. 
 
 ## Penal Reforms
 
