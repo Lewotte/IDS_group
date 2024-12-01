@@ -13,6 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r load-lib, include = FALSE}
 library(tidyverse)
 library(ggplot2)
+library(tidymodels)
 
 #PACKAGES YOU MIGHT NEED TO INSTALL
 library(readODS)
@@ -123,13 +124,13 @@ We tested prison population groups against key penal reform dates, using multipl
 The data was simplified to Remand, Sentenced, and Total population because the original monthly data required merging datasets for specific crime types, reducing accuracy. The system used to measure the data changes in 2009–2010 and offence name changes in 2015 led to testing the idea of non-violent vs. violent crime, but this was narrowed to Remand and Sentenced. This was due to some laws targeting Remand and crime type data being limited to immediate custodial sentences. A generalisation suggested non-violent crimes with minimal societal impact might result in Remand, while violent crimes had a higher likelihood of the same.
 Key reform dates were:
 
-•	2012/05/01: Legal Aid, Sentencing and Punishment of Offenders Act 2012
+•	2012/05/01:Legal Aid, Sentencing and Punishment of Offenders Act 2012
 
-•	2013/04/25: Crime and Courts Act 2013
+•	2013/04/25:Crime and Courts Act 2013
 
-•	2014/03/13: Offender Rehabilitation Act 2014
+•	2014/03/13:Offender Rehabilitation Act 2014
 
-•	2015/02/12: Criminal Justice Act 2015
+•	2015/02/12:Criminal Justice Act 2015
 
 These aimed to reduce prison populations. Data was assigned a TRUE Boolean if within 8 months of an event, chosen through T-tests to assess statistical significance, as acts took time to affect large populations.
 
@@ -137,16 +138,14 @@ These aimed to reduce prison populations. Data was assigned a TRUE Boolean if wi
 knitr::include_graphics("img/MS.png")
 ```
 
-***t test code***
-```{r eval = FALSE}
+
+```{r}
+PR_monthly <- readRDS("PR_monthly.rds")
+
 PR_t_test <- t.test(Total_pop ~ event_occurred, data = PR_monthly) %>%
   tidy()
 print(PR_t_test)
 ```
-
-| estimate| estimate1| estimate2  | 	statistic| p.value|
-|---|---|---|---|---|
-|-699.0284|   84700.25 | 	85399.28 |	-2.990935|0.003552913	|
 
 
 Other variables such as Age groups and Sex were tested with the T-test, however, proved to be weakly correlated compared to Remand, Sentenced and Total populations.
@@ -163,19 +162,6 @@ model_summary
 
 ```
 
-|   Pr(>absolute value of t) | 
-|---|---|---|---|---|
-|Intercept|      0.828   | 
-|Date_num   |        0.146 | 
-|event_occurredTRUE | 2.96e-10 |
-|Sentenced_pop   |    < 2e-16 |
-|Remand_pop  | < 2e-16 |
-
-R-squared:  0.9555
-
-Adjusted R-squared:  0.9539 
-
-
 Model 4,5 and 7 performed the best
 The difference between model 4 and 5 was Remand_pop being added this increased the fit of the model by ~27%
 Model 5 and 7 differ by the response variable (Total_pop) and explanatory variable (Remand_pop) being switched for greater insight into Remand_pops effect
@@ -183,14 +169,12 @@ The other models are 1-3 being a reduction in explanatory variable which reduced
 
 The linear models were tested against themselves using 5 cross-validation splits. We used RMSE and MAE to compare the models, models that used different response variables could not be directly compared.
 
+```{r}
+average_results <- readRDS("average_results.rds")
 
+print(average_results)
+```
 
-| model| avg_rmse| avg_mae  | 
-|---|---|---|---|---|
-|Model 4|   686.9678 | 	578.8595 |
-| Model 5| 316.6402 | 274.5085 |
-
-	
 
 We can use these results to conclude that model 5 is better than model 4, this was used to determine the best models. RMSE and MAE are measures of error with the smaller the error the better the model.
 
@@ -331,4 +315,3 @@ https://www.legislation.gov.uk/ukpga/2014/11/contents
 
 Criminal Justice and Courts Act 2015:
 https://www.legislation.gov.uk/ukpga/2015/2/contents
-

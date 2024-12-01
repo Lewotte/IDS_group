@@ -630,6 +630,9 @@ ts_vs_real %>%
   labs(title = "Forecast vs Real",
        x = "Date", 
        y = "Population")
+
+saveRDS(PR_monthly, "PR_monthly.rds")
+saveRDS(average_results, "average_results.rds")
 ```
 
 
