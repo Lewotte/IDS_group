@@ -300,14 +300,8 @@ The graph compares the predicted prison population (blue line) with the actual p
 
 [^covid_date2]: UK Parliment, "Coronavirus: A history of English lockdown laws", https://commonslibrary.parliament.uk/research-briefings/cbp-9068/ , retrieved November 26, 2024
 
-Legal aid, sentencing and punishment of offenders act 2012 (LASPO):
+Reforms retrived 10/11/24:
 https://www.legislation.gov.uk/ukpga/2012/10/contents
-
-Crime and Courts Act 2013:
 https://www.legislation.gov.uk/ukpga/2013/22/contents
-
-Offender Rehabilitation Act 2014:
 https://www.legislation.gov.uk/ukpga/2014/11/contents
-
-Criminal Justice and Courts Act 2015:
 https://www.legislation.gov.uk/ukpga/2015/2/contents
