@@ -54,7 +54,7 @@ We have picked some major worldwide events to see whether if there is a noticeab
 
 ## Data
 
-The dataset from the 'Prison population by type of custody, age group, and sex' section includes various custody groups such as remand (held until trial), intermediate sentence (awaiting public safety clearance), fine defaulter (imprisoned for not paying fines), and recalls (returned to prison for violating parole). 
+The dataset from the 'Prison population by type of custody, age group, and sex' section includes various custody groups such as remand, intermediate sentence , fine defaulter, and recalls. 
 
 
 ## The effect of COVID-19 on prison population of different custody types
